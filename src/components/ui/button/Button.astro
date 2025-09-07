@@ -1,0 +1,124 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'secondary' | 'ghost' | 'outline';
+type Size = 'sm' | 'md' | 'lg';
+
+// Anchor props when rendering <a>
+type AnchorAttrs = HTMLAttributes<'a'> & {
+  href: string;
+  type?: never; // not applicable on anchors
+};
+
+// Button props when rendering <button>
+type ButtonAttrs = HTMLAttributes<'button'> & {
+  href?: undefined;
+  type?: 'button' | 'submit' | 'reset';
+};
+
+type Common = {
+  variant?: Variant;
+  size?: Size;
+  disabled?: boolean;
+  class?: string;
+  fullWidth?: boolean;
+  ariaLabel?: string;
+};
+
+type Props = Common & (AnchorAttrs | ButtonAttrs);
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  disabled = false,
+  class: className,
+  fullWidth = false,
+  ariaLabel,
+  ...rest
+} = Astro.props as Props;
+
+const Tag = href ? 'a' : 'button';
+
+// Base + layout
+const base = [
+  'inline-flex items-center justify-center font-semibold no-underline select-none align-middle',
+  'rounded-lg',
+  'transition-colors duration-200',
+  fullWidth ? 'w-full' : ''
+].join(' ');
+
+// Sizes
+const sizes: Record<Size, string> = {
+  sm: 'px-3 py-2 text-sm',
+  md: 'px-4 py-2.5 text-base',
+  lg: 'px-5 py-3 text-lg'
+};
+
+// Variants (theme-token aligned)
+const variants: Record<Variant, string> = {
+  primary: [
+    'bg-[var(--primary)] text-[var(--primary-foreground)]',
+    'hover:bg-[var(--primary-hover,var(--accent-dark))]',
+    'shadow-sm'
+  ].join(' '),
+
+  secondary: [
+    'bg-[color:var(--accent)/0.12] text-[var(--accent)]',
+    'border border-[color:var(--accent)/0.25]',
+    'hover:bg-[color:var(--accent)/0.18]'
+  ].join(' '),
+
+  ghost: [
+    'bg-transparent text-[var(--foreground)]',
+    'hover:bg-[var(--muted)]'
+  ].join(' '),
+
+  outline: [
+    'bg-transparent text-[var(--foreground)]',
+    'border border-[var(--border)]',
+    'hover:bg-[var(--muted)]'
+  ].join(' ')
+};
+
+// Disabled style (applies via aria-disabled or disabled attribute)
+const disabledClass = 'opacity-60 cursor-not-allowed pointer-events-none';
+
+const classes = [
+  base,
+  sizes[size],
+  variants[variant],
+  disabled ? disabledClass : '',
+  className
+].filter(Boolean).join(' ');
+---
+
+<Fragment>
+  {href ? (
+    <a
+      class={classes}
+      href={disabled ? undefined : href}
+      aria-disabled={disabled ? 'true' : undefined}
+      aria-label={ariaLabel}
+      {...rest}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button
+      class={classes}
+      type={type}
+      disabled={disabled}
+      aria-label={ariaLabel}
+      {...rest}
+    >
+      <slot />
+    </button>
+  )}
+</Fragment>
+
+<style>
+/* Prefer CSS variables for colors set globally; these ensure good contrast:
+   --primary, --primary-foreground, --accent, --accent-dark, --muted, --border, --foreground. */
+</style>

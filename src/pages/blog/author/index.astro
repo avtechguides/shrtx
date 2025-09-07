@@ -1,0 +1,125 @@
+---
+import { getCollection } from 'astro:content';
+import Seo from '@/components/Seo.astro';
+import Header from '@/components/sections/Header.astro';
+import Footer from '@/components/sections/Footer.astro';
+import BlogHero from '@/components/sections/BlogHero.astro';
+import BlogPagination from '@/components/ui/nav/BlogPagination.astro';
+import AuthorCard from '@/components/sections/AuthorCard.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '@/config';
+import { generateCollectionSEO } from '@/config';
+import { slugifyTag as slugify } from '@/lib/slug';
+
+const posts = await getCollection('blog');
+import { author as mainAuthor } from '@/data/author';
+
+// Build a map of slug -> author object to deduplicate
+const authorMap = new Map();
+
+for (const p of posts) {
+  const name = p.data.author || 'Site Author';
+  const slug = slugify(name);
+
+  if (!authorMap.has(slug)) {
+    if (name === mainAuthor.name) {
+      authorMap.set(slug, {
+        name: mainAuthor.name,
+        slug,
+        avatar: mainAuthor.avatar,
+        bio: mainAuthor.bio,
+        location: mainAuthor.location,
+        social: mainAuthor.social,
+        email: mainAuthor.email,
+      });
+    } else {
+      authorMap.set(slug, {
+        name,
+        slug,
+        avatar: undefined,
+        bio: undefined,
+        location: undefined,
+        social: {},
+        email: undefined,
+      });
+    }
+  }
+}
+
+const authors = Array.from(authorMap.values());
+
+// Pagination settings
+const PAGE_SIZE = 6;
+const { page } = Astro.params;
+const currentPage = Math.max(1, parseInt(page || '1', 10));
+const totalPages = Math.max(1, Math.ceil(authors.length / PAGE_SIZE));
+const start = (currentPage - 1) * PAGE_SIZE;
+const end = start + PAGE_SIZE;
+const pageAuthors = authors.slice(start, end);
+
+// SEO canonical URL for author listing
+const basePath = '/blog/authors/';
+const canonical = currentPage === 1 ? basePath : `${basePath}page/${currentPage}/`;
+
+const collectionSeo = generateCollectionSEO({
+  title: `Authors — Page ${currentPage}`,
+  description: SITE_DESCRIPTION,
+  path: canonical,
+  currentPage,
+  totalPages,
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Seo
+      title={`${SITE_TITLE} | Authors — Page ${currentPage}`}
+      description={SITE_DESCRIPTION}
+      path={canonical}
+      type="page"
+    />
+
+    <!-- Prev/Next pagination hints -->
+    {currentPage > 1 && (
+      <link rel="prev" href={currentPage === 2 ? basePath : `${basePath}page/${currentPage - 1}/`} />
+    )}
+    {currentPage < totalPages && (
+      <link rel="next" href={`${basePath}page/${currentPage + 1}/`} />
+    )}
+
+    <!-- Collection JSON-LD -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(collectionSeo.jsonLd)}
+    />
+  </head>
+  <body class="bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
+    <Header />
+    <BlogHero title="Authors" subtitle="Discover the voices behind the blog." />
+
+    <main class="mx-auto max-w-6xl px-4 py-8 space-y-10 prose prose-invert text-[var(--foreground)]">
+      <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        {pageAuthors.map(author => (
+          <li>
+            <a href={`/blog/author/${author.slug}/`} class="no-underline block focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-lg">
+              <AuthorCard
+                name={author.name}
+                avatar={author.avatar}
+                bio={author.bio}
+                location={author.location}
+                social={author.social}
+                email={author.email}
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      {totalPages > 1 && (
+        <BlogPagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />
+      )}
+    </main>
+
+    <Footer />
+  </body>
+</html>

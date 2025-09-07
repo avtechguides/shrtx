@@ -1,0 +1,36 @@
+# Default: allow everything except sensitive/private areas
+User-agent: *
+Allow: /
+
+# Block sensitive or private areas
+Disallow: /app/
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /login/
+Disallow: /register/
+
+# Prevent indexing of duplicate URLs with tracking/query parameters
+Disallow: /*?utm_=
+Disallow: /*?ref=
+
+# Optional: block temporary or development endpoints
+# Disallow: /dev/
+# Disallow: /preview/
+
+# Allow major search engines full access
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Dynamic content rules: blogs, projects, tools
+Allow: /blog/
+Allow: /projects/
+Allow: /tools/
+
+# Sitemap location (automatically includes all posts, projects, and tools)
+Sitemap: https://shrtx.in/sitemap-index.xml

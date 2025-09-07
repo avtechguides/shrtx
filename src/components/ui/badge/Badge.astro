@@ -1,0 +1,49 @@
+---
+type Variant = 'default' | 'accent' | 'info' | 'success' | 'warning' | 'error' | 'outline';
+type Size = 'sm' | 'md';
+type Radius = 'pill' | 'rounded';
+
+interface Props {
+  variant?: Variant;
+  size?: Size;
+  radius?: Radius;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  variant = 'default',
+  size = 'md',
+  radius = 'pill',
+  class: className,
+  ariaLabel
+} = Astro.props as Props;
+
+const base = 'inline-flex items-center justify-center font-medium select-none align-middle';
+const radii: Record<Radius, string> = {
+  pill: 'rounded-full',
+  rounded: 'rounded-md'
+};
+const paddings: Record<Size, string> = {
+  sm: 'px-2.5 py-0.5 text-xs',
+  md: 'px-3 py-1 text-sm'
+};
+
+const colorByVariant: Record<Variant, string> = {
+  default: 'bg-[color:var(--accent)/0.15] text-[var(--accent)] border border-[color:var(--accent)/0.3]',
+  accent: 'bg-[var(--accent)] text-[var(--accent-foreground)] border border-[var(--accent)]',
+  info: 'bg-[var(--info)] text-[var(--info-foreground)] border border-[var(--info)]',
+  success: 'bg-[var(--success)] text-[var(--success-foreground)] border border-[var(--success)]',
+  warning: 'bg-[var(--warning)] text-[var(--warning-foreground)] border border-[var(--warning)]',
+  error: 'bg-[var(--error)] text-[var(--error-foreground)] border border-[var(--error)]',
+  outline: 'bg-transparent text-[var(--muted-foreground,#6b7280)] border border-[var(--border)]'
+};
+
+const classes = [base, radii[radius], paddings[size], colorByVariant[variant], className]
+  .filter(Boolean)
+  .join(' ');
+---
+
+<span class={classes} role="status" aria-label={ariaLabel}>
+  <slot />
+</span>

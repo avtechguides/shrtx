@@ -1,0 +1,126 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/sections/Header.astro';
+import Footer from '../../../components/sections/Footer.astro';
+import PostCard from '../../../components/ui/card/PostCard.astro';
+
+// Posts per page
+const PAGE_SIZE = 6;
+
+// Slugify category names for URLs
+function slugifyCategory(name: string) {
+  return name.toLowerCase().replace(/\s+/g, '-');
+}
+
+// Convert slug back to human-readable title
+function titleFromSlug(slug: string) {
+  return slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+}
+
+// Generate static paths for all category pages
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const categories = [
+    ...new Set(
+      posts
+        .map((p) => p.data.category || null)
+        .filter((v): v is string => Boolean(v))
+        .map((name) => slugifyCategory(name))
+    ),
+  ];
+
+  const paths: { params: { category: string; page: string } }[] = [];
+  for (const cat of categories) {
+    const catPosts = posts.filter((p) => slugifyCategory(p.data.category || '') === cat);
+    const totalPages = Math.max(1, Math.ceil(catPosts.length / PAGE_SIZE));
+    for (let i = 1; i <= totalPages; i++) {
+      paths.push({ params: { category: cat, page: i.toString() } });
+    }
+  }
+  return paths;
+}
+
+// Get category and page
+const { category, page } = Astro.params;
+
+// Fetch posts for this category
+const allPosts = (await getCollection('blog'))
+  .filter((p) => slugifyCategory(p.data.category || '') === category)
+  .sort((a, b) => +b.data.pubDate - +a.data.pubDate);
+
+const currentPage = Math.max(1, parseInt(page || '1', 10));
+const totalPages = Math.max(1, Math.ceil(allPosts.length / PAGE_SIZE));
+const start = (currentPage - 1) * PAGE_SIZE;
+const end = start + PAGE_SIZE;
+const posts = allPosts.slice(start, end);
+
+// Meta info
+const meta = {
+  title: titleFromSlug(category),
+  description: `All blog posts under the "${titleFromSlug(category)}" category.`,
+};
+
+// Canonical URL
+const canonical = currentPage === 1
+  ? `/blog/category/${category}/`
+  : `/blog/category/${category}/page/${currentPage}/`;
+---
+
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <BaseHead title={`${meta.title} - Category`} description={meta.description} />
+    {currentPage > 1 && (
+      <link rel="prev" href={currentPage === 2 ? `/blog/category/${category}/` : `/blog/category/${category}/page/${currentPage - 1}/`} />
+    )}
+    {currentPage < totalPages && (
+      <link rel="next" href={`/blog/category/${category}/page/${currentPage + 1}/`} />
+    )}
+
+    <link rel="alternate" type="application/rss+xml" title={`Category: ${category} feed`} href={`/rss/category/${category}.xml`} />
+  </head>
+  <body>
+    <Header />
+
+    <main class="mx-auto max-w-6xl px-4 py-16 space-y-10">
+
+      <!-- Category Hero -->
+      <section class="relative text-center p-10 rounded-2xl overflow-hidden bg-gray-900 dark:bg-gray-800">
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 via-purple-600/20 to-pink-600/20 dark:from-indigo-400/10 dark:via-purple-400/10 dark:to-pink-400/10 blur-3xl"></div>
+        <div class="relative z-10 animate-fade-up">
+          <h1 class="text-5xl font-extrabold">{meta.title}</h1>
+          <p class="mt-4 text-lg text-[color:var(--color-text-muted)] max-w-2xl mx-auto">{meta.description}</p>
+        </div>
+      </section>
+
+      <!-- Posts Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((p) => <PostCard post={p} />)}
+      </div>
+
+      <!-- Pagination Buttons -->
+      {totalPages > 1 && (
+        <div class="flex justify-center gap-4 mt-12">
+          {currentPage > 1 && (
+            <a
+              class="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-indigo-600 hover:text-white transition flex items-center gap-2"
+              href={currentPage === 2 ? `/blog/category/${category}/` : `/blog/category/${category}/page/${currentPage - 1}/`}
+            >
+              ← Previous (Page {currentPage - 1} of {totalPages})
+            </a>
+          )}
+          {currentPage < totalPages && (
+            <a
+              class="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-indigo-600 hover:text-white transition flex items-center gap-2"
+              href={`/blog/category/${category}/page/${currentPage + 1}/`}
+            >
+              Next (Page {currentPage + 1} of {totalPages}) →
+            </a>
+          )}
+        </div>
+      )}
+    </main>
+
+    <Footer />
+  </body>
+</html>

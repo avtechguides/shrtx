@@ -1,0 +1,79 @@
+---
+const STORAGE_KEY = 'cookiesConsent';
+const DAYS = 180;
+
+const script = `
+(function () {
+  try {
+    var KEY='${STORAGE_KEY}';
+    var root = null;
+    function get(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(_){ return null; } }
+    function set(val){
+      var exp = new Date(Date.now()+${DAYS}*24*60*60*1000).toISOString();
+      localStorage.setItem(KEY, JSON.stringify({ value: val, ts: Date.now(), expires: exp }));
+      window.dispatchEvent(new CustomEvent('cookies:consent', { detail: { value: val } }));
+    }
+    function expired(v){ return !v || !v.expires || new Date(v.expires).getTime() < Date.now(); }
+    function hide(){ if(root) root.style.display='none'; }
+    function show(){ if(root) root.style.display=''; }
+
+    function init(){
+      root = document.querySelector('[data-cookie-bar]');
+      if(!root) return;
+      var v = get();
+      if(expired(v)) show(); else hide();
+
+      var accept = root.querySelector('[data-accept-all]');
+      var reject = root.querySelector('[data-reject]');
+      var manage = root.querySelector('[data-manage]');
+      accept && accept.addEventListener('click', function(){ set('accepted'); hide(); });
+      reject && reject.addEventListener('click', function(){ set('declined'); hide(); });
+      manage && manage.addEventListener('click', function(){
+        // Optional: open a settings modal if implemented; fallback to accept essentials only
+        set('essentials'); hide();
+      });
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+  } catch(e){}
+})();`;
+---
+<div data-cookie-bar class="fixed inset-x-0 bottom-0 z-50" style="display:none">
+  <div class="border-t border-neutral-200 bg-neutral-50/95 text-neutral-900 backdrop-blur supports-[backdrop-filter]:backdrop-blur-sm dark:border-white/10 dark:bg-neutral-900/92 dark:text-neutral-50">
+    <div class="mx-auto max-w-7xl px-4 py-3 sm:px-6">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div class="max-w-4xl">
+          <h3 class="m-0 text-[15px] font-semibold">We use cookies</h3>
+          <p class="mt-1 text-[13px] sm:text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
+            Some cookies are essential and cannot be turned off. Optional analytics help improve the service. Learn more in our
+            <a href="/privacy" class="underline underline-offset-2 decoration-1 hover:decoration-2">Privacy Policy</a>.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 sm:gap-3 self-start sm:self-auto">
+          <button
+            type="button"
+            data-manage
+            class="px-3.5 py-2 rounded-full border border-neutral-300 bg-white text-neutral-900 shadow-sm hover:bg-neutral-50 text-sm dark:border-white/20 dark:bg-white/10 dark:text-neutral-50 dark:hover:bg-white/15"
+          >
+            Manage Cookies
+          </button>
+          <button
+            type="button"
+            data-reject
+            class="px-3.5 py-2 rounded-full border border-neutral-300 bg-white text-neutral-900 shadow-sm hover:bg-neutral-50 text-sm dark:border-white/20 dark:bg-white/10 dark:text-neutral-50 dark:hover:bg-white/15"
+          >
+            Reject non-essential
+          </button>
+          <button
+            type="button"
+            data-accept-all
+            class="px-3.5 py-2 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-sm text-sm"
+          >
+            Accept all
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>{script}</script>

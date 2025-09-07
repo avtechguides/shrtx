@@ -1,0 +1,121 @@
+/* SHRTX Design Tokens */
+:root {
+  /* Brand (from logo) */
+  --logo-shrt: #000000;
+  --logo-x-blue: #092B77;
+  --logo-x-red: #E02126;
+  --logo-x-black: #000000;
+
+  /* Core actions */
+  --primary: var(--logo-x-blue);
+  --primary-foreground: #ffffff;
+  --primary-hover: #0b3aa3;     /* accessible hover */
+  --primary-active: #082b7a;
+
+  --secondary: #111827;         /* slightly softer than pure black */
+  --secondary-foreground: #ffffff;
+  --secondary-hover: #1f2937;
+  --secondary-active: #0b1220;
+
+  --danger: var(--logo-x-red);
+  --danger-foreground: #ffffff;
+  --danger-hover: #c0181d;
+  --danger-active: #a11215;
+
+  /* Neutrals */
+  --white: #ffffff;
+  --black: #0f1219;
+  --charcoal: #1c1f26;
+  --navy: #081323;
+
+  /* Surfaces (light) */
+  --background: var(--white);
+  --foreground: var(--black);
+  --muted: #6b7280; /* text-muted */
+  --card: var(--white);
+  --card-foreground: var(--black);
+  --popover: var(--white);
+  --popover-foreground: var(--black);
+
+  /* Accent */
+  --accent: var(--primary);
+  --accent-dark: #08306b;
+  --accent-foreground: var(--primary-foreground);
+
+  /* Gradients */
+  --gradient-blue-red: linear-gradient(90deg, var(--logo-x-blue), var(--logo-x-red));
+  --gradient-dark: linear-gradient(135deg, #000000, var(--logo-x-blue));
+  --gradient-accent: linear-gradient(135deg, var(--logo-x-blue), var(--logo-x-red), var(--logo-x-black));
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 15px rgba(0,0,0,0.12);
+  --shadow-xl: 0 12px 25px rgba(0,0,0,0.16);
+  --shadow-2xl: 0 25px 50px rgba(0,0,0,0.20);
+  --box-shadow: 0 2px 6px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.12), 0 16px 32px rgba(0,0,0,0.12);
+
+  /* Borders / Radius */
+  --border: #e5e9f0;
+  --input: #e5e9f0;
+  --outline: var(--primary);
+  --radius: 12px;
+
+  /* Semantic */
+  --info: #38bdf8;
+  --info-foreground: #082f49;
+  --success: #22c55e;
+  --success-foreground: #052e16;
+  --warning: #f59e0b;
+  --warning-foreground: #451a03;
+  --error: var(--danger);
+  --error-foreground: var(--danger-foreground);
+
+  /* Component tokens */
+  --cookie-bg: #f9fafb;                 /* light toast/modal */
+  --cookie-fg: #0f172a;
+  --cookie-ring: rgba(0,0,0,0.06);
+  --cookie-dark-bg: rgba(17,24,39,0.92); /* dark bar/modal */
+  --cookie-dark-fg: #f8fafc;
+
+  --btn-pill-bg: #ffffff;
+  --btn-pill-fg: #111827;
+  --btn-pill-ring: #e5e7eb;
+
+  --focus-ring: #2563eb; /* blue-600 focus */
+}
+
+/* Dark theme overrides */
+:root[class~="dark"], [data-theme="dark"], .dark {
+  --background: #0b0b0b;
+  --foreground: #e5e7eb;
+  --muted: #9ca3af;
+
+  --card: #121212;
+  --card-foreground: #e5e7eb;
+  --popover: #111214;
+  --popover-foreground: #e5e7eb;
+
+  --border: #252933;
+  --input: #1f2430;
+
+  --primary: #3b82f6;             /* better contrast for dark */
+  --primary-hover: #2563eb;
+  --primary-active: #1d4ed8;
+  --accent: var(--primary);
+  --accent-dark: #1d4ed8;
+
+  --cookie-bg: rgba(17,24,39,0.92);
+  --cookie-fg: #f8fafc;
+  --cookie-ring: rgba(255,255,255,0.12);
+
+  --btn-pill-bg: rgba(255,255,255,0.08);
+  --btn-pill-fg: #f3f4f6;
+  --btn-pill-ring: rgba(255,255,255,0.18);
+}
+
+/* Media preference hints */
+:root { color-scheme: light dark; }
+@media (prefers-reduced-motion: reduce) {
+  :root { scroll-behavior: auto; }
+}

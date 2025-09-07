@@ -1,0 +1,93 @@
+.
+├── astro.config.mjs
+├── dev.log
+├── .gitattributes
+├── .github
+│   └── workflows
+│       └── deploy.yml
+├── .gitignore
+├── LICENSE
+├── package.json
+├── package-lock.json
+├── project-tree.txt
+├── public
+│   ├── apple-touch-icon.png
+│   ├── favicon-16x16.png
+│   ├── favicon-32x32.png
+│   ├── favicon-48x48.png
+│   ├── favicon.ico
+│   ├── favicon.png
+│   ├── favicon.svg
+│   ├── fonts
+│   │   ├── atkinson-bold.woff
+│   │   └── atkinson-regular.woff
+│   ├── images
+│   │   └── vishu-akanksha-shrtx-developer.jpg
+│   ├── LOGO-SHRTX-TP.png
+│   ├── LOGO-SHRTX-TP.svg
+│   ├── LOGO-SHRTX-TP-whitebg.png
+│   ├── LOGO-SHRTX-TP-whitebg.svg
+│   └── robots.txt
+├── README.md
+├── sitemap.config.mjs
+├── src
+│   ├── assets
+│   │   ├── icons
+│   │   ├── images
+│   │   └── logos
+│   ├── components
+│   │   ├── BaseHead.astro
+│   │   ├── CookieBanner.astro
+│   │   ├── FormattedDate.astro
+│   │   ├── sections
+│   │   ├── Seo.astro
+│   │   └── ui
+│   ├── config
+│   │   ├── consts.ts
+│   │   ├── index.ts
+│   │   └── seo.config.ts
+│   ├── content
+│   │   ├── blog
+│   │   └── config.ts
+│   ├── content.config.ts
+│   ├── data
+│   │   ├── author.ts
+│   │   ├── categories.ts
+│   │   ├── features.ts
+│   │   ├── logos.ts
+│   │   ├── tags.ts
+│   │   └── toolHighlights.ts
+│   ├── layouts
+│   │   └── BlogPost.astro
+│   ├── lib
+│   │   ├── reading.ts
+│   │   ├── slug.ts
+│   │   └── svg.ts
+│   ├── pages
+│   │   ├── 404.astro
+│   │   ├── about.astro
+│   │   ├── blog
+│   │   ├── contact.astro
+│   │   ├── cookie.astro
+│   │   ├── disclaimer.astro
+│   │   ├── donation.astro
+│   │   ├── index.astro
+│   │   ├── privacy.astro
+│   │   ├── projects
+│   │   ├── rss
+│   │   ├── rss.xml.js
+│   │   ├── search-index.json.ts
+│   │   └── terms.astro
+│   ├── scripts
+│   │   └── header.js
+│   └── styles
+│       ├── global.css
+│       ├── starwind.css
+│       ├── themes
+│       ├── tokens.css
+│       └── utilities.css
+├── starwind.config.json
+├── structure.txt
+└── tsconfig.json
+
+27 directories, 64 files

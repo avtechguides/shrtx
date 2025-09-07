@@ -1,0 +1,97 @@
+---
+import type { ToolHighlight } from '@/data/toolHighlights';
+
+interface Props {
+  title?: string;
+  highlights?: ToolHighlight[];
+  ariaLabel?: string;        // accessibility label for the section
+  compact?: boolean;         // optional denser grid/cards
+}
+
+const {
+  title = 'Why Use SHRTX for URL Shortening?',
+  highlights = [
+    { title: 'Easy & Fast', description: 'Enter a long URL and get a shortened link instantly.', icon: '⚡' },
+    { title: 'Shortened Links Everywhere', description: 'Optimized links for sharing across platforms.', icon: '📈' },
+    { title: 'Secure & Reliable', description: 'HTTPS and automated abuse filtering for safe links.', icon: '🔒' },
+    { title: 'Analytics & Tracking', description: 'Monitor clicks and engagement in real time.', icon: '📊' },
+    { title: 'QR Code Generator', description: 'Create QR codes instantly for any link.', icon: '✨' },
+    { title: 'Device Compatible', description: 'Works across phones, tablets, and desktops.', icon: '📱' }
+  ],
+  ariaLabel = 'Tool highlights',
+  compact = false
+} = Astro.props as Props;
+
+// Defensive copy and normalization
+const items: ToolHighlight[] = Array.isArray(highlights) ? [...highlights] : [];
+---
+
+<section
+  class="w-full py-12 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300"
+  aria-labelledby="tool-highlights-title"
+  role="region"
+  aria-label={ariaLabel}
+>
+  <div class="mx-auto max-w-6xl px-4 text-center mb-10">
+    <h2 id="tool-highlights-title" class="text-3xl md:text-4xl font-extrabold mb-2">
+      <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+        {title}
+      </span>
+    </h2>
+  </div>
+
+  <div
+    class={[
+      'mx-auto max-w-6xl px-4 grid gap-6',
+      compact ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+    ].join(' ')}
+    role="list"
+  >
+    {items.length === 0 ? (
+      <div class="col-span-full text-center text-[var(--muted-foreground,#6b7280)]">
+        No highlights available right now.
+      </div>
+    ) : (
+      items.map((h, idx) => (
+        <article
+          class={[
+            'relative group rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-md hover:shadow-lg transition-transform duration-200 hover:-translate-y-0.5 focus-within:-translate-y-0.5',
+            compact ? 'p-5' : 'p-6 md:p-6'
+          ].join(' ')}
+          role="listitem"
+          aria-label={h.title}
+          data-key={(h.title ?? 'item') + '-' + idx}
+        >
+          <!-- Gradient ring (non-blocking) -->
+          <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35">
+            <span
+              class="absolute inset-0 rounded-2xl"
+              style="background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+                     mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                     -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+            ></span>
+          </span>
+
+          <div class="relative flex flex-col items-center text-center">
+            <div class={['flex items-center justify-center text-4xl transition-transform duration-300 group-hover:scale-110', compact ? 'mb-3 w-14 h-14' : 'mb-4 w-16 h-16'].join(' ')}>
+              <span aria-hidden="true">{h.icon}</span>
+            </div>
+            <h3 class={['font-extrabold mb-2', compact ? 'text-lg' : 'text-xl'].join(' ')}>
+              <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+                {h.title}
+              </span>
+            </h3>
+            <p class={['text-[var(--muted-foreground,#6b7280)] leading-relaxed', compact ? 'text-sm' : ''].join(' ')}>
+              {h.description}
+            </p>
+          </div>
+        </article>
+      ))
+    )}
+  </div>
+</section>
+
+<style>
+/* Relies on global tokens for color system */
+</style>

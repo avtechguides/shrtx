@@ -1,0 +1,20 @@
+---
+interface Props {
+  date: Date;
+  variant?: 'short' | 'long'; // optional: short -> 04 Sep 2025, long -> 04 September 2025
+}
+
+const { date, variant = 'short' } = Astro.props;
+
+// Format options for Indian conventions
+const optsShort: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'short', year: 'numeric' };
+const optsLong: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
+const options = variant === 'long' ? optsLong : optsShort;
+
+// Use en-IN for Indian ordering and names
+const display = date.toLocaleDateString('en-IN', options);
+
+// Keep machine-readable ISO for the datetime attribute
+const iso = date.toISOString();
+---
+<time datetime={iso}>{display}</time>

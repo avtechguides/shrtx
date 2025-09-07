@@ -1,0 +1,238 @@
+---
+import Seo from '../../components/BaseHead.astro';
+import Footer from '../../components/sections/Footer.astro';
+import Header from '../../components/sections/Header.astro';
+import Button from '../../components/ui/button/Button.astro';
+import DonationCTA from '../../components/ui/DonationCTA.astro';
+
+const pageTitle = 'SHRTX – URL Shortener by Vishu';
+const pageDescription = 'SHRTX is a lightweight, secure, and fast URL shortener built by Vishu. Simplify your links and share smarter.';
+const heroImage = '/images/vishu-akanksha-shrtx-developer.jpg';
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <Seo 
+      title={pageTitle} 
+      description={pageDescription} 
+    />
+
+    <!-- JSON-LD: Project -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'SHRTX',
+        description: 'A fast, secure, and simple URL shortener built by Vishu.',
+        operatingSystem: 'Any',
+        applicationCategory: 'WebApplication',
+        creator: {
+          '@type': 'Person',
+          name: 'Vishu',
+          url: new URL('/about', Astro.site).toString()
+        },
+        url: new URL('/projects/shrtx', Astro.site).toString()
+      })}
+    />
+
+    <style>
+      @keyframes fadeUp {
+        0% { opacity: 0; transform: translateY(20px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+      .fade-up {
+        animation: fadeUp 0.8s ease-out forwards;
+        opacity: 0;
+      }
+      .fade-delay-1 { animation-delay: 0.2s; }
+      .fade-delay-2 { animation-delay: 0.4s; }
+      .fade-delay-3 { animation-delay: 0.6s; }
+      .fade-delay-4 { animation-delay: 0.8s; }
+      .fade-delay-5 { animation-delay: 1s; }
+      .fade-delay-6 { animation-delay: 1.2s; }
+      .fade-delay-7 { animation-delay: 1.4s; }
+
+      .card-surface {
+        background: var(--card);
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-lg);
+        padding: 2rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .card-surface:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-xl);
+      }
+
+      h2.underlined {
+        position: relative;
+        display: inline-block;
+        padding-bottom: 0.3em;
+      }
+      h2.underlined::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 20%;
+        width: 60%;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 9999px;
+      }
+
+      /* Removed highlight background */
+      .highlight {
+        font-weight: 700;
+        color: var(--accent);
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+      }
+
+      .btn-icon {
+        display: inline-flex;
+        align-items: center;
+      }
+      .btn-icon svg {
+        margin-left: 0.5em;
+        transition: transform 0.3s ease;
+      }
+      .btn-icon:hover svg {
+        transform: translateX(4px);
+      }
+
+      .text-accent {
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <Header />
+
+    <main class="max-w-5xl mx-auto px-6 py-16 space-y-24 prose prose-invert text-[var(--foreground)]">
+
+      <!-- Hero -->
+      <section class="text-center space-y-6 max-w-3xl mx-auto px-4">
+        <h1 class="text-6xl font-extrabold text-accent fade-up fade-delay-1">SHRTX</h1>
+        <p class="text-xl text-[var(--color-text-muted)] fade-up fade-delay-2">
+          A <span class="highlight">fast</span>, <span class="highlight">secure</span>, and <span class="highlight">no-nonsense</span> URL shortener built with simplicity and reliability in mind.
+        </p>
+        <div class="flex justify-center gap-6 fade-up fade-delay-3">
+          <Button href="/app" variant="primary" size="lg" class="btn-icon">
+            Start Shortening
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+          </Button>
+          <Button href="/about" variant="secondary" size="lg">Meet the Creator</Button>
+        </div>
+      </section>
+
+      <!-- Story -->
+      <section class="card-surface fade-up fade-delay-1 max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-accent underlined mb-6">The Story Behind SHRTX</h2>
+        <p class="leading-relaxed mb-4">
+          SHRTX was born from a simple frustration: existing URL shorteners were either too slow, 
+          packed with intrusive ads, or collected unnecessary personal data. 
+          As someone who values speed, security, and clean design, I decided to create 
+          a tool that would focus on <strong class="highlight">one mission only</strong>—making link sharing effortless.
+        </p>
+        <p class="leading-relaxed">
+          Instead of bloated dashboards and endless settings, SHRTX is designed 
+          to get you from long link &rarr; short link in a blink. No distractions, 
+          no waiting, no “premium-only” paywalls.
+        </p>
+      </section>
+
+      <!-- Why SHRTX -->
+      <section class="card-surface fade-up fade-delay-2 max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-accent underlined mb-6">Why Choose SHRTX?</h2>
+        <p>
+          The internet is full of link shorteners, but few are built for modern creators, developers, 
+          and businesses who want speed and trust. Here’s what makes SHRTX different:
+        </p>
+        <ul class="list-disc list-inside space-y-2">
+          <li><strong>Minimal & Fast:</strong> Built on Astro and Cloudflare Workers, SHRTX loads instantly.</li>
+          <li><strong>Secure:</strong> No shady redirects or malware risks. Your links are safe.</li>
+          <li><strong>Custom Domains:</strong> Brand your links your way with a personal or business domain.</li>
+          <li><strong>Privacy-Respecting:</strong> No hidden trackers, no surprise ads, no selling your data.</li>
+        </ul>
+      </section>
+
+      <!-- Features -->
+      <section class="card-surface fade-up fade-delay-3 max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-accent underlined mb-6">Features That Matter</h2>
+        <p>
+          SHRTX is not overloaded with features you don’t need. Instead, it’s designed to give you 
+          the essentials done right:
+        </p>
+        <ul class="list-disc list-inside space-y-2">
+          <li>One-click link shortening</li>
+          <li>Optional analytics (click counts, referrers, top locations)</li>
+          <li>Custom aliases & branded links</li>
+          <li>Secure redirects powered by Cloudflare</li>
+          <li>Open-source friendly architecture for future contributions</li>
+        </ul>
+      </section>
+
+      <!-- Tech Stack -->
+      <section class="card-surface fade-up fade-delay-4 max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-accent underlined mb-6">The Tech Under The Hood</h2>
+        <p>
+          SHRTX is a modern app, built with technologies that guarantee performance and reliability:
+        </p>
+        <ul class="list-disc list-inside space-y-2">
+          <li><strong>Astro</strong> – lightning-fast frontend framework</li>
+          <li><strong>TailwindCSS</strong> – clean, responsive, theme-ready styling</li>
+          <li><strong>Cloudflare Workers</strong> – serverless, global, and edge-ready backend</li>
+          <li><strong>Cloudflare D1</strong> – lightweight SQL database for storing short links</li>
+        </ul>
+        <p>
+          This combination makes SHRTX <strong>future-proof</strong>, 
+          scalable, and optimized for both individual users and teams.
+        </p>
+      </section>
+
+      <!-- Vision -->
+      <section class="card-surface fade-up fade-delay-5 max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-accent underlined mb-6">The Vision Ahead</h2>
+        <p>
+          SHRTX is not just about cutting down URLs—it’s about giving creators, startups, 
+          and businesses control over how they share their digital presence. 
+          As the internet grows, links are the currency of attention. 
+          Having a reliable, private, and customizable link shortener 
+          means you’re always in charge of how your content travels across the web.
+        </p>
+        <p>
+          Future updates will bring deeper analytics, integrations with popular tools, 
+          and more personalization options—all while keeping SHRTX lightweight 
+          and free from unnecessary complexity.
+        </p>
+      </section>
+
+      <!-- CTA -->
+      <section class="text-center space-y-6 fade-up fade-delay-6">
+        <h2 class="text-3xl font-bold text-accent">Try SHRTX Today</h2>
+        <p class="text-[var(--color-text-muted)] max-w-xl mx-auto">
+          Stop fighting with bloated shorteners. SHRTX is built to be yours — simple, 
+          private, and reliable from the start.
+        </p>
+        <div class="flex justify-center gap-4">
+          <Button href="/app" variant="primary" size="lg" class="btn-icon">
+            Get Started
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+          </Button>
+          <Button href="/contact" variant="secondary" size="lg">Contact Vishu</Button>
+        </div>
+      </section>
+
+           <!-- Donation CTA -->
+      <section class="max-w-3xl mx-auto mt-12 fade-up fade-delay-7">
+        <DonationCTA />
+      </section>
+
+    </main>
+
+    <Footer />
+  </body>
+</html>

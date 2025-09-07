@@ -1,0 +1,22 @@
+---
+type Variant = 'solid' | 'subtle' | 'outline';
+interface Props {
+  class?: string;
+  variant?: Variant;
+  padded?: boolean; // set false for bare containers
+}
+const { class: className, variant = 'solid', padded = true } = Astro.props as Props;
+
+const base = 'rounded-2xl';
+const surfaces: Record<Variant, string> = {
+  solid: 'bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-sm',
+  subtle: 'bg-[var(--background)] text-[var(--foreground)] ring-1 ring-inset ring-[var(--border)]/60',
+  outline: 'bg-transparent text-[var(--foreground)] ring-1 ring-inset ring-[var(--border)]',
+};
+const padding = padded ? 'p-6' : '';
+const classes = [base, surfaces[variant], padding, className].filter(Boolean).join(' ');
+---
+
+<div class={classes}>
+  <slot />
+</div>

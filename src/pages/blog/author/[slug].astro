@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import Seo from '../../../components/Seo.astro';
+import Header from '../../../components/sections/Header.astro';
+import Footer from '../../../components/sections/Footer.astro';
+import PostCard from '../../../components/ui/card/PostCard.astro';
+import { slugifyTag as slugify } from '../../../lib/slug';
+import AuthorCard from '../../../components/sections/AuthorCard.astro';
+
+
+const PAGE_SIZE = 6;
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const authorSlugs = [...new Set(posts.map((p) => slugify(p.data.author || 'Site Author')))];
+  const paths = [];
+  for (const slug of authorSlugs) {
+    const authorPosts = posts.filter(p => slugify(p.data.author || 'Site Author') === slug);
+    const totalPages = Math.max(1, Math.ceil(authorPosts.length / PAGE_SIZE));
+    for (let i = 1; i <= totalPages; i++) {
+      paths.push({ params: { slug, page: i.toString() } });
+    }
+  }
+  return paths;
+}
+
+const { slug, page } = Astro.params;
+
+const allPosts = (await getCollection('blog'))
+  .filter(p => slugify(p.data.author || 'Site Author') === slug)
+  .sort((a, b) => +b.data.pubDate - +a.data.pubDate);
+
+const currentPage = Math.max(1, parseInt(page || '1', 10));
+const totalPages = Math.max(1, Math.ceil(allPosts.length / PAGE_SIZE));
+const start = (currentPage - 1) * PAGE_SIZE;
+const end = start + PAGE_SIZE;
+const posts = allPosts.slice(start, end);
+const authorName = allPosts[0]?.data.author || 'Site Author';
+---
+
+<Seo
+  title={`Articles by ${authorName}`}
+  description={`All blog posts written by ${authorName}.`}
+  path={`/blog/author/${slug}/`}
+  type="blog"
+/>
+<Header />
+
+<main class="max-w-4xl mx-auto px-6 py-12 prose prose-invert">
+  <h1 class="text-center text-3xl font-bold mb-8">All blog posts written by {authorName}</h1>
+  <section class="space-y-10">
+    {posts.length === 0 ? (
+      <p class="text-center text-muted-foreground">No posts found for this author.</p>
+    ) : (
+      posts.map(post => <PostCard post={post} />)
+    )}
+  </section>
+
+  {totalPages > 1 && (
+    <nav class="mt-12 flex justify-center space-x-4">
+      {currentPage > 1 && (
+        <a
+          href={currentPage === 2 ? `/blog/author/${slug}/` : `/blog/author/${slug}/page/${currentPage - 1}/`}
+          class="text-[var(--accent)] hover:underline"
+          aria-label="Previous page"
+        >
+          ← Previous
+        </a>
+      )}
+      <span class="text-muted-foreground">
+        Page {currentPage} of {totalPages}
+      </span>
+      {currentPage < totalPages && (
+        <a
+          href={`/blog/author/${slug}/page/${currentPage + 1}/`}
+          class="text-[var(--accent)] hover:underline"
+          aria-label="Next page"
+        >
+          Next →
+        </a>
+      )}
+    </nav>
+  )}
+</main>
+
+<Footer />

@@ -1,0 +1,157 @@
+---
+import Seo from '@/components/Seo.astro';
+import Header from '@/components/sections/Header.astro';
+import Footer from '@/components/sections/Footer.astro';
+import HeroSection from '@/components/sections/HeroSection.astro';
+import FeaturesSection from '@/components/sections/FeaturesSection.astro';
+import ToolHighlightsSection from '@/components/sections/ToolHighlightsSection.astro';
+import Carousel from '@/components/ui/carousel/Carousel.astro';
+import DonationCTA from '@/components/ui/DonationCTA.astro';
+import { logos } from '@/data/logos';
+import { features } from '@/data/features';
+import { SITE_TITLE, SITE_DESCRIPTION } from '@/config';
+import { generateToolSEO, generateSiteEntityJSONLD } from '@/config';
+
+// Optional homepage hero image (will be resolved to absolute by Seo)
+const HOMEPAGE_HERO = '/images/vishu-akanksha-shrtx-developer.jpg';
+
+// Primary SEO for the SHRTX app (homepage)
+const seo = generateToolSEO({
+  title: 'SHRTX – Shorten, Share, and Track',
+  description: 'A modern, fast, and reliable URL shortener with analytics, QR codes, and seamless integrations.',
+  path: '/',
+  image: HOMEPAGE_HERO
+});
+
+// Site entity JSON-LD (Organization + WebSite + SearchAction) – include once sitewide
+const siteEntity = generateSiteEntityJSONLD();
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <Seo
+      title={seo.title}
+      description={seo.description}
+      path="/"
+      image={seo.image}
+      imageAlt={seo.imageAlt}
+      type="tool"
+    />
+    <script type="application/ld+json" set:html={JSON.stringify(siteEntity)} />
+    <style>
+      .typewriter {
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 0.15em solid var(--accent);
+        color: var(--color-text-primary);
+      }
+      .gradient-text {
+        background-image: var(--gradient-accent-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: transparent;
+        display: inline-block;
+        text-align: center;
+      }
+      :root {
+        --gradient-accent-text: linear-gradient(90deg, var(--accent), var(--accent-dark));
+        --card-gradient-hover: linear-gradient(90deg, var(--accent), var(--accent-dark));
+      }
+      [data-theme="dark"], .dark {
+        --gradient-accent-text: linear-gradient(90deg, #3B82F6, #60A5FA);
+        --card-gradient-hover: linear-gradient(90deg, #3B82F6, #EC2F36);
+      }
+      [data-theme="light"], .light {
+        --gradient-accent-text: linear-gradient(90deg, #2563EB, #3B82F6);
+        --card-gradient-hover: linear-gradient(90deg, #2563EB, #EC2F36);
+      }
+    </style>
+  </head>
+
+  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <Header />
+
+    <main class="space-y-16">
+      <!-- Hero Section -->
+      <HeroSection
+        title="SHRTX – Shorten, Share, and Track"
+        subtitle="A modern, fast, and reliable URL shortener with analytics, QR codes, and seamless integrations."
+        showCTA
+        primaryCTA={{ text: 'Start Shortening', href: '/app' }}
+        secondaryCTA={{ text: 'Learn More', href: '/about' }}
+      />
+
+      <!-- Typewriter -->
+      <div class="flex justify-center items-center">
+        <h1 id="hero-phrase" class="typewriter text-3xl md:text-4xl font-bold text-center"></h1>
+      </div>
+
+      <!-- Popular Platforms Carousel -->
+      <section class="py-8 bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] flex flex-col items-center transition-colors duration-300">
+        <h2 class="text-3xl md:text-4xl font-extrabold mb-6 gradient-text text-center w-full max-w-6xl">
+          Connect With Popular Platforms
+        </h2>
+        <div class="w-full max-w-6xl">
+          <Carousel items={logos} />
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section class="py-8 bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+        <FeaturesSection title="SHRTX Features" features={features} />
+      </section>
+
+      <!-- Tool Highlights Section -->
+      <section class="py-8 bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+        <ToolHighlightsSection />
+      </section>
+
+      <!-- Donation CTA Component -->
+      <DonationCTA
+        description="I keep SHRTX and my projects free of ads — if you like my work, consider making a small donation to keep everything running smoothly."
+      />
+    </main>
+
+    <Footer />
+
+    <!-- Typewriter JS -->
+    <script type="module">
+      const phrases = [
+        "Shorten links in a blink",
+        "Generate QR codes instantly",
+        "Track your links effortlessly",
+        "SHRTX – fast, reliable, and modern"
+      ];
+      const el = document.getElementById('hero-phrase');
+      let phraseIndex = 0;
+      let charIndex = 0;
+
+      function type() {
+        if (!el) return;
+        const current = phrases[phraseIndex];
+        el.textContent = current.slice(0, charIndex + 1);
+        charIndex++;
+        if (charIndex < current.length) {
+          setTimeout(type, 80);
+        } else {
+          setTimeout(erase, 2000);
+        }
+      }
+      function erase() {
+        const current = phrases[phraseIndex];
+        el.textContent = current.slice(0, charIndex - 1);
+        charIndex--;
+        if (charIndex > 0) {
+          setTimeout(erase, 40);
+        } else {
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          setTimeout(type, 500);
+        }
+      }
+      type();
+    </script>
+  </body>
+</html>

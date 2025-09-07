@@ -1,0 +1,62 @@
+---
+import Button from './button/Button.astro';
+
+const {
+  title = 'Support My Work',
+  description = 'SHRTX is ad‑free and built for the community. If you find these tools helpful, supporting ongoing development helps keep them fast, reliable, and ad‑free. Any contribution is appreciated.',
+  buttonText = 'Donate',
+  buttonHref = '/donation',
+  compact = false
+} = Astro.props;
+---
+
+<section
+  class="w-full py-12 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300"
+  aria-labelledby="donation-cta-title"
+  role="region"
+>
+  <!-- Card surface with gradient ring -->
+  <div
+    class={[
+      'relative mx-auto max-w-4xl rounded-2xl ring-1 ring-inset ring-[var(--border)] shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus-within:-translate-y-0.5',
+      compact ? 'p-5' : 'p-6 md:p-6'
+    ].join(' ')}
+  >
+    <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35">
+      <span
+        class="absolute inset-0 rounded-2xl"
+        style="background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+               mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+               -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+               -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+      ></span>
+    </span>
+
+    <div class="relative flex flex-col items-center text-center space-y-4">
+      <div class={['text-4xl transition-transform duration-300 hover:scale-110', compact ? 'w-14 h-14' : 'w-16 h-16'].join(' ')}>
+        <span aria-hidden="true">💖</span>
+      </div>
+
+      <h3 class={['font-extrabold', compact ? 'text-lg' : 'text-xl'].join(' ')}>
+        <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+          {title}
+        </span>
+      </h3>
+
+      <p class={['text-[var(--muted-foreground,#6b7280)] leading-relaxed', compact ? 'text-sm' : ''].join(' ')}>
+        {description}
+      </p>
+
+      <div class="flex justify-center">
+        <Button href={buttonHref} variant="primary" class={compact ? 'px-6 py-2 text-lg' : 'px-8 py-3 text-lg'}>
+          {buttonText}
+        </Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<style>
+/* Gradient ring hover opacity handled inline, colors rely on global tokens */
+</style>

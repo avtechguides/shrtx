@@ -1,0 +1,152 @@
+---
+import Seo from '@/components/Seo.astro';
+import Header from '@/components/sections/Header.astro';
+import Footer from '@/components/sections/Footer.astro';
+import Button from '@/components/ui/button/Button.astro';
+import DonationCTA from '@/components/ui/DonationCTA.astro';
+
+const pageTitle = 'About Vishu | SHRTX';
+const pageDescription = 'Learn more about Vishu – the creator of SHRTX, systems admin, and indie web developer passionate about simplicity.';
+const pagePath = '/about';
+const heroImage = '/images/vishu-akanksha-shrtx-developer.jpg';
+const socialLinks = [
+  'https://github.com/avtechguides',
+  'https://x.com/shrtx',
+];
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <Seo
+      title={pageTitle}
+      description={pageDescription}
+      path={pagePath}
+      image={heroImage}
+      type="page"
+    />
+    <style>
+      /* Accent solid color matching homepage */
+      .text-accent {
+        color: var(--accent);
+      }
+      /* Remove gradient-text everywhere */
+      :root {
+        --card-gradient-hover: linear-gradient(90deg, var(--accent), var(--accent-dark));
+      }
+      [data-theme="dark"], .dark {
+        --card-gradient-hover: linear-gradient(90deg, #3B82F6, #EC2F36);
+      }
+      [data-theme="light"], .light {
+        --card-gradient-hover: linear-gradient(90deg, #2563EB, #EC2F36);
+      }
+    </style>
+  </head>
+  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <Header />
+
+    <section class="max-w-6xl mx-auto px-6 py-16 text-center">
+      <h1 class="text-5xl font-extrabold tracking-tight text-accent">About Me</h1>
+      <p class="mt-4 text-lg text-[var(--color-text-muted)] max-w-3xl mx-auto">
+        Learn about Vishu – the creator of SHRTX, systems admin, and indie web developer passionate about simplicity.
+      </p>
+    </section>
+
+    <main class="max-w-6xl mx-auto space-y-20 px-6 py-16 prose prose-invert text-[var(--foreground)]">
+
+      <!-- Hero / Intro -->
+      <section class="grid md:grid-cols-2 gap-12 items-center bg-[var(--card)] rounded-3xl shadow-2xl p-12">
+        <div class="space-y-6 max-w-xl">
+          <h1 class="text-5xl font-extrabold leading-tight text-accent">Hi, I’m Vishu Tiwari</h1>
+          <p>
+            I’m a systems administrator turned indie builder, passionate about simplifying complex tech.
+            Over the years, I’ve supported servers, tackled tough technical challenges, and helped teams stay online without interruption.
+          </p>
+          <p>
+            My passion is building useful tools that make everyday life easier. <strong><a href="/projects/shrtx" class="underline hover:text-accent">SHRTX</a></strong> was born
+            from my frustration with bloated shorteners — it’s fast, secure, and respects your privacy.
+          </p>
+          <div class="flex gap-6 mt-4">
+            <Button href="/projects/shrtx" variant="primary" size="lg" class="shadow-lg hover:shadow-xl transition-shadow duration-300">Explore SHRTX</Button>
+            <Button href="/contact" variant="secondary" size="lg" class="shadow-md hover:shadow-lg transition-shadow duration-300">Get in Touch</Button>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <img src={heroImage} alt="Vishu – Creator of SHRTX" loading="lazy" class="rounded-3xl object-cover w-72 h-72 shadow-2xl ring-2 ring-accent" />
+        </div>
+      </section>
+
+      <!-- Early Education & Training -->
+      <section class="bg-[var(--card)] rounded-3xl shadow-lg p-10 max-w-3xl mx-auto prose prose-invert space-y-6 text-[var(--foreground)]">
+        <h2 class="text-4xl font-bold tracking-tight drop-shadow-sm text-accent">Early Foundations</h2>
+        <p>
+          My education roots lie in a Bachelor of Commerce from the University of Lucknow where I specialized in accounting and business management.
+          Alongside, I earned a Diploma in Computer Hardware & Networking from Protec Computer Consultancy, completing lab setups, networking, and hardware troubleshooting.
+          I also completed Microsoft Certified System Administrator practical training tied with this diploma.
+        </p>
+      </section>
+
+      <!-- Certifications -->
+      <section class="bg-[var(--card)] rounded-3xl shadow-lg p-10 max-w-3xl mx-auto prose prose-invert space-y-6 text-[var(--foreground)]">
+        <h2 class="text-4xl font-bold tracking-tight drop-shadow-sm text-accent">Continuous Learning & Certifications</h2>
+        <p>
+          Committed to growth, I have pursued certifications including:
+        </p>
+        <ul class="list-disc list-inside text-lg space-y-2">
+          <li>IT Help Desk for Beginners (LinkedIn, 2019)</li>
+          <li>Learning Cryptography and Network Security (LinkedIn, 2019)</li>
+          <li>Learning Kali Linux (LinkedIn, 2019)</li>
+          <li>Learning SQL Server 2017 (LinkedIn, 2019)</li>
+          <li>Windows Deployment with Microsoft Deployment Toolkit (LinkedIn, 2019)</li>
+          <li>Troubleshooting Networks with Wireshark (LinkedIn, 2019)</li>
+          <li>Microsoft Certified Solutions Associate (MCSA)</li>
+          <li>Microsoft Certified Technology Specialist (MCTS) – Active Directory & Network Infrastructure</li>
+          <li>Microsoft Certified Professional (MCPS)</li>
+        </ul>
+        <p>
+          These credentials reinforce my ability to deliver secure, reliable, and high-performing IT solutions.
+        </p>
+      </section>
+
+      <!-- Work Experience -->
+      <section class="bg-[var(--card)] rounded-3xl shadow-lg p-10 max-w-3xl mx-auto prose prose-invert space-y-6 text-[var(--foreground)]">
+        <h2 class="text-4xl font-bold tracking-tight drop-shadow-sm text-accent">Professional Experience</h2>
+        <p>
+          After gaining hands-on experience as a Service Engineer maintaining biomedical and IT equipment, I progressed to Senior Customer Service Engineer roles.
+          Here, I supported enterprise IT systems, managed mobility devices, and resolved complex issues. Now as the proprietor of Vishu Tec Systems,
+          I lead client-focused IT solutions with a commitment to quality, communication, and satisfaction.
+        </p>
+      </section>
+
+      <!-- Philosophy & SHRTX -->
+      <section class="bg-[var(--card)] rounded-3xl shadow-lg p-10 max-w-3xl mx-auto prose prose-invert space-y-6 text-[var(--foreground)]">
+        <h2 class="text-4xl font-bold tracking-tight drop-shadow-sm text-accent">Why SHRTX Exists</h2>
+        <p>
+          From years of solving technical challenges, I realized the importance of tools that are both simple and trustworthy.
+          SHRTX is my answer—a super-fast, secure URL shortener that respects user privacy and delivers what matters without distraction.
+        </p>
+      </section>
+
+      <!-- Connect Section -->
+      <section class="text-center text-[var(--foreground)] max-w-lg mx-auto">
+        <h2 class="text-4xl font-extrabold drop-shadow-sm mb-6 text-accent">Let’s Connect</h2>
+        <p class="text-lg text-[var(--color-text-muted)] mb-8">
+          Interested in SHRTX? Want to collaborate or just say hello? I’d love to hear from you.
+          Together, we can build simple yet powerful solutions.
+        </p>
+        <div class="flex justify-center gap-8">
+          <Button href={socialLinks[0]} variant="secondary" target="_blank" rel="noopener noreferrer" class="shadow-lg hover:shadow-xl transition-shadow duration-300">GitHub</Button>
+          <Button href="/contact" variant="primary" class="shadow-lg hover:shadow-xl transition-shadow duration-300">Contact Me</Button>
+        </div>
+      </section>
+
+      <!-- Donation CTA -->
+      <section class="max-w-3xl mx-auto mt-12">
+        <DonationCTA />
+      </section>
+
+    </main>
+
+    <Footer />
+  </body>
+</html>

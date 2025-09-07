@@ -1,0 +1,181 @@
+---
+/**
+ * Seo.astro (universal, SSR-safe)
+ * - Replaces BaseHead + JSON-LD
+ * - Accepts string or ImageMetadata
+ * - Works with CollectionEntry<'blog' | 'projects' | 'tools'>
+ */
+
+import BaseHead from './BaseHead.astro';
+import { AUTHOR, SITE_URL, OG } from '@/config';
+import type { CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+
+// Props
+export interface SeoProps {
+  title: string;
+  description: string;
+  path?: string; // e.g. "/blog/my-post/"
+  image?: string | ImageMetadata; // supports astro:assets ImageMetadata or URL string
+  imageAlt?: string;
+  type?: 'page' | 'blog' | 'project' | 'tool';
+  entry?:
+    | CollectionEntry<'blog'>
+    //| CollectionEntry<'projects'>
+    //| CollectionEntry<'tools'>;
+  aggregateRating?: { ratingValue: number; reviewCount: number };
+  offers?: { price: string; priceCurrency: string; url?: string };
+}
+
+const {
+  title,
+  description,
+  path = '/',
+  image,
+  imageAlt,
+  type = 'page',
+  entry,
+  aggregateRating,
+  offers,
+} = Astro.props as SeoProps;
+
+// Utilities
+const siteBase = (Astro.site?.toString() || SITE_URL || '').replace(/\/+$/, '') || '';
+const toAbsUrl = (p?: string) => (p ? new URL(p, siteBase + '/').toString() : undefined);
+const iso = (d?: string | Date) => {
+  try { return d ? new Date(d).toISOString() : new Date().toISOString(); }
+  catch { return new Date().toISOString(); }
+};
+
+// Canonical URL
+const canonicalUrl = (() => {
+  const raw = new URL(path || '/', siteBase + '/');
+  raw.search = '';
+  raw.hash = '';
+  return raw.toString();
+})();
+
+// Dates
+const datePublished =
+  (entry as any)?.data?.pubDate ??
+  (entry as any)?.data?.date ??
+  undefined;
+
+const dateModified =
+  (entry as any)?.data?.updatedDate ??
+  datePublished ??
+  undefined;
+
+// Author
+const authorName =
+  (entry as any)?.data?.author?.name ||
+  (entry as any)?.data?.author ||
+  AUTHOR?.name ||
+  'Author';
+
+// Image: accept ImageMetadata or string; fall back to OG.defaultImage
+let heroImageAbs: string | undefined = undefined;
+if (typeof image === 'string') {
+  heroImageAbs = toAbsUrl(image);
+} else if (image && typeof (image as ImageMetadata).src === 'string') {
+  heroImageAbs = toAbsUrl((image as ImageMetadata).src);
+} else {
+  const fromEntry = (entry as any)?.data?.heroImage;
+  if (fromEntry && typeof fromEntry.src === 'string') {
+    heroImageAbs = toAbsUrl(fromEntry.src);
+  } else if (typeof fromEntry === 'string') {
+    heroImageAbs = toAbsUrl(fromEntry);
+  } else {
+    heroImageAbs = toAbsUrl(OG?.defaultImage);
+  }
+}
+
+// Breadcrumbs
+const breadcrumb: Array<{ name: string; url: string }> = [
+  { name: 'Home', url: toAbsUrl('/')! },
+  ...(type === 'blog' ? [{ name: 'Blog', url: toAbsUrl('/blog/')! }] : []),
+  ...(type === 'project' ? [{ name: 'Projects', url: toAbsUrl('/projects/')! }] : []),
+  ...(type === 'tool' ? [{ name: 'Tools', url: toAbsUrl('/tools/')! }] : []),
+  { name: title, url: canonicalUrl },
+];
+
+// JSON-LD blocks
+let jsonLd: Record<string, any> = { '@context': 'https://schema.org' };
+
+if (type === 'blog') {
+  jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    url: canonicalUrl,
+    image: heroImageAbs ? [heroImageAbs] : [],
+    datePublished: iso(datePublished),
+    dateModified: iso(dateModified),
+    author: { '@type': 'Person', name: authorName },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+  };
+} else if (type === 'project' || type === 'tool') {
+  const appType = type === 'tool' ? 'WebApplication' : 'SoftwareApplication';
+  jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': appType,
+    name: title,
+    description,
+    url: canonicalUrl,
+    image: heroImageAbs,
+    applicationCategory: 'WebApplication',
+    operatingSystem: 'Any',
+    creator: { '@type': 'Person', name: authorName },
+    datePublished: iso(datePublished),
+    dateModified: iso(dateModified),
+    ...(aggregateRating && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: String(aggregateRating.ratingValue),
+        reviewCount: String(aggregateRating.reviewCount),
+      },
+    }),
+    ...(offers && {
+      offers: {
+        '@type': 'Offer',
+        price: offers.price,
+        priceCurrency: offers.priceCurrency,
+        url: offers.url ?? canonicalUrl,
+        availability: 'https://schema.org/InStock',
+      },
+    }),
+  };
+} else {
+  jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    url: canonicalUrl,
+    name: title,
+    description,
+  };
+}
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumb.map((item, idx) => ({
+    '@type': 'ListItem',
+    position: idx + 1,
+    name: item.name,
+    item: item.url,
+  })),
+};
+---
+
+<BaseHead
+  title={title}
+  description={description}
+  image={heroImageAbs}
+  imageAlt={imageAlt}
+/>
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify([jsonLd, breadcrumbLd])}
+/>

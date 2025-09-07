@@ -1,0 +1,103 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/sections/Header.astro';
+import Footer from '../components/sections/Footer.astro';
+import Button from '../components/ui/button/Button.astro';
+import DonationCTA from '../components/ui/DonationCTA.astro';
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <BaseHead 
+      title="Contact Vishu | SHRTX" 
+      description="Get in touch with Vishu — creator of SHRTX. Whether it’s feedback, collaboration, or support, I’d love to hear from you." 
+    />
+    <style>
+      .gradient-text {
+        background-image: var(--gradient-accent-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: var(--accent); /* fallback solid accent */
+        display: inline-block;
+        text-align: center;
+        -webkit-text-fill-color: var(--accent); /* explicit fallback for some browsers */
+      }
+    </style>
+  </head>
+  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <Header />
+
+    <main class="max-w-3xl mx-auto px-6 py-16 space-y-16">
+
+      <!-- Hero -->
+      <section class="text-center space-y-4">
+        <h1 class="text-4xl font-extrabold gradient-text">📬 Contact Me</h1>
+        <p class="text-gray-600 dark:text-gray-300">
+          Have feedback on <a href="/projects/shrtx" class="font-semibold">SHRTX</a>, 
+          want to collaborate, or just say hi? Fill out the form below or connect via socials.
+        </p>
+      </section>
+
+      <!-- Contact Form -->
+      <section class="bg-gray-100 dark:bg-gray-900 p-8 rounded-2xl shadow-lg space-y-6">
+        <form action="/api/contact" method="POST" class="space-y-6">
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              required
+              class="mt-1 w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </div>
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required
+              class="mt-1 w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </div>
+
+          <div>
+            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
+            <textarea 
+              id="message" 
+              name="message" 
+              rows="5" 
+              required
+              class="mt-1 w-full p-3 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            ></textarea>
+          </div>
+
+          <div class="text-center">
+            <Button type="submit" variant="primary" size="lg">Send Message</Button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Alternative Links -->
+      <section class="text-center space-y-4">
+        <h2 class="text-2xl font-bold">Other Ways to Connect</h2>
+        <div class="flex justify-center gap-6">
+          <a href="https://github.com/avtechguides" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline">GitHub</a>
+          <a href="https://x.com/shrtx" target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline">X (Twitter)</a>
+        </div>
+      </section>
+
+      <!-- Donation CTA -->
+      <section class="mt-12">
+        <DonationCTA />
+      </section>
+
+    </main>
+
+    <Footer />
+  </body>
+</html>

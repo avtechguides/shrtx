@@ -1,0 +1,156 @@
+---
+/**
+ * BaseHead.astro (Optimized, final)
+ * - Centralized constants via @/config
+ * - Single canonical reused for canonical, og:url, twitter:url
+ * - Absolute og:image resolution with robust MIME detection
+ */
+
+import '@/styles/global.css';
+import type { ImageMetadata } from 'astro';
+import FallbackImage from '@/assets/images/blog-placeholder-1.jpg';
+import { SITE_TITLE, SOCIAL, OG } from '@/config';
+
+// BaseHead.astro (props)
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string; // was ImageMetadata | undefined
+  imageAlt?: string;
+  // ... any other fields
+}
+
+const { title, description, image = FallbackImage, imageAlt } = Astro.props;
+
+// Compute site base safely
+const siteBase = Astro.site?.toString() ?? (globalThis.window ? window.location.origin : 'https://shrtx.in');
+
+// Compute canonical URL without query params/hash
+const rawUrl = new URL(Astro.url ?? '/', siteBase);
+rawUrl.search = '';
+rawUrl.hash = '';
+const canonicalURL = rawUrl.toString();
+
+// Compute image src + MIME type (preferring provided over default)
+const imageSrc = typeof image === 'object' && 'src' in image ? image.src : OG.defaultImage;
+const imageUrl = new URL(imageSrc, siteBase).toString();
+const ext = imageUrl.split('.').pop()?.toLowerCase();
+const imageMime =
+  ext === 'png' ? 'image/png'
+  : ext === 'webp' ? 'image/webp'
+  : ext === 'jpg' ? 'image/jpeg'
+  : ext === 'jpeg' ? 'image/jpeg'
+  : 'image/jpeg';
+
+// Social
+const TWITTER_HANDLE = SOCIAL.twitterHandle;
+const OG_LOCALE = OG.locale;
+
+// Resource hints
+const preconnects = [
+  'https://fonts.gstatic.com',
+  'https://fonts.googleapis.com',
+].filter(Boolean);
+
+// Cache busting for icons
+const v = 'v=1';
+---
+
+<!-- Charset and viewport -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Canonical -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Icons -->
+<link rel="icon" type="image/png" sizes="32x32" href={`/favicon-32x32.png?${v}`} />
+<link rel="icon" type="image/png" sizes="16x16" href={`/favicon-16x16.png?${v}`} />
+<link rel="apple-touch-icon" sizes="180x180" href={`/apple-touch-icon.png?${v}`} />
+<link rel="icon" type="image/png" href={`/favicon.png?${v}`} />
+<link rel="shortcut icon" href={`/favicon.ico?${v}`} />
+<link rel="mask-icon" href="/favicon.svg" color="#0b0b0b" />
+
+<!-- Sitemap and RSS -->
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={new URL('rss.xml', siteBase).toString()} />
+
+<!-- Generator -->
+<meta name="generator" content={Astro.generator} />
+
+<!-- Resource hints -->
+{preconnects.map((href) => <link rel="preconnect" href={href} crossorigin />)}
+<link rel="dns-prefetch" href="//fonts.gstatic.com" />
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+
+<!-- Font preloads -->
+<link rel="preload" href="/fonts/atkinson-regular.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/atkinson-bold.woff2" as="font" type="font/woff2" crossorigin />
+
+<style>
+  @font-face {
+    font-family: 'Atkinson';
+    src: url('/fonts/atkinson-regular.woff2') format('woff2'),
+         url('/fonts/atkinson-regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Atkinson';
+    src: url('/fonts/atkinson-bold.woff2') format('woff2'),
+         url('/fonts/atkinson-bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  :root { color-scheme: light dark; }
+</style>
+
+<!-- Robots -->
+<meta name="robots" content="index,follow,max-image-preview:large,smart-snippet:rich" />
+
+<!-- Theme color -->
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0b0b" />
+
+<!-- Title and primary meta -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:locale" content={OG_LOCALE} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:image:alt" content={imageAlt ?? description ?? title} />
+<meta property="og:image:type" content={imageMime} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content={TWITTER_HANDLE} />
+<meta property="twitter:url" content={canonicalURL} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={imageUrl} />
+<meta property="twitter:image:alt" content={imageAlt ?? description ?? title} />
+
+<!-- No-flash theme guard -->
+<script>
+  (function() {
+    try {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.classList.toggle('dark', theme === 'dark');
+      document.documentElement.classList.toggle('light', theme === 'light');
+    } catch (e) {}
+  })();
+</script>

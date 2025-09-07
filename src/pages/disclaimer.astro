@@ -1,0 +1,111 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/sections/Footer.astro';
+import Header from '../components/sections/Header.astro';
+import { SITE_DESCRIPTION } from '../config/consts';
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <BaseHead title="Disclaimer | SHRTX" description={SITE_DESCRIPTION} />
+    <style>
+      .gradient-text {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        background-image: var(--gradient-accent-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: var(--accent);
+        -webkit-text-fill-color: var(--accent);
+      }
+      .prose h2 {
+        text-align: center !important;
+      }
+    </style>
+  </head>
+  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <Header />
+
+    <main class="max-w-4xl mx-auto px-6 py-12 prose prose-invert">
+      <h2 class="text-3xl font-bold mb-6 gradient-text">DISCLAIMER</h2>
+      <p><strong>Last updated:</strong> 2025-09-01</p>
+
+      <div class="space-y-6">
+        <h3>Website Disclaimer</h3>
+        <p>
+          The information provided by SHRTX (“Company”, “we”, “our”, “us”) on <b>shrtx.in</b> (the “Site”) is for general
+          informational purposes only. All information on the Site is provided in good faith, however we make no
+          representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity,
+          reliability, availability, or completeness of any information on the Site.
+        </p>
+        <p>
+          UNDER NO CIRCUMSTANCE SHALL WE HAVE ANY LIABILITY TO YOU FOR ANY LOSS OR DAMAGE OF ANY KIND INCURRED AS A RESULT
+          OF THE USE OF THE SITE OR RELIANCE ON ANY INFORMATION PROVIDED ON THE SITE. YOUR USE OF THE SITE AND YOUR
+          RELIANCE ON ANY INFORMATION ON THE SITE IS SOLELY AT YOUR OWN RISK.
+        </p>
+
+        <h3>External Links Disclaimer</h3>
+        <p>
+          The Site may contain (or you may be sent through the Site) links to other websites or content belonging to or
+          originating from third parties. Such external links are not investigated, monitored, or checked for accuracy,
+          adequacy, validity, reliability, availability or completeness by us.
+        </p>
+        <p>
+          WE DO NOT WARRANT, ENDORSE, GUARANTEE, OR ASSUME RESPONSIBILITY FOR THE ACCURACY OR RELIABILITY OF ANY
+          INFORMATION OFFERED BY THIRD-PARTY WEBSITES LINKED THROUGH THE SITE OR ANY WEBSITE OR FEATURE LINKED IN ANY
+          BANNER OR OTHER ADVERTISING. WE WILL NOT BE A PARTY TO OR IN ANY WAY BE RESPONSIBLE FOR MONITORING ANY
+          TRANSACTION BETWEEN YOU AND THIRD-PARTY PROVIDERS OF PRODUCTS OR SERVICES.
+        </p>
+
+        <h3>Affiliates Disclaimer</h3>
+        <p>
+          The Site may contain links to affiliate websites, and we may receive an affiliate commission for any purchases
+          or actions made by you on the affiliate websites using such links.
+        </p>
+
+        <h3>Testimonials Disclaimer</h3>
+        <p>
+          The Site may contain testimonials by users of our products and/or services. These testimonials reflect the
+          real-life experiences and opinions of such users. However, the experiences are personal to those particular
+          users, and may not necessarily be representative of all users of our products and/or services.
+        </p>
+        <p><b>Your individual results may vary.</b></p>
+        <p>
+          Testimonials appear verbatim as given by the users, except for grammar corrections or shortening for brevity.
+          Views expressed are solely the individual user’s and do not reflect our opinions.
+        </p>
+
+        <h3>Errors and Omissions Disclaimer</h3>
+        <p>
+          While we have made every attempt to ensure that the information contained in this site has been obtained from
+          reliable sources, SHRTX is not responsible for any errors or omissions or for the results obtained from the use
+          of this information. All information is provided “as is” without warranty of any kind.
+        </p>
+
+        <h3>Guest Contributors Disclaimer</h3>
+        <p>
+          Content from guest contributors reflects the personal views of those contributors and not necessarily the views
+          of SHRTX or its staff, unless explicitly stated.
+        </p>
+
+        <h3>Logos and Trademarks Disclaimer</h3>
+        <p>
+          All logos and trademarks of third parties referenced on shrtx.in are the property of their respective owners.
+          Inclusion does not imply endorsement or sponsorship by SHRTX.
+        </p>
+
+        <h3>Contact Us</h3>
+        <p>
+          Should you have any feedback, comments, requests for technical support or other inquiries, please contact us by
+          email: <a href="mailto:support@shrtx.in" class="underline text-[var(--accent)]">support@shrtx.in</a>.
+        </p>
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

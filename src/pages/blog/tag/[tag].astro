@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/sections/Header.astro';
+import Footer from '../../../components/sections/Footer.astro';
+import PostCard from '../../../components/ui/card/PostCard.astro';
+import { slugifyTag } from '../../../lib/slug';
+import { getTagMeta } from '../../../data/tags';
+
+function titleFromSlug(slug: string) {
+  return slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+}
+
+// Generate static paths for all tags
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags || []))];
+  return tags.map((tag) => ({ params: { tag: slugifyTag(tag) } }));
+}
+
+const { tag } = Astro.params;
+const posts = (await getCollection('blog')).filter((p) =>
+  (p.data.tags || []).some((t) => slugifyTag(t) === tag)
+);
+
+// Fallback meta if getTagMeta doesn't have it
+const meta = getTagMeta(tag) || {
+  title: titleFromSlug(tag),
+  description: `All blog posts tagged with "${titleFromSlug(tag)}".`,
+};
+---
+
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <BaseHead title={`${meta.title} - Tag`} description={meta.description} />
+    <link rel="alternate" type="application/rss+xml" title={`Tag: ${tag} feed`} href={`/rss/tag/${tag}.xml`} />
+  </head>
+  <body>
+    <Header />
+
+    <main class="mx-auto max-w-6xl px-4 py-16 space-y-10">
+
+      <!-- Hero-like tag heading -->
+      <section class="relative text-center p-10 rounded-2xl overflow-hidden bg-gray-900 dark:bg-gray-800">
+        <div class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 via-purple-600/20 to-pink-600/20 dark:from-indigo-400/10 dark:via-purple-400/10 dark:to-pink-400/10 blur-3xl"></div>
+        <div class="relative z-10 animate-fade-up">
+          <h1 class="text-5xl font-extrabold">{meta.title}</h1>
+          <p class="mt-4 text-lg text-[color:var(--color-text-muted)] max-w-2xl mx-auto">{meta.description}</p>
+        </div>
+      </section>
+
+      <!-- Blog posts grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((p) => <PostCard post={p} />)}
+      </div>
+    </main>
+
+    <Footer />
+  </body>
+</html>

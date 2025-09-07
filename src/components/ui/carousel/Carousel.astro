@@ -1,0 +1,88 @@
+---
+import type { LogoItem } from '@/data/logos';
+
+interface Props {
+  items: LogoItem[];
+  speedMs?: number;           // total loop duration
+  pauseOnHover?: boolean;     // optional UX enhancement
+  ariaLabel?: string;         // accessible label for the carousel region
+}
+
+const {
+  items = [],
+  speedMs = 100000,
+  pauseOnHover = true,
+  ariaLabel = 'Partner logos carousel'
+} = Astro.props as Props;
+
+// Duplicate items for seamless infinite scroll
+const trackItems = [...items, ...items];
+---
+
+<div class="overflow-hidden relative z-10 mx-auto px-4 py-6" role="region" aria-label={ariaLabel}>
+  <div class="[mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+    <div
+      class:list={[
+        'flex',
+        'will-change-transform',
+        'w-max',
+        'animate-carousel',
+        pauseOnHover && 'hover:[animation-play-state:paused]'
+      ]}
+      style={`--carousel-speed:${speedMs}ms`}
+    >
+      {trackItems.map((item, idx) => (
+        <div
+          class="group flex flex-col items-center justify-center px-6 py-4 mx-4 min-w-[120px] md:min-w-[140px] rounded-lg"
+          role="listitem"
+          aria-label={item.name}
+        >
+          <div
+            class="w-16 h-16 mb-2 flex items-center justify-center rounded-md ring-1 ring-inset"
+            style="
+              --ring-dark: color-mix(in srgb, var(--foreground) 8%, transparent);
+              border-color: var(--border);
+              box-shadow: none;
+            "
+          >
+            <img
+              src={item.logo}
+              alt={item.name}
+              width="64"
+              height="64"
+              class="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
+              style="filter: drop-shadow(0 1px 0.5px rgba(0,0,0,.25));"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <span class="text-sm md:text-base font-semibold text-[var(--muted-foreground,#9aa3b2)] transition-colors text-center">
+            {item.name}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+@media (prefers-color-scheme: dark) {
+  .ring-inset { border-color: var(--ring-dark) !important; }
+}
+
+/* Infinite marquee animation */
+@keyframes carousel-scroll {
+  0% { transform: translateX(-20%); }
+  100% { transform: translateX(-70%); }
+}
+
+/* Respect reduced motion by disabling animation */
+@media (prefers-reduced-motion: reduce) {
+  .animate-carousel { animation: none !important; transform: translateX(0) !important; }
+}
+
+/* Default animation */
+.animate-carousel {
+  animation: carousel-scroll var(--carousel-speed, 100000ms) linear infinite;
+}
+</style>

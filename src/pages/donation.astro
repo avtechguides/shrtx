@@ -1,0 +1,103 @@
+---
+import Seo from '@/components/Seo.astro';
+import Header from '@/components/sections/Header.astro';
+import Footer from '@/components/sections/Footer.astro';
+import Button from '@/components/ui/button/Button.astro';
+
+// SEO props for this page
+const title = 'Support Vishu | Donate';
+const description = 'Support Vishu and SHRTX by donating via PayPal, Ko‑fi, or GitHub Sponsors.';
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <Seo title={title} description={description} path="/donation/" type="page" />
+    <style>
+      /* Card surface and token-aligned typography */
+      .donation-surface {
+        background: var(--card);
+        color: var(--card-foreground);
+        border-radius: 1rem;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-md, 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1));
+      }
+      .donation-surface .muted {
+        color: var(--muted-foreground, #6b7280);
+      }
+      /* Gradient ring like other sections */
+      .ring-gradient {
+        position: relative;
+        overflow: hidden;
+      }
+      .ring-gradient::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: .15;
+        transition: opacity .3s ease;
+        pointer-events: none;
+      }
+      .ring-gradient:hover::before {
+        opacity: .35;
+      }
+      /* Page background and text follow global tokens */
+      body {
+        background: var(--color-bg-primary);
+        color: var(--color-text-primary);
+      }
+      /* Center page title with gradient effect */
+      .gradient-text {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        background-image: var(--gradient-accent-text);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        color: var(--accent);
+        -webkit-text-fill-color: var(--accent);
+      }
+    </style>
+  </head>
+  <body class="transition-colors duration-300">
+    <Header />
+
+    <main class="max-w-3xl mx-auto px-6 py-16">
+      <section class="donation-surface ring-gradient p-8 md:p-10 text-center">
+        <h1 class="text-3xl md:text-4xl font-extrabold mb-3 gradient-text">
+          💙 Support My Work
+        </h1>
+        <p class="muted max-w-prose mx-auto">
+          SHRTX and other projects are built with passion and no ads. If this work provides value, a donation helps keep everything fast, secure, and improving 🚀
+        </p>
+
+        <div class="flex flex-col md:flex-row justify-center gap-4 md:gap-6 mt-8">
+          <Button href="https://paypal.me/YOUR-LINK" variant="primary" size="lg">
+            💰 Donate via PayPal
+          </Button>
+          <Button href="https://ko-fi.com/YOUR-LINK" variant="secondary" size="lg">
+            ☕ Support on Ko‑fi
+          </Button>
+          <Button href="https://github.com/sponsors/avtechguides" variant="outline" size="lg">
+            💻 Sponsor on GitHub
+          </Button>
+        </div>
+
+        <p class="muted mt-10 text-sm">
+          Every contribution — no matter how small — makes a difference. Thank you for supporting independent projects like <strong>SHRTX</strong>.
+        </p>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>

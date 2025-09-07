@@ -1,0 +1,41 @@
+---
+const STORAGE_KEY = 'cookiesConsent';
+const DAYS = 180;
+
+const script = `
+(function(){
+  try{
+    var KEY='${STORAGE_KEY}';
+    var root=document.querySelector('.cookie-toast');
+    if(!root) return;
+    function get(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(_){ return null; } }
+    function set(v){
+      var exp=new Date(Date.now()+${DAYS}*864e5).toISOString();
+      localStorage.setItem(KEY, JSON.stringify({value:v, ts:Date.now(), expires:exp}));
+      window.dispatchEvent(new CustomEvent('cookies:consent',{detail:{value:v}}));
+    }
+    function expired(v){ return !v||!v.expires||new Date(v.expires).getTime()<Date.now(); }
+    var s=get();
+    root.style.display = expired(s) ? '' : 'none';
+    root.querySelector('[data-accept]')?.addEventListener('click',function(){ set('accepted'); root.style.display='none'; });
+    root.querySelector('[data-customize]')?.addEventListener('click',function(){
+      document.querySelector('.cookie-modal')?.classList.remove('hidden');
+      document.querySelector('.cookie-overlay')?.classList.remove('hidden');
+      root.style.display='none';
+    });
+  }catch(e){}
+})();`;
+---
+<div class="cookie-toast fixed bottom-6 left-1/2 -translate-x-1/2 z-50" style="display:none">
+  <div class="rounded-2xl bg-white text-neutral-900 shadow-xl ring-1 ring-black/5 dark:bg-neutral-900 dark:text-neutral-50 dark:ring-white/10 px-4 py-3 sm:px-5 sm:py-4 flex items-start gap-4 max-w-xl">
+    <p class="text-sm">
+      We use cookies to enhance the experience. You can
+      <a href="/cookie" class="underline underline-offset-2">manage your preferences</a>.
+    </p>
+    <div class="ml-auto flex gap-2">
+      <button data-accept class="rounded-md bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700">Accept All</button>
+      <button data-customize class="rounded-md bg-white text-neutral-900 ring-1 ring-inset ring-neutral-300 px-4 py-2 text-sm hover:bg-neutral-50 dark:bg-neutral-800 dark:text-neutral-50 dark:ring-white/20 dark:hover:bg-neutral-750">Customize</button>
+    </div>
+  </div>
+</div>
+<script is:inline>{script}</script>

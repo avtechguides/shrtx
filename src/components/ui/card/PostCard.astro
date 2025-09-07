@@ -1,0 +1,71 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import { calculateReadingTimeFromMarkdown } from '../../../lib/reading';
+import { Image } from 'astro:assets';
+import FormattedDate from '../../FormattedDate.astro';
+import { slugifyTag as slugify } from '../../../lib/slug';
+
+interface Props { post: CollectionEntry<'blog'> }
+const { post } = Astro.props as Props;
+
+// Calculate reading time from markdown content
+let readingTimeMin = 0;
+try {
+  const md = (post as any).body ?? '';
+  readingTimeMin = calculateReadingTimeFromMarkdown(md || post.data.description || '');
+} catch {}
+const href = `/blog/${post.id}/`;
+const title = post.data.title ?? 'Untitled';
+---
+
+<article class="rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] p-4 h-full flex flex-col gap-3 relative hover:shadow-md hover:-translate-y-0.5 transition-all">
+  {post.data.heroImage && (
+    <a href={href} class="block overflow-hidden rounded-xl">
+      <Image
+        width={640}
+        height={360}
+        src={post.data.heroImage}
+        alt={title}
+        format="webp"
+        quality={80}
+        loading="lazy"
+        class="w-full h-auto aspect-[16/9] object-cover rounded-xl"
+      />
+    </a>
+  )}
+
+  <h3 class="text-xl font-semibold leading-snug">
+    <a href={href} class="no-underline hover:underline underline-offset-2 decoration-[var(--accent)] text-[var(--card-foreground)]">{title}</a>
+  </h3>
+
+  {post.data.description && (
+    <p class="text-[var(--muted-foreground,#6b7280)]">{post.data.description}</p>
+  )}
+
+  <div class="flex flex-col text-sm text-[var(--muted-foreground,#6b7280)] gap-1">
+    <div class="flex items-center gap-1">
+      <FormattedDate date={post.data.pubDate} />
+    </div>
+    {readingTimeMin > 0 && (
+      <div class="flex items-center gap-1">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 7v5l3 3"/>
+        </svg>
+        {readingTimeMin} min read
+      </div>
+    )}
+  </div>
+
+  {post.data.tags?.length ? (
+    <div class="flex gap-2 flex-wrap">
+      {post.data.tags.map((t) => (
+        <a href={`/blog/tag/${slugify(t)}/`} class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-[var(--accent)]/12 text-[var(--accent)] ring-1 ring-inset ring-[var(--accent)]/25 no-underline hover:bg-[var(--accent)]/16">
+          {t}
+        </a>
+      ))}
+    </div>
+  ) : null}
+
+  <a href={href} class="absolute inset-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--accent)]" aria-label={title}></a>
+</article>

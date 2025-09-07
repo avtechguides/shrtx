@@ -1,0 +1,188 @@
+---
+import ThemeToggle from "../ui/button/ThemeToggle.astro";
+
+const NAV_ITEMS = [
+  { href: "/", label: "Home" },
+  { href: "/blog/", label: "Blog" },
+  { href: "/tools/", label: "Tools" },
+  { href: "/about/", label: "About" },
+  { href: "/contact/", label: "Contact" }
+];
+
+const currentPath = Astro.url.pathname.replace(/\/+$/, '/') || '/';
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 border-b backdrop-blur supports-[backdrop-filter]:bg-[color:var(--background)/0.6] bg-[var(--background)]/85 text-[var(--foreground)]"
+  style="--header-offset: 64px"
+>
+  <nav role="navigation" class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="h-16 md:h-20 flex items-center justify-between gap-3">
+      <!-- Left: Branding -->
+      <a href="/" class="flex items-center h-full px-0 hover:opacity-90 transition" aria-label="SHRTX Home">
+        <span class="block w-[110px] h-10 md:h-12">
+          <img
+            src="/LOGO-SHRTX-TP.svg"
+            alt="SHRTX Logo"
+            width="400" height="120"
+            class="block dark:hidden w-full h-full object-contain"
+            loading="eager"
+            decoding="async"
+          />
+          <img
+            src="/LOGO-SHRTX-TP-whitebg.svg"
+            alt="SHRTX Logo"
+            width="400" height="120"
+            class="hidden dark:block w-full h-full object-contain"
+            loading="eager"
+            decoding="async"
+          />
+        </span>
+      </a>
+
+      <!-- Center: Desktop Nav -->
+      <div class="hidden md:flex items-center gap-6">
+        {NAV_ITEMS.map((item) => {
+          const active = currentPath === item.href;
+          return (
+            <a
+              href={item.href}
+              class={[
+                'nav-link text-sm font-medium transition',
+                active ? 'text-[var(--accent)] font-semibold underline underline-offset-4' : ''
+              ].join(' ')}
+              aria-current={active ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          );
+        })}
+      </div>
+
+      <!-- Right: Icons -->
+      <div class="hidden md:flex items-center gap-2">
+        <a href="https://github.com/avtechguides/shrtx-astro" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 .5C5.648.5.5 5.648.5 12c0 5.088 3.292 9.387 7.865 10.915.575.106.785-.25.785-.556 0-.274-.01-1.002-.015-1.965-3.2.696-3.875-1.542-3.875-1.542-.523-1.33-1.277-1.686-1.277-1.686-1.043-.713.08-.698.08-.698 1.152.082 1.758 1.183 1.758 1.183 1.026 1.758 2.69 1.25 3.345.956.103-.743.402-1.25.73-1.538-2.555-.29-5.238-1.277-5.238-5.683 0-1.255.448-2.282 1.182-3.086-.12-.29-.512-1.46.112-3.046 0 0 .964-.308 3.16 1.177.916-.255 1.9-.382 2.878-.386.978.004 1.962.131 2.878.386 2.196-1.485 3.16-1.177 3.16-1.177.624 1.586.232 2.756.114 3.046.736.804 1.182 1.831 1.182 3.086 0 4.416-2.686 5.389-5.25 5.673.414.355.786 1.062.786 2.142 0 1.544-.014 2.784-.014 3.164 0 .31.208.668.792.554C20.208 21.385 23.5 17.086 23.5 12c0-6.352-5.148-11.5-11.5-11.5Z"/>
+          </svg>
+        </a>
+
+        <a href="/donation" class="icon-btn" aria-label="Support us">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </a>
+
+        <ThemeToggle />
+
+        <button aria-label="Search" data-search-btn class="icon-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M10 2a8 8 0 105.293 14.293l4.707 4.707 1.414-1.414-4.707-4.707A8 8 0 0010 2zm0 2a6 6 0 110 12A6 6 0 0110 4z"/></svg>
+        </button>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button aria-label="Toggle menu" id="menu-btn" aria-expanded="false" aria-controls="mobile-menu" class="icon-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden px-4 pb-4 space-y-2 transition-all duration-200 ease-out origin-top scale-95 opacity-0"
+  >
+    {NAV_ITEMS.map((item) => {
+      const active = currentPath === item.href;
+      return (
+        <a
+          href={item.href}
+          class={['nav-link block text-sm font-medium transition', active ? 'text-[var(--accent)] font-semibold underline underline-offset-4' : ''].join(' ')}
+          aria-current={active ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      );
+    })}
+
+    <div class="flex items-center gap-3 pt-2">
+      <a href="https://github.com/avtechguides/shrtx-astro" target="_blank" rel="noopener" class="icon-btn" aria-label="GitHub"></a>
+      <a href="/donation" class="icon-btn" aria-label="Support us"></a>
+      <ThemeToggle />
+    </div>
+  </div>
+</header>
+
+<!-- Header behavior (menu toggle, shadow on scroll) -->
+<script type="module">
+  const header = document.getElementById('site-header');
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  // Responsive header offset variable
+  const setOffset = () => {
+    const root = document.documentElement;
+    const offset = window.matchMedia('(min-width: 768px)').matches ? 80 : 64;
+    root.style.setProperty('--header-offset', offset + 'px');
+  };
+  setOffset();
+  window.addEventListener('resize', setOffset);
+
+  // Shadow on scroll
+  const onScroll = () => {
+    if (window.scrollY > 4) {
+      header?.classList.add('shadow-md');
+    } else {
+      header?.classList.remove('shadow-md');
+    }
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile menu toggle
+  menuBtn?.addEventListener('click', () => {
+    const open = mobileMenu?.classList.contains('opacity-100');
+    if (open) {
+      mobileMenu.classList.add('opacity-0', 'scale-95', 'hidden');
+      mobileMenu.classList.remove('opacity-100', 'scale-100');
+      menuBtn.setAttribute('aria-expanded', 'false');
+    } else {
+      mobileMenu.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        mobileMenu.classList.remove('opacity-0', 'scale-95');
+        mobileMenu.classList.add('opacity-100', 'scale-100');
+      });
+      menuBtn.setAttribute('aria-expanded', 'true');
+    }
+  });
+</script>
+
+<style>
+/* Theme-aware link and icon button styles */
+.nav-link {
+  color: var(--foreground);
+  opacity: 0.85;
+  text-decoration: none;
+}
+.nav-link:hover {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.icon-btn {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: var(--foreground);
+  background: transparent;
+  transition: background-color .2s ease, color .2s ease, opacity .2s ease;
+}
+.icon-btn:hover {
+  background: var(--muted);
+}
+
+/* Ensure border token is used */
+header#site-header {
+  border-color: var(--border);
+}
+</style>

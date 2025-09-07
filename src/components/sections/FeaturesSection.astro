@@ -1,0 +1,94 @@
+---
+import type { Feature } from '@/data/features';
+
+interface Props {
+  title?: string;
+  features: ReadonlyArray<Feature>;  // accept readonly arrays
+  subtitle?: string;
+  ariaLabel?: string;                // accessibility label for the section
+}
+
+const {
+  title,
+  features,
+  subtitle,
+  ariaLabel = 'Key features'
+} = Astro.props as Props;
+
+// Make a mutable local copy while preserving type
+const items: Feature[] = Array.isArray(features) ? [...features] : [];
+---
+
+<section
+  class="w-full py-12 sm:py-14 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300"
+  aria-labelledby="features-title"
+  role="region"
+  aria-label={ariaLabel}
+>
+  <div class="mx-auto max-w-6xl px-4">
+    {(title || subtitle) && (
+      <header class="mb-8 sm:mb-10 text-center space-y-2">
+        {title && (
+          <h2 id="features-title" class="text-3xl md:text-4xl font-extrabold tracking-tight">
+            <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+              {title}
+            </span>
+          </h2>
+        )}
+        {subtitle && (
+          <p class="text-sm sm:text-base text-[var(--muted-foreground,#6b7280)] max-w-prose mx-auto">
+            {subtitle}
+          </p>
+        )}
+      </header>
+    )}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list">
+      {items.length === 0 ? (
+        <div class="col-span-full text-center text-[var(--muted-foreground,#6b7280)]">
+          No features to display right now.
+        </div>
+      ) : (
+        items.map((feature) => (
+          <article
+            class="relative group p-6 rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-md hover:shadow-lg transition-transform duration-200 hover:-translate-y-0.5 focus-within:-translate-y-0.5"
+            role="listitem"
+            aria-label={feature.title}
+          >
+            <!-- Gradient ring overlay (non-blocking) -->
+            <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35">
+              <span
+                class="absolute inset-0 rounded-2xl"
+                style="background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+                       mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                       -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+              ></span>
+            </span>
+
+            <div class="relative flex flex-col items-center text-center">
+              <!-- Icon: data module provides SVG string -->
+              <div class="mb-4 w-16 h-16 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                <div class="w-full h-full" set:html={feature.icon} />
+              </div>
+
+              <h3 class="text-xl font-extrabold mb-2">
+                <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+                  {feature.title}
+                </span>
+              </h3>
+              <p class="text-[var(--muted-foreground,#6b7280)] leading-relaxed">
+                {feature.description}
+              </p>
+            </div>
+          </article>
+        ))
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+/* Optional icon stroke accent on hover, without affecting fill-only SVGs */
+.group:hover svg [stroke] { stroke: var(--accent); transition: stroke .3s ease; }
+</style>

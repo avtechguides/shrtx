@@ -1,0 +1,141 @@
+---
+import Seo from '@components/Seo.astro';
+import Header from '@components/sections/Header.astro';
+import Footer from '@components/sections/Footer.astro';
+import FormattedDate from '@components/FormattedDate.astro';
+import PostMeta from '@components/ui/meta/PostMeta.astro';
+import ShareButtons from '@components/ui/share/ShareButtons.astro';
+import PostNav from '@components/ui/nav/PostNav.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+type NavLink = { id: string; title: string } | null;
+
+export interface Props {
+  // SEO / header
+  title: string;
+  description?: string;
+  path?: string;
+  image?: ImageMetadata; // hero image from content schema image()
+  imageAlt?: string;
+  author?: string;
+
+  // Dates & meta
+  pubDate: Date;
+  updatedDate?: Date;
+  readingTimeMin?: number;
+
+  // UI
+  showHeader?: boolean;
+
+  // Navigation
+  prevPost?: NavLink;
+  nextPost?: NavLink;
+}
+
+const {
+  title,
+  description = '',
+  path = Astro.url.pathname,
+  image,
+  imageAlt,
+  author = 'Site Author',
+  pubDate,
+  updatedDate,
+  readingTimeMin = 0,
+  showHeader = true,
+  prevPost = null,
+  nextPost = null,
+} = Astro.props as Props;
+
+const canonicalUrl = Astro.url.toString();
+---
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      path={path}
+      image={image}
+      type="blog"
+      entry={{
+        // Minimal entry shape for Seo to extract dates/author/hero
+        collection: 'blog',
+        // @ts-expect-error allow partial shape for Seo
+        data: { title, description, pubDate, updatedDate, author, heroImage: image }
+      }}
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <article>
+        {showHeader && (
+          <div class="hero-image">
+            {image && <Image width={1020} height={510} src={image} alt={imageAlt ?? title} />}
+          </div>
+        )}
+
+        <div class="prose">
+          {showHeader && (
+            <div class="title">
+              <div class="date">
+                <FormattedDate date={pubDate} />
+                {updatedDate && (
+                  <div class="last-updated-on">
+                    Last updated on <FormattedDate date={updatedDate} />
+                  </div>
+                )}
+              </div>
+              <h1>{title}</h1>
+              <hr />
+            </div>
+          )}
+
+          <ShareButtons title={title} url={canonicalUrl} />
+          <PostMeta pubDate={pubDate} readingTimeMin={readingTimeMin} authorName={author} />
+
+          <slot />
+
+          <PostNav prev={prevPost} next={nextPost} />
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  main {
+    width: 1280px;
+    max-width: calc(100% - 2em);
+    margin: auto;
+    background: var(--color-bg-primary);
+  }
+  .hero-image { width: 100%; }
+  .hero-image img {
+    display: block;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: var(--box-shadow);
+  }
+  .prose {
+    width: 100%;
+    max-width: 870px;
+    margin: auto;
+    padding: 0.05em;
+    color: var(--color-text-secondary);
+  }
+  .title {
+    margin-bottom: 1em;
+    padding: 1em 0;
+    text-align: center;
+    line-height: 1;
+  }
+  .title h1 {
+    margin: 0 0 0.5em 0;
+    color: var(--color-text-primary);
+  }
+  .date { margin-bottom: 0.5em; color: var(--color-text-muted); }
+  .last-updated-on { font-style: italic; }
+</style>

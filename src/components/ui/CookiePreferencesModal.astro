@@ -1,0 +1,83 @@
+---
+const STORAGE_KEY = 'cookiesConsent';
+const DAYS = 180;
+const script = `
+(function(){
+  try{
+    var KEY='${STORAGE_KEY}';
+    var modal=document.querySelector('.cookie-modal');
+    var overlay=document.querySelector('.cookie-overlay');
+    if(!modal||!overlay) return;
+
+    function set(v){
+      var exp=new Date(Date.now()+${DAYS}*864e5).toISOString();
+      localStorage.setItem(KEY, JSON.stringify({value:v, ts:Date.now(), expires:exp}));
+      window.dispatchEvent(new CustomEvent('cookies:consent',{detail:{value:v}}));
+    }
+    function close(){ modal.classList.add('hidden'); overlay.classList.add('hidden'); }
+    function open(){ modal.classList.remove('hidden'); overlay.classList.remove('hidden'); }
+
+    // Open from any trigger
+    document.querySelectorAll('[data-open-cookie-modal]').forEach(function(btn){ btn.addEventListener('click', open); });
+
+    // Actions
+    modal.querySelector('[data-save]')?.addEventListener('click', function(){
+      var allow = modal.querySelector('#analytics')?.checked;
+      set(allow ? 'accepted' : 'declined');
+      close();
+    });
+    modal.querySelector('[data-decline]')?.addEventListener('click', function(){ set('declined'); close(); });
+    modal.querySelector('[data-close]')?.addEventListener('click', close);
+    overlay.addEventListener('click', close);
+    modal.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  }catch(e){}
+})();`;
+---
+<!-- Corrected z-index classes -->
+<div class="cookie-overlay fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-"></div>
+
+<div class="cookie-modal fixed inset-x-4 sm:inset-x-0 sm:left-1/2 sm:-translate-x-1/2 sm:top-1/2 sm:-translate-y-1/2 bottom-8 hidden z-">
+  <!-- Width guard + overflow hidden -->
+  <div class="mx-auto max-w-xl w-full overflow-hidden rounded-2xl bg-white text-neutral-900 shadow-2xl ring-1 ring-black/10 dark:bg-neutral-900 dark:text-neutral-50 dark:ring-white/20">
+    <div class="p-6 sm:p-7">
+      <div class="flex items-start justify-between gap-3">
+        <h2 class="text-2xl font-extrabold">Cookie Preferences</h2>
+        <button data-close aria-label="Close" class="rounded p-1.5 hover:bg-black/5 focus:outline-none focus:ring-2 focus:ring-blue-600 dark:hover:bg-white/10">✕</button>
+      </div>
+      <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-300">
+        Necessary cookies are always on. Choose whether to allow optional analytics.
+      </p>
+
+      <div class="mt-5 space-y-4">
+        <!-- Necessary row with wrap fixes -->
+        <div class="grid grid-cols-[1fr_auto] items-start gap-3 rounded-lg ring-1 ring-inset ring-neutral-200 bg-neutral-50 p-4 dark:bg-neutral-800 dark:ring-white/10">
+          <div class="min-w-0 break-words whitespace-normal leading-snug">
+            <div class="font-medium">Necessary Cookies</div>
+            <div class="text-sm text-neutral-600 dark:text-neutral-300">(Always active)</div>
+          </div>
+          <span class="shrink-0 inline-flex items-center rounded-full bg-emerald-600/15 px-2 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-600/30 dark:text-emerald-300">On</span>
+        </div>
+
+        <!-- Analytics row with wrap fixes -->
+        <div class="grid grid-cols-[1fr_auto] items-start gap-3 rounded-lg ring-1 ring-inset ring-neutral-200 bg-neutral-50 p-4 dark:bg-neutral-800 dark:ring-white/10">
+          <div class="min-w-0 break-words whitespace-normal leading-snug">
+            <label for="analytics" class="font-medium">Analytics Cookies</label>
+            <div class="text-sm text-neutral-600 dark:text-neutral-300">(Optional)</div>
+          </div>
+          <label class="shrink-0 relative inline-flex items-center cursor-pointer">
+            <input id="analytics" type="checkbox" class="peer sr-only" />
+            <span class="h-6 w-11 rounded-full bg-neutral-300 peer-checked:bg-blue-600 transition-colors"></span>
+            <span class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform peer-checked:translate-x-5 ring-1 ring-black/10"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end gap-3">
+        <button data-decline class="rounded-md bg-white text-neutral-900 ring-1 ring-inset ring-neutral-300 px-4 py-2 text-sm hover:bg-neutral-50 dark:bg-neutral-800 dark:text-neutral-50 dark:ring-white/20">Decline All</button>
+        <button data-save class="rounded-md bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>{script}</script>

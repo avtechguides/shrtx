@@ -1,0 +1,45 @@
+# Enforce LF line endings for all text files
+* text=auto eol=lf
+
+# Treat specific file types as text
+*.js    text
+*.ts    text
+*.tsx   text
+*.astro text
+*.css   text
+*.scss  text
+*.md    text
+*.mdx   text
+*.json  text
+*.yml   text
+*.yaml  text
+*.html  text
+*.xml   text
+*.txt   text
+*.toml  text
+*.gitignore text
+*.gitattributes text
+
+# Mark binary files to prevent Git from messing with them
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.svg   binary
+*.ttf   binary
+*.woff  binary
+*.woff2 binary
+*.eot   binary
+*.mp4   binary
+*.mp3   binary
+*.ogg   binary
+*.wav   binary
+
+# Ensure shell scripts keep LF endings
+*.sh text eol=lf
+
+# Ensure batch scripts use CRLF on Windows
+*.bat text eol=crlf
+*.cmd text eol=crlf

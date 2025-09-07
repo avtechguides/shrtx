@@ -1,0 +1,198 @@
+/* Load Starwind first so our tokens override */
+@import "./starwind.css";
+
+/* Tokens and themes */
+@import "./tokens.css";
+@import "./themes/dark.css";
+@import "./themes/light.css";
+
+/* Project utilities */
+@import "./utilities.css";
+
+/* Fonts */
+@font-face {
+  font-family: "Atkinson";
+  src: url("/fonts/atkinson-regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Atkinson";
+  src: url("/fonts/atkinson-bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Base */
+html { -webkit-text-size-adjust: 100%; }
+body {
+  font-family: "Atkinson", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 18px;         /* more typical base, headings scale adjusted below */
+  line-height: 1.65;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color-scheme: light dark;
+}
+
+/* Layout (legacy) */
+main:not(.use-utility-layout) {
+  width: 1280px;
+  max-width: min(100%, calc(100% - 2rem));
+  margin: auto;
+  padding: 3rem 1rem;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 0.5rem 0;
+  color: var(--foreground);
+  line-height: 1.2;
+}
+h1 { font-size: clamp(2rem, 3vw + 1rem, 2.75rem); }
+h2 { font-size: clamp(1.75rem, 2.5vw + 1rem, 2.2rem); }
+h3 { font-size: clamp(1.35rem, 1.5vw + 1rem, 1.75rem); }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.1rem; }
+
+strong, b { font-weight: 700; }
+
+p, .prose p { margin-bottom: 1em; color: var(--foreground); }
+
+/* Links */
+a:not(.sw-btn):not(.sw-btn-sm):not(.no-underline) {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color .2s ease, text-decoration-thickness .2s ease;
+}
+a:not(.sw-btn):not(.sw-btn-sm):not(.no-underline):hover {
+  color: var(--primary-hover);
+  text-decoration-thickness: 2px;
+}
+
+/* Accent text utility */
+.text-accent {
+  color: var(--accent);
+}
+
+/* Gradient text with solid accent fallback */
+.gradient-text {
+  background-image: var(--gradient-accent-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: var(--accent); /* solid accent fallback */
+  display: inline-block;
+  text-align: center;
+  -webkit-text-fill-color: var(--accent); /* fallback for WebKit */
+}
+
+/* Forms */
+textarea, input {
+  width: 100%;
+  font-size: 16px;
+  color: var(--foreground);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .6rem .75rem;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+thead th {
+  background: color-mix(in srgb, var(--card) 70%, #000 5%);
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: .5rem .75rem;
+}
+
+/* Media */
+img, svg, video {
+  max-width: 100%;
+  height: auto;
+}
+img {
+  border-radius: 8px;
+  background-color: var(--card); /* transparent logos visible */
+}
+
+/* Code */
+code {
+  padding: 2px 5px;
+  background-color: color-mix(in srgb, var(--card) 85%, #000 10%);
+  border-radius: 4px;
+}
+pre {
+  padding: 1.25rem;
+  border-radius: 12px;
+  overflow-x: auto;
+  background: color-mix(in srgb, var(--card) 85%, #000 10%);
+  border: 1px solid var(--border);
+}
+pre > code { all: unset; }
+
+/* Blockquote */
+blockquote {
+  border-left: 4px solid var(--accent);
+  padding-left: 20px;
+  margin: 0;
+  font-size: 1.15em;
+  color: var(--foreground);
+}
+
+/* HR */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+/* Prose guard: keep prose styles from altering UI components */
+.prose :where(button, .cookie-toast, .cookie-modal, .sw-btn, .no-prose) { all: unset; }
+
+/* Cookie UI defaults using tokens (in case classes miss) */
+.cookie-toast, .cookie-modal {
+  font-family: inherit;
+  color: var(--cookie-fg);
+}
+.cookie-toast .btn, .cookie-modal .btn {
+  border-radius: 9999px;
+}
+
+/* Utility helpers */
+.max-w-prose { max-width: 65ch; }
+
+/* Responsiveness */
+@media (max-width: 720px) {
+  body { font-size: 16px; }
+  main { padding: 1rem; }
+}
+
+/* Accessibility */
+.sr-only {
+  border: 0; padding: 0; margin: 0;
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Focus ring consistent across elements */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
