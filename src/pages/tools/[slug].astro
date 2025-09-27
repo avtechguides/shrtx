@@ -1,0 +1,41 @@
+---
+import Seo from '../../components/Seo.astro';
+import Header from '../../components/sections/Header.astro';
+import Footer from '../../components/sections/Footer.astro';
+import { tools } from '../../data/tools';
+import ToolHero from '../../components/ui/tools/ToolHero.astro';
+import ToolFeatures from '../../components/ui/tools/ToolFeatures.astro';
+
+const { slug } = Astro.params;
+const tool = tools.find(t => t.slug === slug);
+
+if (!tool) {
+  throw new Error(`Tool with slug "${slug}" not found`);
+}
+
+const pageTitle = `${tool.title} - Your SaaS Utility Platform`;
+const pageDescription = tool.description;
+---
+
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <Seo
+      title={pageTitle}
+      description={pageDescription}
+      path={`/tools/${slug}`}
+      type="tool"
+    />
+  </head>
+  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <Header />
+    <main class="max-w-4xl mx-auto px-4 py-12 space-y-8">
+      <ToolHero title={tool.title} description={tool.description} icon={tool.icon} />
+      {tool.features && tool.features.length > 0 && <ToolFeatures features={tool.features} />}
+      <section class="mt-10 prose prose-invert max-w-none">
+        {/* Placeholder for your tool UI or detailed content */}
+        <p>Tool UI will be implemented here for <strong>{tool.title}</strong>.</p>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>

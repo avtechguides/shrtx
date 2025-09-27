@@ -1,0 +1,14 @@
+---
+const { title, description, icon } = Astro.props;
+---
+
+<section class="flex items-center space-x-6 py-10 border-b border-gray-200">
+  <div class="text-primary-600 text-6xl">
+    <!-- Replace this with your icon logic -->
+    <i class={`icon-${icon}`}></i>
+  </div>
+  <div>
+    <h1 class="text-4xl font-bold">{title}</h1>
+    <p class="mt-2 text-gray-700">{description}</p>
+  </div>
+</section>

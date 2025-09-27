@@ -1,0 +1,47 @@
+---
+import Seo from '@components/Seo.astro';
+import Header from '@components/sections/Header.astro';
+import Footer from '@components/sections/Footer.astro';
+import Button from '@/components/ui/button/Button.astro';
+import ToolCard from '@components/ui/tools/ToolCard.astro';
+import { tools } from '../../data/tools';
+
+const pageTitle = 'SHRTX Utility Tools - Your daily compainanion for productivity';
+const pageDescription = 'Explore our online tools including URL shortener, QR code generator, JSON formatter, and more.';
+---
+
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <Seo title={pageTitle} description={pageDescription} path="/tools" type="page" />
+  </head>
+  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <Header />
+
+    <main class="max-w-[1280px] mx-auto bg-[var(--color-bg-primary)] px-4 py-16">
+      <section
+        class="max-w-[870px] mx-auto text-[var(--color-text-secondary)]"
+      >
+        <h1 class="text-4xl font-extrabold mb-8 text-[var(--color-text-primary)]">
+          {pageTitle}
+        </h1>
+
+        <div
+          class="grid gap-6"
+          style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));"
+        >
+          {tools.map(tool => (
+            <ToolCard
+              key={tool.slug}
+              title={tool.title}
+              description={tool.description}
+              icon={tool.icon}
+              href={`/tools/${tool.slug}`}
+            />
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </body>
+</html>

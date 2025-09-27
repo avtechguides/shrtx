@@ -1,0 +1,16 @@
+---
+import Card from '../card/Card.astro';
+const { title, description, icon, href } = Astro.props;
+---
+
+<Card class="group cursor-pointer">
+  <a href={href} class="block p-4">
+    <div class="flex items-center space-x-4">
+      <span class="text-primary-600 group-hover:text-primary-700 text-2xl">
+        <i class={`icon-${icon}`}></i>
+      </span>
+      <h3 class="text-lg font-semibold text-gray-900 group-hover:text-primary-700">{title}</h3>
+    </div>
+    <p class="mt-2 text-sm text-gray-600">{description}</p>
+  </a>
+</Card>
