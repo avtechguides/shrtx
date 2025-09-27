@@ -455,5 +455,5 @@ If you deploy to Netlify, use:
 
 MIT — you’re free to use, modify, and redistribute. See `LICENSE` for details.
 
-Check my site live at 'https://guihubie.com'
+Check my site live at 'https://shrtx.in'
 
