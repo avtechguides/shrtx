@@ -1,4 +1,4 @@
-# 🔗 shrtx – Minimal URL Shortener & Blog
+# 🔗 SHRTX – Minimal URL Shortener & Blog
 
 [![Deploy to Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-Live-orange?logo=cloudflare&logoColor=white)](https://shrtx.pages.dev)
 [![GitHub Actions](https://github.com/avtechguides/shrtx/actions/workflows/deploy.yml/badge.svg)](https://github.com/avtechguides/shrtx/actions)
