@@ -19,16 +19,22 @@ const {
   ariaLabel
 } = Astro.props as Props;
 
+// Base styles for badge
 const base = 'inline-flex items-center justify-center font-medium select-none align-middle';
+
+// Border radius variants
 const radii: Record<Radius, string> = {
   pill: 'rounded-full',
-  rounded: 'rounded-md'
-};
-const paddings: Record<Size, string> = {
-  sm: 'px-2.5 py-0.5 text-xs',
-  md: 'px-3 py-1 text-sm'
+  rounded: 'rounded-md',
 };
 
+// Padding and font size variants
+const paddings: Record<Size, string> = {
+  sm: 'px-2.5 py-0.5 text-xs',
+  md: 'px-3 py-1 text-sm',
+};
+
+// Color and border by variant using CSS variables for theme compliance
 const colorByVariant: Record<Variant, string> = {
   default: 'bg-[color:var(--accent)/0.15] text-[var(--accent)] border border-[color:var(--accent)/0.3]',
   accent: 'bg-[var(--accent)] text-[var(--accent-foreground)] border border-[var(--accent)]',
@@ -36,12 +42,17 @@ const colorByVariant: Record<Variant, string> = {
   success: 'bg-[var(--success)] text-[var(--success-foreground)] border border-[var(--success)]',
   warning: 'bg-[var(--warning)] text-[var(--warning-foreground)] border border-[var(--warning)]',
   error: 'bg-[var(--error)] text-[var(--error-foreground)] border border-[var(--error)]',
-  outline: 'bg-transparent text-[var(--muted-foreground,#6b7280)] border border-[var(--border)]'
+  outline: 'bg-transparent text-[var(--muted-foreground,#6b7280)] border border-[var(--border)]',
 };
 
-const classes = [base, radii[radius], paddings[size], colorByVariant[variant], className]
-  .filter(Boolean)
-  .join(' ');
+// Compose the final class string
+const classes = [
+  base,
+  radii[radius],
+  paddings[size],
+  colorByVariant[variant],
+  className
+].filter(Boolean).join(' ');
 ---
 
 <span class={classes} role="status" aria-label={ariaLabel}>

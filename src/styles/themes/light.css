@@ -1,26 +1,25 @@
-/* Light theme tokens (applies to [data-theme="light"]) */
 [data-theme="light"] {
   /* Brand */
-  --accent: #2563EB;           /* primary brand blue */
-  --accent-dark: #1E40AF;      /* hover/active */
+  --accent: #2563EB;
+  --accent-dark: #1E40AF;
   --accent-foreground: #ffffff;
 
   --primary: var(--accent);
   --primary-foreground: #ffffff;
 
-  --secondary: #EC2F36;        /* brand red */
+  --secondary: #EC2F36;
   --secondary-foreground: #ffffff;
 
   /* Neutrals */
   --background: #ffffff;
-  --foreground: #0f1219;
+  --foreground: #101322; /* Darker for better contrast */
   --card: #ffffff;
-  --card-foreground: #0f1219;
+  --card-foreground: #101322;
   --popover: #ffffff;
-  --popover-foreground: #0f1219;
+  --popover-foreground: #101322;
 
-  --muted: #f6f7f9;
-  --muted-foreground: #60739f;
+  --muted: #e6e9f5; /* Slightly darker muted */
+  --muted-foreground: #52607c;
 
   /* Borders/inputs */
   --border: #e5e9f0;
@@ -50,10 +49,10 @@
   --btn-pill-fg: #111827;
   --btn-pill-ring: #e5e7eb;
 
-  /* Legacy aliases (for any remaining old CSS) */
+  /* Legacy aliases */
   --color-text-primary: var(--foreground);
-  --color-text-secondary: #222939;
-  --color-text-muted: #60739f;
+  --color-text-secondary: #2a3043; /* Darkened */
+  --color-text-muted: #52607c; /* Darkened */
 
   --color-bg-primary: var(--background);
   --color-bg-secondary: rgba(0, 0, 0, 0.03);

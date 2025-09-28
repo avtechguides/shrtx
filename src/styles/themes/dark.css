@@ -1,26 +1,25 @@
-/* Dark theme tokens (applies to [data-theme="dark"] or .dark) */
 [data-theme="dark"], .dark {
   /* Brand */
-  --accent: #3B82F6;           /* primary brand blue */
-  --accent-dark: #1E40AF;      /* hover/active */
+  --accent: #3B82F6;
+  --accent-dark: #1E40AF;
   --accent-foreground: #ffffff;
 
   --primary: var(--accent);
   --primary-foreground: #ffffff;
 
-  --secondary: #EC2F36;        /* brand red used sparingly */
+  --secondary: #EC2F36;
   --secondary-foreground: #ffffff;
 
-  /* Neutrals (tokens use hex; keep rgb for legacy fallbacks if needed) */
-  --background: #0f1219;       /* page bg */
-  --foreground: #f9fafb;       /* main text */
-  --card: #111827;             /* deeper than #1e293b for contrast balance */
-  --card-foreground: #f3f4f6;
-  --popover: #0f1219;
-  --popover-foreground: #f9fafb;
+  /* Neutrals */
+  --background: #0b0b0c;        /* Slightly darker for contrast */
+  --foreground: #e5e7eb;        /* Slightly brighter foreground */
+  --card: #111827;
+  --card-foreground: #e5e7eb;
+  --popover: #0b0b0c;
+  --popover-foreground: #e5e7eb;
 
-  --muted: #111827;            /* UI fills */
-  --muted-foreground: #94a3b8;
+  --muted: #1a2233;             /* Darker muted UI fill */
+  --muted-foreground: #9ca3af;  /* Slightly brighter muted text */
 
   /* Borders/inputs */
   --border: #2a2f3a;
@@ -41,7 +40,7 @@
   --gradient-blue-red: linear-gradient(90deg, #3B82F6, #EC2F36);
   --gradient-blue-purple: linear-gradient(90deg, #3B82F6, #9333ea);
 
-  /* Component tokens (used by cookie UI, buttons, etc.) */
+  /* Component tokens */
   --cookie-bg: rgba(17, 24, 39, 0.92);
   --cookie-fg: #f8fafc;
   --cookie-ring: rgba(255,255,255,0.12);
@@ -50,10 +49,10 @@
   --btn-pill-fg: #f3f4f6;
   --btn-pill-ring: rgba(255,255,255,0.18);
 
-  /* Legacy aliases (for older utilities still in code) */
+  /* Legacy aliases */
   --color-text-primary: var(--foreground);
   --color-text-secondary: #cbd5e1;
-  --color-text-muted: #94a3b8;
+  --color-text-muted: var(--muted-foreground);
 
   --color-bg-primary: var(--background);
   --color-bg-secondary: rgba(255,255,255,0.05);

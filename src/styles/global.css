@@ -1,13 +1,14 @@
-/* Load Starwind first so our tokens override */
+/* Imports must come before other statements besides @charset or empty @layer */
+@import "tw-animate-css";
 @import "./starwind.css";
-
-/* Tokens and themes */
 @import "./tokens.css";
 @import "./themes/dark.css";
 @import "./themes/light.css";
-
-/* Project utilities */
 @import "./utilities.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Fonts */
 @font-face {
@@ -26,7 +27,9 @@
 }
 
 /* Base */
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+}
 body {
   font-family: "Atkinson", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
   margin: 0;
@@ -34,11 +37,13 @@ body {
   text-align: left;
   background: var(--background);
   color: var(--foreground);
-  font-size: 18px;         /* more typical base, headings scale adjusted below */
+  font-size: 18px; /* typical base */
   line-height: 1.65;
   word-wrap: break-word;
   overflow-wrap: break-word;
   color-scheme: light dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Layout (legacy) */
@@ -54,44 +59,63 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 0 0.5rem 0;
   color: var(--foreground);
   line-height: 1.2;
+  letter-spacing: 0.02em;
+  font-weight: 700;
 }
-h1 { font-size: clamp(2rem, 3vw + 1rem, 2.75rem); }
-h2 { font-size: clamp(1.75rem, 2.5vw + 1rem, 2.2rem); }
-h3 { font-size: clamp(1.35rem, 1.5vw + 1rem, 1.75rem); }
-h4 { font-size: 1.25rem; }
-h5 { font-size: 1.1rem; }
+h1 {
+  font-size: clamp(2rem, 3vw + 1rem, 2.75rem);
+}
+h2 {
+  font-size: clamp(1.75rem, 2.5vw + 1rem, 2.2rem);
+}
+h3 {
+  font-size: clamp(1.35rem, 1.5vw + 1rem, 1.75rem);
+}
+h4 {
+  font-size: 1.25rem;
+}
+h5 {
+  font-size: 1.1rem;
+}
 
-strong, b { font-weight: 700; }
+strong, b {
+  font-weight: 700;
+}
 
-p, .prose p { margin-bottom: 1em; color: var(--foreground); }
+p, .prose p {
+  margin-bottom: 1em;
+  color: var(--foreground);
+  /* optional smooth font rendering */
+  font-feature-settings: "liga", "kern";
+}
 
 /* Links */
 a:not(.sw-btn):not(.sw-btn-sm):not(.no-underline) {
   color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 2px;
-  transition: color .2s ease, text-decoration-thickness .2s ease;
+  transition: color 0.2s ease, text-decoration-thickness 0.2s ease;
 }
 a:not(.sw-btn):not(.sw-btn-sm):not(.no-underline):hover {
   color: var(--primary-hover);
   text-decoration-thickness: 2px;
 }
 
-/* Accent text utility */
+/* Accent text */
 .text-accent {
   color: var(--accent);
 }
 
-/* Gradient text with solid accent fallback */
+/* Gradient text */
 .gradient-text {
   background-image: var(--gradient-accent-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: var(--accent); /* solid accent fallback */
+  color: var(--accent);
   display: inline-block;
   text-align: center;
-  -webkit-text-fill-color: var(--accent); /* fallback for WebKit */
+  -webkit-text-fill-color: var(--accent);
 }
 
 /* Forms */
@@ -102,7 +126,15 @@ textarea, input {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: .6rem .75rem;
+  padding: 0.75rem 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-feature-settings: "liga", "kern";
+}
+textarea:focus, input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+  background: var(--card);
 }
 
 /* Tables */
@@ -115,54 +147,62 @@ thead th {
 }
 th, td {
   border: 1px solid var(--border);
-  padding: .5rem .75rem;
+  padding: 0.75rem 1rem;
+  text-align: left;
 }
 
-/* Media */
+/* Media elements */
 img, svg, video {
   max-width: 100%;
   height: auto;
+  display: block;
+  margin: auto;
 }
 img {
   border-radius: 8px;
-  background-color: var(--card); /* transparent logos visible */
+  background-color: var(--card);
 }
 
 /* Code */
 code {
-  padding: 2px 5px;
+  padding: 3px 7px;
   background-color: color-mix(in srgb, var(--card) 85%, #000 10%);
   border-radius: 4px;
+  font-family: 'Fira Mono', monospace;
+  font-size: 0.9em;
 }
 pre {
-  padding: 1.25rem;
-  border-radius: 12px;
+  padding: 1.5rem;
+  border-radius: 16px;
   overflow-x: auto;
   background: color-mix(in srgb, var(--card) 85%, #000 10%);
   border: 1px solid var(--border);
 }
 pre > code { all: unset; }
 
-/* Blockquote */
+/* Blockquote styled for focus */
 blockquote {
-  border-left: 4px solid var(--accent);
-  padding-left: 20px;
+  border-left: 5px solid var(--accent);
+  padding-left: 1.5rem;
   margin: 0;
   font-size: 1.15em;
+  font-style: italic;
   color: var(--foreground);
 }
 
-/* HR */
+/* Horizontal Rule */
 hr {
   border: none;
   border-top: 1px solid var(--border);
-  margin: 1.5rem 0;
+  margin: 2rem 0;
 }
 
-/* Prose guard: keep prose styles from altering UI components */
-.prose :where(button, .cookie-toast, .cookie-modal, .sw-btn, .no-prose) { all: unset; }
+/* Prose guard for UI elements */
+.prose :where(button, .cookie-toast, .cookie-modal, .sw-btn, .no-prose) {
+  all: unset;
+}
 
-/* Cookie UI defaults using tokens (in case classes miss) */
+/* Cookie UI default styles */
 .cookie-toast, .cookie-modal {
   font-family: inherit;
   color: var(--cookie-fg);
@@ -172,26 +212,35 @@ hr {
 }
 
 /* Utility helpers */
-.max-w-prose { max-width: 65ch; }
+.max-w-prose {
+  max-width: 65ch;
+}
 
-/* Responsiveness */
+/* Responsive adjustments */
 @media (max-width: 720px) {
-  body { font-size: 16px; }
-  main { padding: 1rem; }
+  body {
+    font-size: 16px;
+  }
+  main {
+    padding: 1rem;
+  }
 }
 
 /* Accessibility */
 .sr-only {
-  border: 0; padding: 0; margin: 0;
   position: absolute !important;
-  height: 1px; width: 1px;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
   overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
+  clip: rect(0 0 0 0);
   clip-path: inset(50%);
+  border: 0;
   white-space: nowrap;
 }
 
-/* Focus ring consistent across elements */
+/* Focus ring consistent */
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;

@@ -1,0 +1,44 @@
+---
+interface Props {
+  title?: string;
+  subtitle?: string;
+  center?: boolean; // optional: center-align subtitle and title on small layouts
+}
+
+const {
+  title = 'SHRTX Utility Tools',
+  subtitle = 'Your daily companion for productivity. Explore our online tools including URL shortener, QR code generator, JSON formatter, and more.',
+  center = false
+} = Astro.props as Props;
+---
+
+<section class="w-full pt-[calc(var(--header-offset,64px)+0.5rem)] pb-6 sm:pb-8 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
+  <div class="mx-auto max-w-5xl px-3">
+    <div class={[
+      'grid items-center gap-3 sm:gap-4',
+      'md:grid-cols-2',
+      center ? 'text-center md:text-left' : ''
+    ].join(' ')}>
+      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">
+        <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+          {title}
+        </span>
+      </h1>
+      {subtitle && (
+        <p class={[
+          'text-sm sm:text-base md:text-lg',
+          'text-[var(--muted-foreground,#6b7280)]',
+          center ? 'md:text-left' : 'md:text-right'
+        ].join(' ')}>
+          {subtitle}
+        </p>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+/* 
+  If the header is sticky, ensure --header-offset is set in Header (64px mobile, ~80px desktop).
+*/
+</style>

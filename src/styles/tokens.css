@@ -12,7 +12,7 @@
   --primary-hover: #0b3aa3;     /* accessible hover */
   --primary-active: #082b7a;
 
-  --secondary: #111827;         /* slightly softer than pure black */
+  --secondary: #111827;          /* slightly softer than pure black */
   --secondary-foreground: #ffffff;
   --secondary-hover: #1f2937;
   --secondary-active: #0b1220;
@@ -24,14 +24,14 @@
 
   /* Neutrals */
   --white: #ffffff;
-  --black: #0f1219;
+  --black: #101322;              /* slightly darker for better contrast */
   --charcoal: #1c1f26;
   --navy: #081323;
 
   /* Surfaces (light) */
   --background: var(--white);
   --foreground: var(--black);
-  --muted: #6b7280; /* text-muted */
+  --muted: #52607c;              /* darker muted text for readability */
   --card: var(--white);
   --card-foreground: var(--black);
   --popover: var(--white);
@@ -53,7 +53,6 @@
   --shadow-lg: 0 8px 15px rgba(0,0,0,0.12);
   --shadow-xl: 0 12px 25px rgba(0,0,0,0.16);
   --shadow-2xl: 0 25px 50px rgba(0,0,0,0.20);
-  --box-shadow: 0 2px 6px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.12), 0 16px 32px rgba(0,0,0,0.12);
 
   /* Borders / Radius */
   --border: #e5e9f0;
@@ -72,7 +71,7 @@
   --error-foreground: var(--danger-foreground);
 
   /* Component tokens */
-  --cookie-bg: #f9fafb;                 /* light toast/modal */
+  --cookie-bg: #f9fafb;                  /* light toast/modal */
   --cookie-fg: #0f172a;
   --cookie-ring: rgba(0,0,0,0.06);
   --cookie-dark-bg: rgba(17,24,39,0.92); /* dark bar/modal */
@@ -83,13 +82,17 @@
   --btn-pill-ring: #e5e7eb;
 
   --focus-ring: #2563eb; /* blue-600 focus */
+
+  /* Text roles */
+  --color-text-primary: var(--black);
+  --color-text-muted: #60739f;
 }
 
 /* Dark theme overrides */
 :root[class~="dark"], [data-theme="dark"], .dark {
-  --background: #0b0b0b;
+  --background: #0b0b0c;
   --foreground: #e5e7eb;
-  --muted: #9ca3af;
+  --muted: #a3aabd;
 
   --card: #121212;
   --card-foreground: #e5e7eb;
@@ -99,7 +102,7 @@
   --border: #252933;
   --input: #1f2430;
 
-  --primary: #3b82f6;             /* better contrast for dark */
+  --primary: #3b82f6;              /* better contrast for dark */
   --primary-hover: #2563eb;
   --primary-active: #1d4ed8;
   --accent: var(--primary);
@@ -112,6 +115,9 @@
   --btn-pill-bg: rgba(255,255,255,0.08);
   --btn-pill-fg: #f3f4f6;
   --btn-pill-ring: rgba(255,255,255,0.18);
+
+  --color-text-primary: #e5e7eb;
+  --color-text-muted: #9ca3af;
 }
 
 /* Media preference hints */
