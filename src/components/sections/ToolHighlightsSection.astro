@@ -5,7 +5,7 @@ interface Props {
   title?: string;
   highlights?: ToolHighlight[];
   ariaLabel?: string;        // accessibility label for the section
-  compact?: boolean;         // optional denser grid/cards
+  compact?: boolean;          // optional denser grid/cards
 }
 
 const {
@@ -22,7 +22,6 @@ const {
   compact = false
 } = Astro.props as Props;
 
-// Defensive copy and normalization
 const items: ToolHighlight[] = Array.isArray(highlights) ? [...highlights] : [];
 ---
 
@@ -60,9 +59,8 @@ const items: ToolHighlight[] = Array.isArray(highlights) ? [...highlights] : [];
           ].join(' ')}
           role="listitem"
           aria-label={h.title}
-          data-key={(h.title ?? 'item') + '-' + idx}
+          tabindex="0"
         >
-          <!-- Gradient ring (non-blocking) -->
           <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35">
             <span
               class="absolute inset-0 rounded-2xl"
@@ -93,5 +91,5 @@ const items: ToolHighlight[] = Array.isArray(highlights) ? [...highlights] : [];
 </section>
 
 <style>
-/* Relies on global tokens for color system */
+  /* Relies on global tokens for color system */
 </style>

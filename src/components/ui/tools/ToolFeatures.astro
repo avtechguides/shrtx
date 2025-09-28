@@ -1,12 +1,15 @@
 ---
-const { features } = Astro.props;
+const { features } = Astro.props as { features: string[] };
 ---
 
-<section class="mt-8">
-  <h2 class="text-2xl font-semibold mb-4">Key Features</h2>
-  <ul class="list-disc list-inside text-gray-700 space-y-2">
-    {features.map(feature => (
-      <li key={feature}>{feature}</li>
+<section class="mt-8 max-w-3xl mx-auto">
+  <h2 class="text-2xl font-semibold mb-4 text-[var(--foreground)]">Key Features</h2>
+  <ul class="list-disc list-inside space-y-2 text-[var(--muted-foreground,#6b7280)] text-base">
+    {features.map((feature) => (
+      <li class="leading-relaxed">
+        {feature}
+      </li>
     ))}
   </ul>
 </section>
+

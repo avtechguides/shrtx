@@ -12,24 +12,34 @@ const {
 } = Astro.props as Props;
 ---
 
-<section class="w-full pt-[calc(var(--header-offset,64px)+0.5rem)] pb-6 sm:pb-8 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300">
+<section
+  class="w-full pt-[calc(var(--header-offset,64px)+0.5rem)] pb-6 sm:pb-8 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300"
+  aria-labelledby="toolhero-title"
+>
   <div class="mx-auto max-w-5xl px-3">
-    <div class={[
-      'grid items-center gap-3 sm:gap-4',
-      'md:grid-cols-2',
-      center ? 'text-center md:text-left' : ''
-    ].join(' ')}>
-      <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">
+    <div
+      class={[
+        'grid items-center gap-3 sm:gap-4',
+        'md:grid-cols-2',
+        center ? 'text-center md:text-left' : ''
+      ].join(' ')}
+    >
+      <h1
+        id="toolhero-title"
+        class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight"
+      >
         <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
           {title}
         </span>
       </h1>
       {subtitle && (
-        <p class={[
-          'text-sm sm:text-base md:text-lg',
-          'text-[var(--muted-foreground,#6b7280)]',
-          center ? 'md:text-left' : 'md:text-right'
-        ].join(' ')}>
+        <p
+          class={[
+            'text-sm sm:text-base md:text-lg leading-relaxed',
+            'text-[var(--muted-foreground,#6b7280)]',
+            center ? 'md:text-left' : 'md:text-right'
+          ].join(' ')}
+        >
           {subtitle}
         </p>
       )}

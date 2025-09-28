@@ -18,24 +18,30 @@ const cssWidth = typeof width === 'number' ? `${width}px` : String(width);
 </div>
 
 <style is:inline>
-.sw-separator-glow {
-  width: var(--sep-width);
-  margin-inline: auto;
-  position: relative;
-  height: 10px;
-}
-.sw-separator-glow .sw-glow {
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background:
-    radial-gradient(60% 100% at 50% 50%, color-mix(in srgb, var(--sep-accent) 35%, transparent), transparent 70%)
-    center/100% 100% no-repeat;
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--sep-accent) 20%, transparent) inset,
-    0 4px 16px color-mix(in srgb, var(--sep-accent) 20%, transparent);
-}
-@media (prefers-reduced-transparency: reduce) {
-  .sw-separator-glow .sw-glow { box-shadow: none; }
-}
+  .sw-separator-glow {
+    width: var(--sep-width);
+    margin-inline: auto;
+    position: relative;
+    height: 10px;
+  }
+  .sw-separator-glow .sw-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background:
+      radial-gradient(
+        60% 100% at 50% 50%,
+        color-mix(in srgb, var(--sep-accent) 35%, transparent),
+        transparent 70%
+      )
+      center / 100% 100% no-repeat;
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--sep-accent) 20%, transparent) inset,
+      0 4px 16px color-mix(in srgb, var(--sep-accent) 20%, transparent);
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .sw-separator-glow .sw-glow {
+      box-shadow: none;
+    }
+  }
 </style>

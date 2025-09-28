@@ -19,7 +19,7 @@ import liIcon from '../../../assets/icons/linkedin-blog-post-shareicon.svg?raw';
 import rdIcon from '../../../assets/icons/reddit-blog-post-share-icon.svg?raw';
 ---
 
-<div class="sw-share group flex items-center gap-2">
+<div class="sw-share group flex items-center gap-3">
   <a href={xUrl} target="_blank" rel="noopener noreferrer" class="sw-share-btn" aria-label="Share on X" set:html={xIcon} />
   <a href={hnUrl} target="_blank" rel="noopener noreferrer" class="sw-share-btn" aria-label="Share on Hacker News" set:html={hnIcon} />
   <a href={liUrl} target="_blank" rel="noopener noreferrer" class="sw-share-btn" aria-label="Share on LinkedIn" set:html={liIcon} />
@@ -27,25 +27,40 @@ import rdIcon from '../../../assets/icons/reddit-blog-post-share-icon.svg?raw';
 </div>
 
 <style is:inline>
-.sw-share-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; border-radius: 9999px;
-  color: var(--muted-foreground, #6b7280);
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
-  border: 1px solid var(--border);
-  transition: color .2s ease, background-color .2s ease, transform .2s ease, border-color .2s ease;
-  text-decoration: none;
-}
-.sw-share-btn:hover, .sw-share-btn:focus-visible {
-  color: var(--accent);
-  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  outline: none;
-}
-.sw-share-btn:active { transform: translateY(1px) scale(.98); }
+  .sw-share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    color: var(--muted-foreground, #6b7280);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border: 1px solid var(--border);
+    transition: color 0.3s ease, background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+    text-decoration: none;
+  }
+  .sw-share-btn:hover,
+  .sw-share-btn:focus-visible {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 70%, var(--border));
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    outline: none;
+  }
+  .sw-share-btn:active {
+    transform: translateY(1px) scale(0.95);
+  }
 
-/* Ensure raw SVGs inherit the button color */
-.sw-share-btn :where(svg) { width: 18px; height: 18px; display: block; }
-.sw-share-btn :where([fill]:not([fill="none"])) { fill: currentColor; }
-.sw-share-btn :where([stroke]:not([stroke="none"])) { stroke: currentColor; }
+  /* Ensure raw SVGs inherit the button color */
+  .sw-share-btn :where(svg) {
+    width: 20px;
+    height: 20px;
+    display: block;
+  }
+  .sw-share-btn :where([fill]:not([fill="none"])) {
+    fill: currentColor;
+  }
+  .sw-share-btn :where([stroke]:not([stroke="none"])) {
+    stroke: currentColor;
+  }
 </style>

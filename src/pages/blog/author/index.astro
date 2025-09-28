@@ -98,21 +98,30 @@ const collectionSeo = generateCollectionSEO({
     <BlogHero title="Authors" subtitle="Discover the voices behind the blog." />
 
     <main class="mx-auto max-w-6xl px-4 py-8 space-y-10 prose prose-invert text-[var(--foreground)]">
-      <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-        {pageAuthors.map(author => (
-          <li>
-            <a href={`/blog/author/${author.slug}/`} class="no-underline block focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-lg">
-              <AuthorCard
-                name={author.name}
-                avatar={author.avatar}
-                bio={author.bio}
-                location={author.location}
-                social={author.social}
-                email={author.email}
-              />
-            </a>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8" role="list">
+        {pageAuthors.length === 0 ? (
+          <li class="col-span-full text-center text-[var(--muted-foreground,#6b7280)]">
+            No authors found.
           </li>
-        ))}
+        ) : (
+          pageAuthors.map((author, index) => (
+            <li role="listitem" tabindex="0">
+              <a
+                href={`/blog/author/${author.slug}/`}
+                class="no-underline block focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-lg transition-shadow duration-200 hover:shadow-lg focus:shadow-lg"
+              >
+                <AuthorCard
+                  name={author.name}
+                  avatar={author.avatar}
+                  bio={author.bio}
+                  location={author.location}
+                  social={author.social}
+                  email={author.email}
+                />
+              </a>
+            </li>
+          ))
+        )}
       </ul>
 
       {totalPages > 1 && (

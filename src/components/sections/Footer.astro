@@ -67,7 +67,9 @@ const socialLinks = [
       <ul class="flex flex-col md:flex-row items-center gap-4 text-sm text-[var(--muted-foreground,#6b7280)]">
         {footerMenu.map((item) => (
           <li>
-            <a href={item.href} class="hover:text-[var(--accent)] transition-colors">{item.text}</a>
+            <a href={item.href} class="hover:text-[var(--accent)] transition-colors">
+              {item.text}
+            </a>
           </li>
         ))}
         <li>
@@ -108,8 +110,16 @@ const socialLinks = [
 </footer>
 
 <style>
-/* Ensure inlined SVGs inherit theme colors */
-[set\:html] svg { width: 1em; height: 1em; display: block; }
-[set\:html] svg [fill]:not([fill="none"]) { fill: currentColor; }
-[set\:html] svg [stroke]:not([stroke="none"]) { stroke: currentColor; }
+  /* Ensure inlined SVGs inherit theme colors */
+  [set\\:html] svg {
+    width: 1em;
+    height: 1em;
+    display: block;
+  }
+  [set\\:html] svg [fill]:not([fill="none"]) {
+    fill: currentColor;
+  }
+  [set\\:html] svg [stroke]:not([stroke="none"]) {
+    stroke: currentColor;
+  }
 </style>

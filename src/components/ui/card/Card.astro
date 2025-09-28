@@ -1,19 +1,28 @@
 ---
 type Variant = 'solid' | 'subtle' | 'outline';
+
 interface Props {
   class?: string;
   variant?: Variant;
-  padded?: boolean; // set false for bare containers
+  padded?: boolean; // false for padding removal
 }
+
 const { class: className, variant = 'solid', padded = true } = Astro.props as Props;
 
+// Base rounded styling for cards
 const base = 'rounded-2xl';
+
+// Variants with theme colors, rings, and shadows
 const surfaces: Record<Variant, string> = {
   solid: 'bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-sm',
   subtle: 'bg-[var(--background)] text-[var(--foreground)] ring-1 ring-inset ring-[var(--border)]/60',
   outline: 'bg-transparent text-[var(--foreground)] ring-1 ring-inset ring-[var(--border)]',
 };
+
+// Padding utility, removable with `padded=false`
 const padding = padded ? 'p-6' : '';
+
+// Compose combined class string
 const classes = [base, surfaces[variant], padding, className].filter(Boolean).join(' ');
 ---
 

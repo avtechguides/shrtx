@@ -15,20 +15,25 @@ const {
   aria-labelledby="donation-cta-title"
   role="region"
 >
-  <!-- Card surface with gradient ring -->
+  <!-- Card surface with subtle gradient ring -->
   <div
     class={[
-      'relative mx-auto max-w-4xl rounded-2xl ring-1 ring-inset ring-[var(--border)] shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus-within:-translate-y-0.5',
+      'relative mx-auto max-w-4xl rounded-2xl ring-1 ring-inset ring-[var(--border)] shadow-md transition-transform duration-200 hover:-translate-y-0.5 focus-within:-translate-y-0.5 focus-within:ring-2 focus-within:ring-[var(--accent)]',
       compact ? 'p-5' : 'p-6 md:p-6'
     ].join(' ')}
   >
-    <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35">
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35"
+    >
       <span
         class="absolute inset-0 rounded-2xl"
-        style="background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-               mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-               -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-               -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+        style="
+          background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;
+        "
       ></span>
     </span>
 
@@ -56,7 +61,6 @@ const {
   </div>
 </section>
 
-
 <style>
-/* Gradient ring hover opacity handled inline, colors rely on global tokens */
+/* Gradient ring hover opacity handled inline. Colors rely on global tokens */
 </style>

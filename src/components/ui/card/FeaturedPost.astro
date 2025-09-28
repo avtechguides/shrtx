@@ -14,12 +14,20 @@ const { post, readingTimeMin } = Astro.props as Props;
 const readTime = readingTimeMin ?? calculateReadingTimeFromMarkdown((post as any).body ?? post.data.description ?? '');
 
 const title = post.data.title ?? 'Untitled';
-const author = post.data.author || 'Site Author';
+const author = post.data.author ?? 'Site Author';
 const href = `/blog/${post.id}/`;
 ---
-<section class="rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all relative">
+
+<section
+  class="relative rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] p-4 md:p-5 hover:shadow-lg hover:-translate-y-0.5 transition-shadow focus-within:shadow-lg focus-within:-translate-y-0.5"
+>
   {post.data.heroImage && (
-    <a href={href} class="block overflow-hidden rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]">
+    <a
+      href={href}
+      class="block overflow-hidden rounded-xl mb-4 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <Image
         src={post.data.heroImage}
         alt={title}
@@ -34,13 +42,16 @@ const href = `/blog/${post.id}/`;
   )}
 
   <h2 class="text-2xl md:text-3xl font-bold leading-tight mb-2">
-    <a href={href} class="no-underline hover:underline underline-offset-2 decoration-[var(--accent)]">{title}</a>
+    <a
+      href={href}
+      class="no-underline hover:underline underline-offset-2 decoration-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+    >
+      {title}
+    </a>
   </h2>
 
   {post.data.description && (
-    <p class="text-[var(--muted-foreground,#6b7280)] mb-3">
-      {post.data.description}
-    </p>
+    <p class="text-[var(--muted-foreground,#6b7280)] mb-3 line-clamp-3">{post.data.description}</p>
   )}
 
   <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--muted-foreground,#6b7280)] mb-3">
@@ -48,20 +59,30 @@ const href = `/blog/${post.id}/`;
     <span aria-hidden="true">•</span>
     <span>{readTime} min read</span>
     <span aria-hidden="true">•</span>
-    <a href={`/blog/author/${slugify(author)}/`} class="no-underline hover:underline underline-offset-2 hover:text-[var(--accent)]">
+    <a
+      href={`/blog/author/${slugify(author)}/`}
+      class="no-underline hover:underline underline-offset-2 hover:text-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
+    >
       {author}
     </a>
   </div>
 
   {post.data.tags?.length ? (
-    <div class="flex gap-2 flex-wrap">
+    <div class="flex gap-2 flex-wrap" aria-label="Tags">
       {post.data.tags.map((t) => (
-        <a href={`/blog/tag/${slugify(t)}/`} class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-[var(--accent)]/12 text-[var(--accent)] ring-1 ring-inset ring-[var(--accent)]/25 no-underline hover:bg-[var(--accent)]/16">
+        <a
+          href={`/blog/tag/${slugify(t)}/`}
+          class="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-[var(--accent)]/12 text-[var(--accent)] ring-1 ring-inset ring-[var(--accent)]/25 no-underline hover:bg-[var(--accent)]/16 focus:outline-none focus:ring-1 focus:ring-[var(--accent)]"
+        >
           {t}
         </a>
       ))}
     </div>
   ) : null}
 
-  <a href={href} class="absolute inset-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--accent)]" aria-label={title}></a>
+  <a
+    href={href}
+    class="absolute inset-0 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+    aria-label={title}
+  ></a>
 </section>

@@ -3,14 +3,14 @@ import Card from '../card/Card.astro';
 const { title, description, icon, href } = Astro.props;
 ---
 
-<Card class="group cursor-pointer">
-  <a href={href} class="block p-4">
+<Card class="group cursor-pointer transition hover:shadow-lg focus-within:shadow-lg rounded-lg">
+  <a href={href} class="block p-4 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]" tabindex="0" aria-label={title}>
     <div class="flex items-center space-x-4">
-      <span class="text-primary-600 group-hover:text-primary-700 text-2xl">
+      <span class="text-[var(--accent)] group-hover:text-[var(--accent-hover,#0c4a6e)] text-2xl transition-colors duration-200" aria-hidden="true">
         <i class={`icon-${icon}`}></i>
       </span>
-      <h3 class="text-lg font-semibold text-gray-900 group-hover:text-primary-700">{title}</h3>
+      <h3 class="text-lg font-semibold text-[var(--foreground)] group-hover:text-[var(--accent-hover,#0c4a6e)] transition-colors duration-200">{title}</h3>
     </div>
-    <p class="mt-2 text-sm text-gray-600">{description}</p>
+    <p class="mt-2 text-sm text-[var(--muted-foreground,#6b7280)]">{description}</p>
   </a>
 </Card>

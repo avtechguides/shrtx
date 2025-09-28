@@ -41,7 +41,10 @@ const {
 } = Astro.props as Props;
 ---
 
-<section class="w-full pt-[calc(var(--header-offset,64px)+0.5rem)] pb-10 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300" aria-labelledby="hero-title">
+<section
+  class="w-full pt-[calc(var(--header-offset,64px)+0.5rem)] pb-10 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300"
+  aria-labelledby="hero-title"
+>
   <div class="max-w-5xl mx-auto px-4 text-center mb-8">
     <h1 id="hero-title" class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
       <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
@@ -78,9 +81,14 @@ const {
       class="flex-1 p-6 md:p-8 rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-lg relative overflow-hidden transition-transform duration-200 hover:-translate-y-0.5 group"
       aria-labelledby="shorten-title"
     >
-      <!-- Gradient ring (non-blocking) -->
-      <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-500 group-hover:opacity-35">
-        <span class="absolute inset-0 rounded-2xl" style="background: linear-gradient(90deg, var(--accent), var(--accent-dark)); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"></span>
+      <span
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-500 group-hover:opacity-35"
+      >
+        <span
+          class="absolute inset-0 rounded-2xl"
+          style="background: linear-gradient(90deg, var(--accent), var(--accent-dark)); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+        ></span>
       </span>
 
       <div class="relative flex flex-col items-start gap-3">
@@ -94,7 +102,7 @@ const {
           name="longUrl"
           placeholder={shortenPlaceholder}
           required
-          class="w-full px-4 py-3 border border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-0 transition bg-[var(--card)] text-[var(--card-foreground)] shadow-sm"
+          class="w-full px-4 py-3 border border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition bg-[var(--card)] text-[var(--card-foreground)] shadow-sm"
           autocomplete="url"
         />
         <button
@@ -113,8 +121,14 @@ const {
       class="flex-1 p-6 md:p-8 rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-lg relative overflow-hidden transition-transform duration-200 hover:-translate-y-0.5 group"
       aria-labelledby="qr-title"
     >
-      <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-500 group-hover:opacity-35">
-        <span class="absolute inset-0 rounded-2xl" style="background: linear-gradient(90deg, var(--accent), var(--accent-dark)); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"></span>
+      <span
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-500 group-hover:opacity-35"
+      >
+        <span
+          class="absolute inset-0 rounded-2xl"
+          style="background: linear-gradient(90deg, var(--accent), var(--accent-dark)); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+        ></span>
       </span>
 
       <div class="relative flex flex-col items-start gap-3">
@@ -128,7 +142,7 @@ const {
           name="qrUrl"
           placeholder={qrPlaceholder}
           required
-          class="w-full px-4 py-3 border border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-0 transition bg-[var(--card)] text-[var(--card-foreground)] shadow-sm"
+          class="w-full px-4 py-3 border border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition bg-[var(--card)] text-[var(--card-foreground)] shadow-sm"
           autocomplete="url"
         />
         <button

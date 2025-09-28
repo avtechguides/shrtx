@@ -3,19 +3,18 @@ import type { Feature } from '@/data/features';
 
 interface Props {
   title?: string;
-  features: ReadonlyArray<Feature>;  // accept readonly arrays
+  features: ReadonlyArray<Feature>;
   subtitle?: string;
-  ariaLabel?: string;                // accessibility label for the section
+  ariaLabel?: string;
 }
 
 const {
   title,
   features,
   subtitle,
-  ariaLabel = 'Key features'
+  ariaLabel = 'Key features',
 } = Astro.props as Props;
 
-// Make a mutable local copy while preserving type
 const items: Feature[] = Array.isArray(features) ? [...features] : [];
 ---
 
@@ -29,7 +28,10 @@ const items: Feature[] = Array.isArray(features) ? [...features] : [];
     {(title || subtitle) && (
       <header class="mb-8 sm:mb-10 text-center space-y-2">
         {title && (
-          <h2 id="features-title" class="text-3xl md:text-4xl font-extrabold tracking-tight">
+          <h2
+            id="features-title"
+            class="text-3xl md:text-4xl font-extrabold tracking-tight"
+          >
             <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
               {title}
             </span>
@@ -54,9 +56,12 @@ const items: Feature[] = Array.isArray(features) ? [...features] : [];
             class="relative group p-6 rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-md hover:shadow-lg transition-transform duration-200 hover:-translate-y-0.5 focus-within:-translate-y-0.5"
             role="listitem"
             aria-label={feature.title}
+            tabindex="0"
           >
-            <!-- Gradient ring overlay (non-blocking) -->
-            <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35">
+            <span
+              aria-hidden="true"
+              class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35"
+            >
               <span
                 class="absolute inset-0 rounded-2xl"
                 style="background: linear-gradient(90deg, var(--accent), var(--accent-dark));
@@ -67,11 +72,11 @@ const items: Feature[] = Array.isArray(features) ? [...features] : [];
             </span>
 
             <div class="relative flex flex-col items-center text-center">
-              <!-- Icon: data module provides SVG string -->
-              <div class="mb-4 w-16 h-16 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                <div class="w-full h-full" set:html={feature.icon} />
-              </div>
-
+              <div
+                class="mb-4 w-16 h-16 flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                aria-hidden="true"
+                set:html={feature.icon}
+              />
               <h3 class="text-xl font-extrabold mb-2">
                 <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
                   {feature.title}
@@ -89,6 +94,9 @@ const items: Feature[] = Array.isArray(features) ? [...features] : [];
 </section>
 
 <style>
-/* Optional icon stroke accent on hover, without affecting fill-only SVGs */
-.group:hover svg [stroke] { stroke: var(--accent); transition: stroke .3s ease; }
+  /* Icon stroke accent on hover, no fill color override */
+  .group:hover svg [stroke] {
+    stroke: var(--accent);
+    transition: stroke 0.3s ease;
+  }
 </style>

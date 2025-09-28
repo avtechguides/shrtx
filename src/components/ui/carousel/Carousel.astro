@@ -3,9 +3,9 @@ import type { LogoItem } from '@/data/logos';
 
 interface Props {
   items: LogoItem[];
-  speedMs?: number;           // total loop duration
-  pauseOnHover?: boolean;     // optional UX enhancement
-  ariaLabel?: string;         // accessible label for the carousel region
+  speedMs?: number;           // total loop duration in ms
+  pauseOnHover?: boolean;     // pause animation on hover
+  ariaLabel?: string;         // accessible label for the carousel container
 }
 
 const {
@@ -15,7 +15,7 @@ const {
   ariaLabel = 'Partner logos carousel'
 } = Astro.props as Props;
 
-// Duplicate items for seamless infinite scroll
+// Duplicate items to create seamless infinite scroll effect
 const trackItems = [...items, ...items];
 ---
 
@@ -30,8 +30,9 @@ const trackItems = [...items, ...items];
         pauseOnHover && 'hover:[animation-play-state:paused]'
       ]}
       style={`--carousel-speed:${speedMs}ms`}
+      role="list"
     >
-      {trackItems.map((item, idx) => (
+      {trackItems.map((item) => (
         <div
           class="group flex flex-col items-center justify-center px-6 py-4 mx-4 min-w-[120px] md:min-w-[140px] rounded-lg"
           role="listitem"
@@ -67,18 +68,27 @@ const trackItems = [...items, ...items];
 
 <style>
 @media (prefers-color-scheme: dark) {
-  .ring-inset { border-color: var(--ring-dark) !important; }
+  .ring-inset {
+    border-color: var(--ring-dark) !important;
+  }
 }
 
 /* Infinite marquee animation */
 @keyframes carousel-scroll {
-  0% { transform: translateX(-20%); }
-  100% { transform: translateX(-70%); }
+  0% {
+    transform: translateX(-20%);
+  }
+  100% {
+    transform: translateX(-70%);
+  }
 }
 
-/* Respect reduced motion by disabling animation */
+/* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  .animate-carousel { animation: none !important; transform: translateX(0) !important; }
+  .animate-carousel {
+    animation: none !important;
+    transform: translateX(0) !important;
+  }
 }
 
 /* Default animation */

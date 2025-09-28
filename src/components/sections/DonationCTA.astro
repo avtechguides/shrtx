@@ -7,21 +7,63 @@ interface Props {
 const { note = 'SHRTX is ad‑free and built for the community. If supporting ongoing development is possible, any help is appreciated.' } = Astro.props as Props;
 ---
 
-<section class="relative my-16 rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] shadow-lg" aria-labelledby="support-title">
+<section
+  class="relative my-16 rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] shadow-lg"
+  aria-labelledby="support-title"
+>
   <div class="mx-auto max-w-4xl px-6 py-10 text-center">
-    <h2 id="support-title" class="text-2xl md:text-3xl font-extrabold tracking-tight mb-3">
+    <h2
+      id="support-title"
+      class="text-2xl md:text-3xl font-extrabold tracking-tight mb-3"
+    >
       ❤️ Love SHRTX?
     </h2>
 
-    <p class="text-sm md:text-base text-[var(--muted-foreground,#6b7280)] max-w-2xl mx-auto mb-6">
+    <p
+      class="text-sm md:text-base text-[var(--muted-foreground,#6b7280)] max-w-2xl mx-auto mb-6 leading-relaxed"
+    >
       {note}
     </p>
 
-    <div class="flex flex-wrap justify-center gap-3 sm:gap-4">
-      <Button href="/donation" variant="primary" size="lg" aria-label="Open donation page">Support My Work</Button>
-      <Button href="https://paypal.me/your-link" variant="secondary" size="lg" target="_blank" rel="noopener noreferrer" aria-label="Donate via PayPal in a new tab">PayPal</Button>
-      <Button href="https://ko-fi.com/your-link" variant="secondary" size="lg" target="_blank" rel="noopener noreferrer" aria-label="Donate via Ko‑fi in a new tab">Ko‑fi</Button>
-      <Button href="https://github.com/sponsors/avtechguides" variant="outline" size="lg" target="_blank" rel="noopener noreferrer" aria-label="Support on GitHub Sponsors in a new tab">GitHub Sponsors</Button>
+    <div class="flex flex-wrap justify-center gap-4">
+      <Button
+        href="/donation"
+        variant="primary"
+        size="lg"
+        aria-label="Open donation page"
+      >
+        Support My Work
+      </Button>
+      <Button
+        href="https://paypal.me/your-link"
+        variant="secondary"
+        size="lg"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Donate via PayPal in a new tab"
+      >
+        PayPal
+      </Button>
+      <Button
+        href="https://ko-fi.com/your-link"
+        variant="secondary"
+        size="lg"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Donate via Ko‑fi in a new tab"
+      >
+        Ko‑fi
+      </Button>
+      <Button
+        href="https://github.com/sponsors/avtechguides"
+        variant="outline"
+        size="lg"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Support on GitHub Sponsors in a new tab"
+      >
+        GitHub Sponsors
+      </Button>
     </div>
   </div>
 </section>

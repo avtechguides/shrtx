@@ -11,7 +11,7 @@ interface Props {
 const {
   posts = [],
   title = 'All Articles',
-  description
+  description,
 } = Astro.props as Props;
 ---
 
@@ -22,7 +22,10 @@ const {
   aria-label="All articles"
 >
   <header class="flex flex-col gap-2">
-    <h2 id="blog-all-title" class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+    <h2
+      id="blog-all-title"
+      class="text-2xl sm:text-3xl font-extrabold tracking-tight"
+    >
       {title}
     </h2>
     {description && (
@@ -35,29 +38,34 @@ const {
   {posts.length > 0 ? (
     <div class="blog-grid" role="list">
       {posts.map((post) => (
-        <div role="listitem">
+        <div role="listitem" tabindex="0" class="focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-md">
           <PostCard post={post} />
         </div>
       ))}
     </div>
   ) : (
-    <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--card-foreground)] p-6">
+    <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--card-foreground)] p-6 text-center">
       No articles found.
     </div>
   )}
 </section>
 
 <style>
-/* Example grid; keep if not defined elsewhere */
 .blog-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
 }
 @media (min-width: 768px) {
-  .blog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  .blog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
 }
 @media (min-width: 1024px) {
-  .blog-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+  .blog-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
 }
 </style>
