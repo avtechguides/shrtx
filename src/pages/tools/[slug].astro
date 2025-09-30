@@ -1,41 +1,78 @@
 ---
-import Seo from '../../components/Seo.astro';
-import Header from '../../components/sections/Header.astro';
-import Footer from '../../components/sections/Footer.astro';
-import { tools } from '../../data/tools';
-import ToolHero from '../../components/ui/tools/ToolHero.astro';
-import ToolFeatures from '../../components/ui/tools/ToolFeatures.astro';
+import ToolsLayout from '@layouts/ToolsLayout.astro';
+import ToolNav from '@components/ui/nav/ToolNav.astro';
+import { tools } from '@data/tools/tools';
+import { slugifyTag } from '@lib/slug';
 
-const { slug } = Astro.params;
-const tool = tools.find(t => t.slug === slug);
+export const prerender = true;
 
-if (!tool) {
-  throw new Error(`Tool with slug "${slug}" not found`);
+export function getStaticPaths() {
+  return tools
+    .filter((t) => !!t.slug)
+    .map((t) => ({
+      params: { slug: t.slug as string },
+      props: { tool: t },
+    }));
 }
 
-const pageTitle = `${tool.title} - Your SaaS Utility Platform`;
-const pageDescription = tool.description;
+type Tool = typeof tools[number];
+type Props = { tool?: Tool };
+
+const { slug } = Astro.params;
+const { tool: toolFromProps } = (Astro.props as Props) ?? {};
+const tool = toolFromProps ?? tools.find((t) => t.slug === slug);
+if (!tool) return Astro.redirect('/404');
+
+// Page meta
+const pageTitle = `${tool.title} - SHRTX Tools`;
+const pageDescription = tool.description ?? '';
+const path = `/tools/${tool.slug}`;
+
+// Neighbor navigation (sorted by title; switch to popularity if preferred)
+const sorted = [...tools]
+  .filter(t => !!t.slug)
+  .sort((a, b) => a.title.localeCompare(b.title));
+const idx = sorted.findIndex(t => t.slug === tool.slug);
+const prevTool = idx > 0 ? sorted[idx - 1] : null;
+const nextTool = idx >= 0 && idx < sorted.length - 1 ? sorted[idx + 1] : null;
+
+// Category breadcrumb
+const categoryName = tool.category ?? '';
+const categorySlug = categoryName ? slugifyTag(categoryName) : '';
+const categoryHref = categorySlug ? `/tools/categories/${categorySlug}` : '';
 ---
 
-<html lang="en" data-theme="dark" class="dark">
-  <head>
-    <Seo
-      title={pageTitle}
-      description={pageDescription}
-      path={`/tools/${slug}`}
-      type="tool"
-    />
-  </head>
-  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
-    <Header />
-    <main class="max-w-4xl mx-auto px-4 py-12 space-y-8">
-      <ToolHero title={tool.title} description={tool.description} icon={tool.icon} />
-      {tool.features && tool.features.length > 0 && <ToolFeatures features={tool.features} />}
-      <section class="mt-10 prose prose-invert max-w-none">
-        {/* Placeholder for your tool UI or detailed content */}
-        <p>Tool UI will be implemented here for <strong>{tool.title}</strong>.</p>
-      </section>
-    </main>
-    <Footer />
-  </body>
-</html>
+<ToolsLayout
+  title={pageTitle}
+  description={pageDescription}
+  path={path}
+  category={categoryName}
+  popularity={tool.popularity}
+  isPremium={tool.isPremium}
+>
+  {categoryHref && (
+    <p class="text-sm text-[var(--color-text-muted)]">
+      <a href="/tools" class="hover:underline">Tools</a>
+      {categoryName && (
+        <>
+          {' '}•{' '}
+          <a href={categoryHref} class="hover:underline">
+            {categoryName.replace(/-/g, ' ')}
+          </a>
+        </>
+      )}
+    </p>
+  )}
+
+  <section class="space-y-6 mt-4">
+    <h2 class="text-2xl font-semibold">About this tool</h2>
+    <p>{tool.description ?? 'Tool description coming soon.'}</p>
+
+    <!-- Add tool-specific UI here -->
+  </section>
+
+  <ToolNav
+    prev={prevTool ? { id: prevTool.slug!, title: prevTool.title } : null}
+    next={nextTool ? { id: nextTool.slug!, title: nextTool.title } : null}
+  />
+</ToolsLayout>

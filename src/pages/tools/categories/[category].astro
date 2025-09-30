@@ -1,0 +1,39 @@
+---
+import ToolsLayout from '@layouts/ToolsLayout.astro';
+import ToolsAll from '@components/sections/ToolsAll.astro';
+import { tools, type Tool } from '@data/tools/tools';
+import { slugifyTag } from '@lib/slug';
+
+export const prerender = true;
+
+const rawCategories = Array.from(new Set(tools.map(t => t.category))).filter(Boolean) as string[];
+const slugToRaw = new Map(rawCategories.map((raw) => [slugifyTag(raw), raw]));
+
+export function getStaticPaths() {
+  return Array.from(slugToRaw.keys()).map((slug) => ({ params: { category: slug } }));
+}
+
+const { category: categorySlug } = Astro.params;
+if (!categorySlug || !slugToRaw.has(categorySlug)) return Astro.redirect('/404');
+
+const rawCategory = slugToRaw.get(categorySlug)!;
+const categoryTools: Tool[] = tools.filter((t) => t.category === rawCategory);
+if (!categoryTools.length) return Astro.redirect('/404');
+
+const readableCategory = rawCategory.replace(/-/g, ' ');
+const pageTitle = `${readableCategory} - SHRTX Tools`;
+const pageDescription = `Explore all tools in the "${readableCategory}" category.`;
+const categoryPath = `/tools/categories/${categorySlug}`;
+---
+
+<ToolsLayout
+  title={pageTitle}
+  description={pageDescription}
+  path={categoryPath}
+  category={readableCategory}
+>
+  <p class="text-[var(--color-text-muted)] mb-6">
+    {categoryTools.length} {categoryTools.length === 1 ? 'tool' : 'tools'} in this category.
+  </p>
+  <ToolsAll tools={categoryTools} showHeader={false} />
+</ToolsLayout>

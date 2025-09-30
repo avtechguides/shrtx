@@ -1,0 +1,84 @@
+---
+import ToolCard from '@components/ui/tools/ToolCard.astro';
+import type { tools as toolsData } from '@data/tools/tools';
+
+type Tool = typeof toolsData[number];
+
+interface Props {
+  tools: Tool[];
+  title?: string;
+  description?: string;
+  showHeader?: boolean;
+}
+
+const {
+  tools = [],
+  title = 'All Tools',
+  description,
+  showHeader = true,
+} = Astro.props as Props;
+---
+
+<section
+  class="space-y-4 sm:space-y-6 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300"
+  aria-labelledby="tools-all-title"
+  role="region"
+  aria-label="All tools"
+>
+  {showHeader && (
+    <header class="flex flex-col gap-2">
+      <h2
+        id="tools-all-title"
+        class="text-2xl sm:text-3xl font-extrabold tracking-tight"
+      >
+        {title}
+      </h2>
+      {description && (
+        <p class="text-sm sm:text-base text-[var(--muted-foreground,#6b7280)] max-w-prose">
+          {description}
+        </p>
+      )}
+    </header>
+  )}
+
+  {tools.length > 0 ? (
+    <div class="tools-grid" role="list">
+      {tools.map((tool) => (
+        <div role="listitem" tabindex="0" class="focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-md">
+          <ToolCard
+            title={tool.title}
+            description={tool.description}
+            icon={tool.icon}
+            href={tool.slug ? `/tools/${tool.slug}` : undefined}
+            isPremium={tool.isPremium}
+            popularity={tool.popularity}
+          />
+        </div>
+      ))}
+    </div>
+  ) : (
+    <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--card-foreground)] p-6 text-center">
+      No tools found.
+    </div>
+  )}
+</section>
+
+<style>
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+@media (min-width: 1024px) {
+  .tools-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+</style>

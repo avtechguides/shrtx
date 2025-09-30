@@ -2,41 +2,57 @@
 import Seo from '@components/Seo.astro';
 import Header from '@components/sections/Header.astro';
 import Footer from '@components/sections/Footer.astro';
-import ToolCard from '@components/ui/tools/ToolCard.astro';
-import ToolHero from '@components/sections/ToolHero.astro';
-import { tools } from '../../data/tools';
+import ToolsAll from '@components/sections/ToolsAll.astro';
+import ToolsPagination from '@components/ui/nav/ToolsPagination.astro';
+import CategoryGallery from '@components/sections/CategoryGallery.astro';
+import ToolSearch from '@components/ui/tools/ToolSearch.astro';
+import { tools, type Tool } from '@data/tools/tools';
+
+const PAGE_SIZE = 12;
 
 const pageTitle = 'SHRTX Utility Tools';
-const pageDescription = 'Your daily companion for productivity. Explore our online tools including URL shortener, QR code generator, JSON formatter, and more.';
+const pageDescription =
+  'Quick, reliable web tools for everyday tasks: URL shorteners, QR generators, text and image utilities, and more.';
+
+// Sort tools by popularity desc, then title
+const sorted = [...tools].sort(
+  (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0) || a.title.localeCompare(b.title)
+);
+
+// Latest list
+const firstPageTools: Tool[] = sorted.slice(0, PAGE_SIZE);
+const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
 ---
 
 <html lang="en" data-theme="dark" class="dark">
   <head>
-    <Seo
-      title={pageTitle}
-      description={pageDescription}
-      path="/tools"
-      type="page"
-    />
+    <Seo title={pageTitle} description={pageDescription} path="/tools/" type="page" />
+    {totalPages > 1 && <link rel="next" href={`/tools/page/2/`} />}
   </head>
   <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
     <Header />
 
-    <ToolHero title={pageTitle} subtitle={pageDescription} center />
+    <main class="max-w-[1280px] mx-auto px-4 py-12 space-y-14">
+      <!-- Compact hero -->
+      <section class="text-center space-y-3">
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">{pageTitle}</h1>
+        <p class="text-[var(--color-text-muted)] max-w-2xl mx-auto">{pageDescription}</p>
+      </section>
 
-    <main class="max-w-[1280px] mx-auto bg-[var(--color-bg-primary)] px-4 py-16">
-      <section class="max-w-[870px] mx-auto text-[var(--color-text-secondary)]">
-        <div class="grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-          {tools.map(tool => (
-            <ToolCard
-              key={tool.slug}
-              title={tool.title}
-              description={tool.description}
-              icon={tool.icon}
-              href={`/tools/${tool.slug}`}
-            />
-          ))}
+      <!-- Polished search panel with popular chips -->
+      <ToolSearch tools={tools} />
+
+      <!-- Rich category gallery -->
+      <CategoryGallery tools={tools} />
+
+      <!-- Latest tools with pagination -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-2xl font-bold">Latest</h2>
+          <a href="/tools/categories" class="text-[var(--accent)] hover:underline">See categories</a>
         </div>
+        <ToolsAll tools={firstPageTools} showHeader={false} />
+        <ToolsPagination currentPage={1} totalPages={totalPages} />
       </section>
     </main>
 

@@ -1,0 +1,100 @@
+---
+import { slugifyTag } from '@lib/slug';
+import type { tools as toolsData } from '@data/tools/tools';
+
+type Tool = typeof toolsData[number];
+
+export interface Props {
+  tools: Tool[];
+  title?: string;
+  subtitle?: string;
+}
+
+const { tools, title = 'Explore by Category', subtitle = 'Jump into a group of tools tailored to specific tasks.' } = Astro.props as Props;
+
+// Aggregate categories with counts
+const categoryMap = new Map<string, { name: string; count: number }>();
+for (const t of tools) {
+  if (!t.category) continue;
+  const name = t.category;
+  const entry = categoryMap.get(name) ?? { name, count: 0 };
+  entry.count += 1;
+  categoryMap.set(name, entry);
+}
+const categories = Array.from(categoryMap.values())
+  .map(c => ({ ...c, slug: slugifyTag(c.name) }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+
+// Optionally pick icons per category (fallback emoji)
+function getIcon(name: string): string {
+  const n = name.toLowerCase();
+  if (n.includes('url') || n.includes('link')) return '🔗';
+  if (n.includes('image') || n.includes('photo')) return '🖼️';
+  if (n.includes('pdf') || n.includes('document')) return '📄';
+  if (n.includes('security') || n.includes('privacy')) return '🛡️';
+  if (n.includes('seo') || n.includes('marketing')) return '📈';
+  if (n.includes('social')) return '💬';
+  if (n.includes('text') || n.includes('content')) return '✍️';
+  if (n.includes('developer') || n.includes('code')) return '💻';
+  if (n.includes('conversion')) return '🔁';
+  if (n.includes('fun') || n.includes('viral')) return '🎉';
+  return '🧩';
+}
+---
+
+<section class="space-y-4">
+  <div class="flex items-end justify-between gap-3">
+    <div>
+      <h2 class="text-2xl font-bold">{title}</h2>
+      <p class="text-[var(--color-text-muted)]">{subtitle}</p>
+    </div>
+    <a href="/tools/categories" class="text-[var(--accent)] hover:underline whitespace-nowrap">See all</a>
+  </div>
+
+  <div class="gallery-grid">
+    {categories.map(({ name, slug, count }) => (
+      <a href={`/tools/categories/${slug}`} class="card">
+        <div class="icon">{getIcon(name)}</div>
+        <div class="content">
+          <div class="name">{name.replace(/-/g, ' ')}</div>
+          <div class="meta">{count} {count === 1 ? 'tool' : 'tools'}</div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-bg-secondary);
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  background: var(--color-bg-elevated, rgba(255,255,255,0.02));
+  border-color: var(--accent);
+}
+.icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.content .name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.content .meta {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+</style>

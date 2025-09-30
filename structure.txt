@@ -1,15 +1,9 @@
 .
 ├── astro.config.mjs
-├── dev.log
-├── .gitattributes
-├── .github
-│   └── workflows
-│       └── deploy.yml
-├── .gitignore
 ├── LICENSE
 ├── package.json
 ├── package-lock.json
-├── project-tree.txt
+├── postcss.config.js
 ├── public
 │   ├── apple-touch-icon.png
 │   ├── favicon-16x16.png
@@ -56,8 +50,10 @@
 │   │   ├── features.ts
 │   │   ├── logos.ts
 │   │   ├── tags.ts
-│   │   └── toolHighlights.ts
+│   │   ├── toolHighlights.ts
+│   │   └── tools
 │   ├── layouts
+│   │   ├── BlogLayout.astro
 │   │   └── BlogPost.astro
 │   ├── lib
 │   │   ├── reading.ts
@@ -77,9 +73,20 @@
 │   │   ├── rss
 │   │   ├── rss.xml.js
 │   │   ├── search-index.json.ts
-│   │   └── terms.astro
+│   │   ├── terms.astro
+│   │   └── tools
 │   ├── scripts
-│   │   └── header.js
+│   │   ├── code
+│   │   ├── conversion
+│   │   ├── fun
+│   │   ├── header.js
+│   │   ├── image
+│   │   ├── pdf
+│   │   ├── security
+│   │   ├── seo
+│   │   ├── social
+│   │   ├── text
+│   │   └── url
 │   └── styles
 │       ├── global.css
 │       ├── starwind.css
@@ -88,6 +95,7 @@
 │       └── utilities.css
 ├── starwind.config.json
 ├── structure.txt
+├── tailwind.config.mjs
 └── tsconfig.json
 
-27 directories, 64 files
+37 directories, 62 files

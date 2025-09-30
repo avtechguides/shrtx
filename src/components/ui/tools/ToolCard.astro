@@ -1,16 +1,71 @@
 ---
-import Card from '../card/Card.astro';
-const { title, description, icon, href } = Astro.props;
+// ToolCard.astro
+import Button from '../button/Button.astro';
+import type { Tool } from '../../../data/tools/tools';
+import { slugifyTag } from '../../../lib/slug';
+
+const {
+  title,
+  description,
+  icon = '',
+  category,
+  isPremium = false,
+  popularity,
+  authorSlug,
+  createdAt,
+  href
+} = Astro.props as Tool;
+
+const categorySlug = category ? slugifyTag(category) : '';
+const displayDate = createdAt ? new Date(createdAt).toLocaleDateString() : '';
 ---
 
-<Card class="group cursor-pointer transition hover:shadow-lg focus-within:shadow-lg rounded-lg">
-  <a href={href} class="block p-4 focus:outline-none focus:ring-2 focus:ring-[var(--accent)]" tabindex="0" aria-label={title}>
-    <div class="flex items-center space-x-4">
-      <span class="text-[var(--accent)] group-hover:text-[var(--accent-hover,#0c4a6e)] text-2xl transition-colors duration-200" aria-hidden="true">
-        <i class={`icon-${icon}`}></i>
-      </span>
-      <h3 class="text-lg font-semibold text-[var(--foreground)] group-hover:text-[var(--accent-hover,#0c4a6e)] transition-colors duration-200">{title}</h3>
+<article class="bg-[var(--card)] rounded-2xl shadow-md hover:shadow-xl transition-shadow p-6 flex flex-col justify-between">
+  <header class="flex items-center gap-4 mb-4">
+    <div class="w-12 h-12 flex items-center justify-center text-2xl">
+      <span set:html={icon}></span>
     </div>
-    <p class="mt-2 text-sm text-[var(--muted-foreground,#6b7280)]">{description}</p>
-  </a>
-</Card>
+    <div class="flex-1">
+      <h3 class="text-lg font-semibold">{title}</h3>
+      <div class="flex flex-wrap gap-2 mt-1">
+        {category && (
+          <Button 
+            href={`/tools/categories/${categorySlug}`} 
+            variant="outline" 
+            size="sm" 
+            class="pointer-events-auto"
+          >
+            {category}
+          </Button>
+        )}
+        {isPremium && (
+          <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">
+            Premium
+          </span>
+        )}
+        {popularity !== undefined && (
+          <span class="text-xs text-[var(--muted-foreground)]">
+            ⭐ {popularity}
+          </span>
+        )}
+      </div>
+    </div>
+  </header>
+
+  <p class="text-sm text-[var(--muted-foreground)] mb-4">{description}</p>
+
+  <footer class="flex items-center justify-between mt-4 text-xs text-[var(--muted-foreground)]">
+    <div class="flex gap-2">
+      {authorSlug && <span>By {authorSlug}</span>}
+      {displayDate && <span>{displayDate}</span>}
+    </div>
+    <Button 
+      href={href ?? '#'} 
+      variant="primary" 
+      size="sm" 
+      disabled={!href}
+    >
+      {href ? 'Open Tool' : 'Coming Soon'}
+    </Button>
+  </footer>
+</article>

@@ -1,0 +1,49 @@
+---
+import Seo from '@components/Seo.astro';
+import Header from '@components/sections/Header.astro';
+import Footer from '@components/sections/Footer.astro';
+import ToolsAll from '@components/sections/ToolsAll.astro';
+import ToolsPagination from '@components/ui/nav/ToolsPagination.astro';
+import { tools, type Tool } from '@data/tools/tools';
+
+export const prerender = true;
+
+const PAGE_SIZE = 8;
+
+export function getStaticPaths() {
+  const rest = [...tools].slice(1);
+  const totalPages = Math.max(1, Math.ceil(rest.length / PAGE_SIZE));
+  return Array.from({ length: totalPages - 1 }, (_, i) => ({ params: { page: String(i + 2) } }));
+}
+
+const { page } = Astro.params;
+const pageNum = Math.max(2, parseInt(page || '2', 10));
+
+const sorted = [...tools].sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0) || a.title.localeCompare(b.title));
+const [, ...rest] = sorted;
+const totalPages = Math.max(1, Math.ceil(rest.length / PAGE_SIZE));
+
+if (pageNum > totalPages) return Astro.redirect('/tools/');
+
+const start = (pageNum - 2) * PAGE_SIZE;
+const pageItems: Tool[] = rest.slice(start, start + PAGE_SIZE);
+
+const pageTitle = `Tools - Page ${pageNum}`;
+const pageDescription = `Browse SHRTX tools (page ${pageNum}).`;
+const path = `/tools/page/${pageNum}/`;
+---
+
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <Seo title={pageTitle} description={pageDescription} path={path} type="page" />
+  </head>
+  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+    <Header />
+    <main class="max-w-[1280px] mx-auto bg-[var(--color-bg-primary)] px-4 py-16 space-y-8">
+      <h1 class="text-2xl font-bold">Latest tools</h1>
+      <ToolsAll tools={pageItems} showHeader={false} />
+      <ToolsPagination currentPage={pageNum} totalPages={totalPages} />
+    </main>
+    <Footer />
+  </body>
+</html>
