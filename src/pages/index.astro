@@ -64,11 +64,11 @@ const siteEntity = generateSiteEntityJSONLD();
       }
       [data-theme="dark"], .dark {
         --gradient-accent-text: linear-gradient(90deg, #3B82F6, #60A5FA);
-        --card-gradient-hover: linear-gradient(90deg, #3B82F6, #EC2F36);
+        --card-gradient-hover: linear-gradient(90deg, #3B82F6, #60A5FA);
       }
       [data-theme="light"], .light {
         --gradient-accent-text: linear-gradient(90deg, #2563EB, #3B82F6);
-        --card-gradient-hover: linear-gradient(90deg, #2563EB, #EC2F36);
+        --card-gradient-hover: linear-gradient(90deg, #2563EB, #3B82F6);
       }
     </style>
   </head>
@@ -88,7 +88,11 @@ const siteEntity = generateSiteEntityJSONLD();
 
       <!-- Typewriter -->
       <div class="flex justify-center items-center">
-        <h1 id="hero-phrase" class="typewriter text-3xl md:text-4xl font-bold text-center"></h1>
+        <h2 
+          id="hero-phrase" 
+          aria-live="polite" 
+          class="typewriter text-2xl md:text-3xl font-bold text-center"
+        ></h2>
       </div>
 
       <!-- Popular Platforms Carousel -->
@@ -113,8 +117,9 @@ const siteEntity = generateSiteEntityJSONLD();
 
       <!-- Donation CTA Component -->
       <DonationCTA
-        description="I keep SHRTX and my projects free of ads — if you like my work, consider making a small donation to keep everything running smoothly."
-      />
+  description="Support SHRTX and help keep it free of ads — your contribution makes a difference!"
+  buttonText="Contribute Now"
+/>
     </main>
 
     <Footer />
@@ -153,7 +158,12 @@ const siteEntity = generateSiteEntityJSONLD();
           setTimeout(type, 500);
         }
       }
-      type();
+
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(type);
+      } else {
+        setTimeout(type, 200);
+      }
     </script>
   </body>
 </html>
