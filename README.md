@@ -51,84 +51,107 @@ npm run preview
 ## 📁 Project Structure
 
 ```text
-shrtx/
-├── public/                       # Static files served at root
-│   ├── favicon.png/.svg          # Favicons for browsers
-│   ├── fonts/                    # Custom web fonts
-│   ├── images/                   # Public images (not optimized by Astro)
-│   └── robots.txt                # SEO directives for crawlers
-│
-├── src/                          # Main source code
-│   ├── assets/                   # Assets bundled with build
-│   │   ├── icons/                # Inline UI icons
-│   │   ├── images/               # Internal images (optimized by Astro)
-│   │   └── logos/                # Brand/project logos
-│   │
-│   ├── components/               # Reusable UI + page sections
-│   │   ├── BaseHead.astro        # SEO/meta head component
-│   │   ├── CookieBanner.astro    # GDPR cookie consent banner
-│   │   ├── FormattedDate.astro   # Utility date formatter
-│   │   ├── sections/             # Page-specific sections (Hero, Footer, etc.)
-│   │   └── ui/                   # Smaller UI widgets (buttons, cards, etc.)
-│   │
-│   ├── consts.ts                 # Global constants (site name, description)
-│   │
-│   ├── content/                  # Markdown/MDX content collections
-│   │   ├── blog/                 # Blog posts
-│   │   └── config.ts             # Collection config
-│   │
-│   ├── content.config.ts         # Astro content schema config
-│   │
-│   ├── data/                     # Structured data for site sections
-│   │   ├── author.ts             # Author bio & info
-│   │   ├── categories.ts         # Blog categories
-│   │   ├── features.ts           # Product/feature highlights
-│   │   ├── logos.ts              # Logo registry
-│   │   ├── projects.ts           # Portfolio/projects list
-│   │   ├── tags.ts               # Blog tags
-│   │   └── toolHighlights.ts     # Highlighted tools/tech
-│   │
-│   ├── layouts/                  # Layout wrappers
-│   │   └── BlogPost.astro        # Blog post layout
-│   │
-│   ├── lib/                      # Utility functions
-│   │   ├── reading.ts            # Estimate reading time
-│   │   ├── slug.ts               # Slugify helpers
-│   │   └── svg.ts                # SVG sanitization/utilities
-│   │
-│   ├── pages/                    # Astro pages → become routes
-│   │   ├── 404.astro             # Custom 404 page
-│   │   ├── about.astro           # About page
-│   │   ├── blog/                 # Blog index & dynamic routes
-│   │   ├── contact.astro         # Contact page
-│   │   ├── cookie.astro          # Cookie policy
-│   │   ├── disclaimer.astro      # Disclaimer page
-│   │   ├── donation.astro        # Donation page
-│   │   ├── index.astro           # Homepage
-│   │   ├── portfolio.astro       # Portfolio/projects showcase
-│   │   ├── privacy.astro         # Privacy policy
-│   │   ├── projects/             # Project-specific pages
-│   │   ├── rss/                  # RSS feed routes
-│   │   ├── rss.xml.js            # RSS feed generator
-│   │   ├── search-index.json.ts  # Search index generator
-│   │   └── terms.astro           # Terms of service
-│   │
-│   └── styles/                   # Global + theme styles
-│       ├── global.css            # Global styles
-│       ├── starwind.css          # Tailwind + Starwind configs
-│       ├── themes/               # Theme overrides (e.g., dark mode)
-│       ├── tokens.css            # Design tokens (colors, spacing)
-│       └── utilities.css         # Utilities & animations
-│
-├── astro.config.mjs              # Astro project config
-├── starwind.config.json          # Starwind (Tailwind theme) config
-├── tsconfig.json                 # TypeScript config
-├── package.json                  # Dependencies & scripts
-├── package-lock.json             # Dependency lockfile
-├── LICENSE                       # License info
-├── README.md                     # Project documentation
-├── dev.log                       # Local dev logs
-└── structure.txt                 # Generated project tree
+.
+├── astro.config.mjs
+├── LICENSE
+├── package.json
+├── package-lock.json
+├── postcss.config.js
+├── public
+│   ├── apple-touch-icon.png
+│   ├── favicon-16x16.png
+│   ├── favicon-32x32.png
+│   ├── favicon-48x48.png
+│   ├── favicon.ico
+│   ├── favicon.png
+│   ├── favicon.svg
+│   ├── fonts
+│   │   ├── atkinson-bold.woff
+│   │   └── atkinson-regular.woff
+│   ├── images
+│   │   └── vishu-akanksha-shrtx-developer.jpg
+│   ├── LOGO-SHRTX-TP.png
+│   ├── LOGO-SHRTX-TP.svg
+│   ├── LOGO-SHRTX-TP-whitebg.png
+│   ├── LOGO-SHRTX-TP-whitebg.svg
+│   └── robots.txt
+├── README.md
+├── sitemap.config.mjs
+├── src
+│   ├── assets
+│   │   ├── icons
+│   │   ├── images
+│   │   └── logos
+│   ├── components
+│   │   ├── BaseHead.astro
+│   │   ├── CookieBanner.astro
+│   │   ├── FormattedDate.astro
+│   │   ├── sections
+│   │   ├── Seo.astro
+│   │   └── ui
+│   ├── config
+│   │   ├── consts.ts
+│   │   ├── index.ts
+│   │   └── seo.config.ts
+│   ├── content
+│   │   ├── blog
+│   │   └── config.ts
+│   ├── content.config.ts
+│   ├── data
+│   │   ├── author.ts
+│   │   ├── categories.ts
+│   │   ├── features.ts
+│   │   ├── logos.ts
+│   │   ├── tags.ts
+│   │   ├── toolHighlights.ts
+│   │   └── tools
+│   ├── layouts
+│   │   ├── BlogLayout.astro
+│   │   └── BlogPost.astro
+│   ├── lib
+│   │   ├── reading.ts
+│   │   ├── slug.ts
+│   │   └── svg.ts
+│   ├── pages
+│   │   ├── 404.astro
+│   │   ├── about.astro
+│   │   ├── blog
+│   │   ├── contact.astro
+│   │   ├── cookie.astro
+│   │   ├── disclaimer.astro
+│   │   ├── donation.astro
+│   │   ├── index.astro
+│   │   ├── privacy.astro
+│   │   ├── projects
+│   │   ├── rss
+│   │   ├── rss.xml.js
+│   │   ├── search-index.json.ts
+│   │   ├── terms.astro
+│   │   └── tools
+│   ├── scripts
+│   │   ├── code
+│   │   ├── conversion
+│   │   ├── fun
+│   │   ├── header.js
+│   │   ├── image
+│   │   ├── pdf
+│   │   ├── security
+│   │   ├── seo
+│   │   ├── social
+│   │   ├── text
+│   │   └── url
+│   └── styles
+│       ├── global.css
+│       ├── starwind.css
+│       ├── themes
+│       ├── tokens.css
+│       └── utilities.css
+├── starwind.config.json
+├── structure.txt
+├── tailwind.config.mjs
+└── tsconfig.json
+
+37 directories, 62 files
 ```
 
 ## 🧩 Components & Sections

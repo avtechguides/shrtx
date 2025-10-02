@@ -1,39 +1,73 @@
 ---
 import ToolsLayout from '@layouts/ToolsLayout.astro';
-import ToolsAll from '@components/sections/ToolsAll.astro';
-import { tools, type Tool } from '@data/tools/tools';
+import ToolCard from '@components/ui/tools/ToolCard.astro';
+import ToolsPagination from '@components/ui/nav/ToolsPagination.astro';
+import { tools } from '@data/tools/tools';
 import { slugifyTag } from '@lib/slug';
 
 export const prerender = true;
 
-const rawCategories = Array.from(new Set(tools.map(t => t.category))).filter(Boolean) as string[];
-const slugToRaw = new Map(rawCategories.map((raw) => [slugifyTag(raw), raw]));
-
+// Generate static paths for all categories
 export function getStaticPaths() {
-  return Array.from(slugToRaw.keys()).map((slug) => ({ params: { category: slug } }));
+  const categories = Array.from(
+    new Set(tools.filter(t => t.category).map(t => t.category))
+  );
+  return categories.map((category) => ({
+    params: { category: category ? slugifyTag(category) : '' },
+  }));
 }
 
-const { category: categorySlug } = Astro.params;
-if (!categorySlug || !slugToRaw.has(categorySlug)) return Astro.redirect('/404');
+// Get current category slug from URL
+const { category: catSlug } = Astro.params;
 
-const rawCategory = slugToRaw.get(categorySlug)!;
-const categoryTools: Tool[] = tools.filter((t) => t.category === rawCategory);
+// Filter tools by category
+const categoryTools = tools.filter(
+  (t) => t.category && slugifyTag(t.category) === catSlug
+);
+
 if (!categoryTools.length) return Astro.redirect('/404');
 
-const readableCategory = rawCategory.replace(/-/g, ' ');
-const pageTitle = `${readableCategory} - SHRTX Tools`;
-const pageDescription = `Explore all tools in the "${readableCategory}" category.`;
-const categoryPath = `/tools/categories/${categorySlug}`;
+// Get category name from first tool
+const categoryName = categoryTools[0].category ?? '';
+const cleanCategory = categoryName.trim();
+
+// Avoid duplicate "Tools" in title
+const pageTitle = cleanCategory.endsWith('Tools')
+  ? `${cleanCategory} - SHRTX`
+  : `${cleanCategory} Tools - SHRTX`;
+
+const pageDescription = `Explore all tools under the ${cleanCategory} category.`;
+
+// Pagination (optional)
+const currentPage = 1;
+const perPage = 12;
+const totalPages = Math.ceil(categoryTools.length / perPage);
+const paginatedTools = categoryTools.slice(
+  (currentPage - 1) * perPage,
+  currentPage * perPage
+);
 ---
 
 <ToolsLayout
   title={pageTitle}
   description={pageDescription}
-  path={categoryPath}
-  category={readableCategory}
+  category={cleanCategory}
+  showHeader={true}
 >
-  <p class="text-[var(--color-text-muted)] mb-6">
-    {categoryTools.length} {categoryTools.length === 1 ? 'tool' : 'tools'} in this category.
-  </p>
-  <ToolsAll tools={categoryTools} showHeader={false} />
+
+  <!-- Tools grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {paginatedTools.map((tool) => (
+      <ToolCard {...tool} />
+    ))}
+  </div>
+
+  <!-- Pagination -->
+  {totalPages > 1 && (
+    <ToolsPagination
+      currentPage={currentPage}
+      totalPages={totalPages}
+      basePath={`/tools/categories/${catSlug}`}
+    />
+  )}
 </ToolsLayout>

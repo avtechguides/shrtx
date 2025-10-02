@@ -42,19 +42,43 @@ const {
   )}
 
   {tools.length > 0 ? (
-    <div class="tools-grid" role="list">
-      {tools.map((tool) => (
-        <div role="listitem" tabindex="0" class="focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-md">
-          <ToolCard
-            title={tool.title}
-            description={tool.description}
-            icon={tool.icon}
-            href={tool.slug ? `/tools/${tool.slug}` : undefined}
-            isPremium={tool.isPremium}
-            popularity={tool.popularity}
-          />
-        </div>
-      ))}
+    <div class="tools-grid" role="list" aria-roledescription="cards">
+      {tools.map((tool) => {
+        const href = tool.href ?? (tool.slug ? `/tools/${tool.slug}` : undefined);
+        return (
+          <article
+            role="listitem"
+            tabindex="0"
+            aria-label={tool.title}
+            class="relative group focus:outline-none focus:ring-2 focus:ring-[var(--accent)] rounded-2xl"
+          >
+            <!-- Gradient frame and surface wrapper for consistency with home cards -->
+            <span
+              aria-hidden="true"
+              class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35"
+            >
+              <span
+                class="absolute inset-0 rounded-2xl"
+                style="background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+                       mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                       -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+              ></span>
+            </span>
+
+            <div class="relative rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-md hover:shadow-lg transition-transform duration-200 hover:-translate-y-0.5">
+              <ToolCard
+                title={tool.title}
+                description={tool.description}
+                icon={tool.icon}
+                href={href}
+                isPremium={tool.isPremium}
+                popularity={tool.popularity}
+              />
+            </div>
+          </article>
+        );
+      })}
     </div>
   ) : (
     <div class="rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--card-foreground)] p-6 text-center">

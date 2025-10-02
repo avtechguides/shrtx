@@ -1,0 +1,11 @@
+---
+// src/components/google/GoogleFonts.astro
+const fonts = [
+  'family=Roboto:wght@400;700&display=swap',
+  // add more font families as needed
+];
+---
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href={`https://fonts.googleapis.com/css2?${fonts.join('&')}`} rel="stylesheet" />

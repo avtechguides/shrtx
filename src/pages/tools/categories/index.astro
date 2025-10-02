@@ -1,49 +1,16 @@
 ---
-import Seo from '@components/Seo.astro';
-import Header from '@components/sections/Header.astro';
-import Footer from '@components/sections/Footer.astro';
-import { tools } from '../../../data/tools/tools';
-import { slugifyTag } from '../../../lib/slug';
+import ToolsLayout from '@layouts/ToolsLayout.astro';
+import CategoryGallery from '@components/sections/CategoryGallery.astro';
+import { tools } from '@data/tools/tools';
 
 const pageTitle = 'All Tool Categories';
 const pageDescription = 'Browse every SHRTX tool category.';
-
-// Unique raw categories
-const rawCategories = Array.from(new Set(tools.map(t => t.category))).filter(Boolean) as string[];
-
-// Build list with slug + count
-const categories = rawCategories
-  .map((raw) => {
-    const slug = slugifyTag(raw);
-    const count = tools.filter(t => t.category === raw).length;
-    return { name: raw, slug, count };
-  })
-  .sort((a, b) => a.name.localeCompare(b.name));
 ---
 
-<html lang="en" data-theme="dark">
-  <head>
-    <Seo title={pageTitle} description={pageDescription} path="/tools/categories" type="page" />
-  </head>
-  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
-    <Header />
-
-    <main class="max-w-[1280px] mx-auto px-4 py-16">
-      <h1 class="text-3xl font-bold mb-8">{pageTitle}</h1>
-      <p class="text-[var(--color-text-muted)] mb-10">{pageDescription}</p>
-
-      <ul class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-        {categories.map(({ name, slug, count }) => (
-          <li class="border border-[var(--color-border)] rounded-lg p-4 hover:bg-[var(--color-bg-secondary)] transition">
-            <a href={`/tools/categories/${slug}`} class="block">
-              <div class="font-semibold">{name.replace(/-/g, ' ')}</div>
-              <div class="text-sm text-[var(--color-text-muted)]">{count} tools</div>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </main>
-
-    <Footer />
-  </body>
-</html>
+<ToolsLayout title={pageTitle} description={pageDescription} showHeader={true}>
+  <CategoryGallery
+    tools={tools}
+    title={pageTitle}
+    subtitle="Jump into a group of tools tailored to specific tasks."
+  />
+</ToolsLayout>

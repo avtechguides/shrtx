@@ -1,4 +1,4 @@
-import { Tool } from "../tools";
+import type { Tool } from "../tools";
 
 export const pdfTools: Tool[] = [
   {
@@ -9,6 +9,33 @@ export const pdfTools: Tool[] = [
     categorySlug: "pdf-tools",
     icon: "📄",
     popularity: 94,
+    href: "/tools/pdf/pdf-to-word",
+    createdAt: "2025-09-18",
+    updatedAt: "2025-09-30",
+  },
+  {
+    slug: "word-to-pdf",
+    title: "Word to PDF Converter",
+    description: "Convert Word documents into PDF format instantly.",
+    category: "PDF & Document Tools",
+    categorySlug: "pdf-tools",
+    icon: "📝",
+    popularity: 92,
+    href: "/tools/pdf/word-to-pdf",
+    createdAt: "2025-09-19",
+    updatedAt: "2025-09-30",
+  },
+  {
+    slug: "pdf-split-merge",
+    title: "PDF Split / Merge",
+    description: "Split or merge multiple PDF files with ease.",
+    category: "PDF & Document Tools",
+    categorySlug: "pdf-tools",
+    icon: "✂️",
+    popularity: 90,
+    href: "/tools/pdf/pdf-split-merge",
+    createdAt: "2025-09-20",
+    updatedAt: "2025-09-30",
   },
   {
     slug: "pdf-compressor",
@@ -18,5 +45,20 @@ export const pdfTools: Tool[] = [
     categorySlug: "pdf-tools",
     icon: "📉",
     popularity: 88,
+    href: "/tools/pdf/pdf-compressor",
+    createdAt: "2025-09-21",
+    updatedAt: "2025-09-30",
+  },
+  {
+    slug: "pdf-to-text",
+    title: "PDF to Text / OCR",
+    description: "Extract text from PDFs using OCR technology.",
+    category: "PDF & Document Tools",
+    categorySlug: "pdf-tools",
+    icon: "🔍",
+    popularity: 86,
+    href: "/tools/pdf/pdf-to-text",
+    createdAt: "2025-09-22",
+    updatedAt: "2025-09-30",
   },
 ];

@@ -1,61 +1,73 @@
 ---
-import Seo from '@components/Seo.astro';
-import Header from '@components/sections/Header.astro';
-import Footer from '@components/sections/Footer.astro';
-import ToolsAll from '@components/sections/ToolsAll.astro';
+import ToolsLayout from '@layouts/ToolsLayout.astro';
+import ToolCard from '@components/ui/tools/ToolCard.astro';
 import ToolsPagination from '@components/ui/nav/ToolsPagination.astro';
 import CategoryGallery from '@components/sections/CategoryGallery.astro';
 import ToolSearch from '@components/ui/tools/ToolSearch.astro';
-import { tools, type Tool } from '@data/tools/tools';
+import { tools } from '@data/tools/tools';
+import { slugifyTag } from '@lib/slug';
+
+export const prerender = true;
 
 const PAGE_SIZE = 12;
 
-const pageTitle = 'SHRTX Utility Tools';
-const pageDescription =
-  'Quick, reliable web tools for everyday tasks: URL shorteners, QR generators, text and image utilities, and more.';
-
-// Sort tools by popularity desc, then title
-const sorted = [...tools].sort(
+// Sort tools by popularity then title
+const sortedTools = [...tools].sort(
   (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0) || a.title.localeCompare(b.title)
 );
 
-// Latest list
-const firstPageTools: Tool[] = sorted.slice(0, PAGE_SIZE);
-const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+const pageTitle = 'SHRTX Utility Tools';
+const pageDescription =
+  'All the web tools you need for your daily hustle — speedy, dependable, and designed with you in mind.';
+
+// Pagination
+const currentPage = Number(Astro.params.page ?? 1);
+const totalPages = Math.ceil(sortedTools.length / PAGE_SIZE);
+const paginatedTools = sortedTools.slice(
+  (currentPage - 1) * PAGE_SIZE,
+  currentPage * PAGE_SIZE
+);
 ---
 
-<html lang="en" data-theme="dark" class="dark">
-  <head>
-    <Seo title={pageTitle} description={pageDescription} path="/tools/" type="page" />
-    {totalPages > 1 && <link rel="next" href={`/tools/page/2/`} />}
-  </head>
-  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
-    <Header />
+<ToolsLayout title={pageTitle} description={pageDescription} showHeader={true}>
 
-    <main class="max-w-[1280px] mx-auto px-4 py-12 space-y-14">
-      <!-- Compact hero -->
-      <section class="text-center space-y-3">
-        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">{pageTitle}</h1>
-        <p class="text-[var(--color-text-muted)] max-w-2xl mx-auto">{pageDescription}</p>
-      </section>
+  <!-- Search panel -->
+  <ToolSearch tools={tools} />
 
-      <!-- Polished search panel with popular chips -->
-      <ToolSearch tools={tools} />
+  <!-- Categories Section -->
+  <section class="space-y-6">
+    <div>
+      <h2 class="text-2xl font-bold mb-2">
+        <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+          Explore by Category
+        </span>
+      </h2>
+      <p class="text-[var(--color-text-muted)]">Jump into a group of tools tailored to specific tasks.</p>
+    </div>
 
-      <!-- Rich category gallery -->
-      <CategoryGallery tools={tools} />
+    <CategoryGallery
+      tools={tools}
+      title=""
+      subtitle=""
+    />
+  </section>
 
-      <!-- Latest tools with pagination -->
-      <section class="space-y-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-2xl font-bold">Latest</h2>
-          <a href="/tools/categories" class="text-[var(--accent)] hover:underline">See categories</a>
-        </div>
-        <ToolsAll tools={firstPageTools} showHeader={false} />
-        <ToolsPagination currentPage={1} totalPages={totalPages} />
-      </section>
-    </main>
+  <!-- Latest Tools Section -->
+  <section class="mt-10 space-y-6">
+    <h2 class="text-2xl font-bold mb-2">
+      <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+        Latest Tools
+      </span>
+    </h2>
 
-    <Footer />
-  </body>
-</html>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {paginatedTools.map((tool) => (
+        <ToolCard {...tool} />
+      ))}
+    </div>
+
+    {totalPages > 1 && (
+      <ToolsPagination currentPage={currentPage} totalPages={totalPages} />
+    )}
+  </section>
+</ToolsLayout>

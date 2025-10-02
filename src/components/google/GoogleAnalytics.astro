@@ -1,0 +1,15 @@
+---
+export interface Props {
+  trackingId: string;     // Your GA tracking ID (e.g., "G-XXXXXXXXXX")
+}
+
+const { trackingId } = Astro.props as Props;
+---
+
+<script async src={`https://www.googletagmanager.com/gtag/js?id=${trackingId}`}></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{trackingId}}', { 'send_page_view': true });
+</script>

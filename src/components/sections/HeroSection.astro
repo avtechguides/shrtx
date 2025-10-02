@@ -1,43 +1,34 @@
 ---
-interface CTA {
-  text: string;
-  href: string;
-}
-
 interface Props {
   title: string;
   subtitle?: string;
 
-  // Existing controls (kept)
+  // URL shortener controls
   shortenPlaceholder?: string;
-  qrPlaceholder?: string;
   shortenButtonText?: string;
-  qrButtonText?: string;
   onShortenSubmit?: string;
-  onQrSubmit?: string;
+  shortenMethod?: 'get' | 'post';
 
-  // New optional CTA controls for header area
-  showCTA?: boolean;
-  primaryCTA?: CTA;
-  secondaryCTA?: CTA;
+  // QR controls
+  qrPlaceholder?: string;
+  qrButtonText?: string;
+  onQrSubmit?: string;
+  qrMethod?: 'get' | 'post';
 }
 
 const {
   title,
   subtitle,
 
-  // Existing defaults
   shortenPlaceholder = 'https://example.com/my-long-url',
-  qrPlaceholder = 'Enter URL for QR code',
   shortenButtonText = 'Shorten Link →',
-  qrButtonText = 'Generate QR →',
   onShortenSubmit = '#',
-  onQrSubmit = '#',
+  shortenMethod = 'get',
 
-  // New CTA defaults
-  showCTA = false,
-  primaryCTA,
-  secondaryCTA
+  qrPlaceholder = 'Enter URL for QR code',
+  qrButtonText = 'Generate QR →',
+  onQrSubmit = '#',
+  qrMethod = 'get',
 } = Astro.props as Props;
 ---
 
@@ -56,35 +47,17 @@ const {
         {subtitle}
       </p>
     )}
-
-    {showCTA && (primaryCTA || secondaryCTA) && (
-      <div class="mt-6 flex gap-3 justify-center">
-        {primaryCTA && (
-          <a href={primaryCTA.href} class="btn btn-primary">
-            {primaryCTA.text}
-          </a>
-        )}
-        {secondaryCTA && (
-          <a href={secondaryCTA.href} class="btn btn-secondary">
-            {secondaryCTA.text}
-          </a>
-        )}
-      </div>
-    )}
   </div>
 
   <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row gap-6">
     <!-- URL Shortener Card -->
     <form
       action={onShortenSubmit}
-      method="post"
+      method={shortenMethod}
       class="flex-1 p-6 md:p-8 rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-lg relative overflow-hidden transition-transform duration-200 hover:-translate-y-0.5 group"
       aria-labelledby="shorten-title"
     >
-      <span
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-500 group-hover:opacity-35"
-      >
+      <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-500 group-hover:opacity-35">
         <span
           class="absolute inset-0 rounded-2xl"
           style="background: linear-gradient(90deg, var(--accent), var(--accent-dark)); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
@@ -104,10 +77,11 @@ const {
           required
           class="w-full px-4 py-3 border border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition bg-[var(--card)] text-[var(--card-foreground)] shadow-sm"
           autocomplete="url"
+          inputmode="url"
         />
         <button
           type="submit"
-          class="mt-1 w-full px-6 py-3 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-bold hover:bg-[var(--primary-hover, var(--accent-dark))] transition shadow-md hover:shadow-lg"
+          class="mt-1 w-full px-6 py-3 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-bold hover:bg-[var(--primary-hover, var(--accent-dark))] transition shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {shortenButtonText}
         </button>
@@ -117,14 +91,11 @@ const {
     <!-- QR Code Generator Card -->
     <form
       action={onQrSubmit}
-      method="post"
+      method={qrMethod}
       class="flex-1 p-6 md:p-8 rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow-lg relative overflow-hidden transition-transform duration-200 hover:-translate-y-0.5 group"
       aria-labelledby="qr-title"
     >
-      <span
-        aria-hidden="true"
-        class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-500 group-hover:opacity-35"
-      >
+      <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-500 group-hover:opacity-35">
         <span
           class="absolute inset-0 rounded-2xl"
           style="background: linear-gradient(90deg, var(--accent), var(--accent-dark)); mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
@@ -140,14 +111,15 @@ const {
           id="qrUrl"
           type="url"
           name="qrUrl"
-          placeholder={qrPlaceholder}
+          placeholder={'Enter URL for QR code'}
           required
           class="w-full px-4 py-3 border border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition bg-[var(--card)] text-[var(--card-foreground)] shadow-sm"
           autocomplete="url"
+          inputmode="url"
         />
         <button
           type="submit"
-          class="mt-1 w-full px-6 py-3 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-bold hover:bg-[var(--primary-hover, var(--accent-dark))] transition shadow-md hover:shadow-lg"
+          class="mt-1 w-full px-6 py-3 rounded-lg bg-[var(--primary)] text-[var(--primary-foreground)] font-bold hover:bg-[var(--primary-hover, var(--accent-dark))] transition shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {qrButtonText}
         </button>
@@ -155,7 +127,3 @@ const {
     </form>
   </div>
 </section>
-
-<style>
-/* If your header is sticky, set --header-offset in Header.astro (e.g., 72px). */
-</style>

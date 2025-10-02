@@ -2,14 +2,35 @@
 const { features } = Astro.props as { features: string[] };
 ---
 
-<section class="mt-8 max-w-3xl mx-auto">
-  <h2 class="text-2xl font-semibold mb-4 text-[var(--foreground)]">Key Features</h2>
-  <ul class="list-disc list-inside space-y-2 text-[var(--muted-foreground,#6b7280)] text-base">
+<section class="mt-8 max-w-4xl mx-auto space-y-6">
+  <h2 class="text-2xl font-semibold text-[var(--foreground)]">Key Features</h2>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
     {features.map((feature) => (
-      <li class="leading-relaxed">
-        {feature}
-      </li>
+      <article class="relative group p-6 rounded-2xl bg-[var(--card)] text-[var(--card-foreground)] shadow-md hover:shadow-lg transition-transform duration-200 hover:-translate-y-0.5">
+        <!-- Decorative gradient frame -->
+        <span
+          aria-hidden="true"
+          class="absolute inset-0 rounded-2xl p-[2px] opacity-15 transition-opacity duration-300 group-hover:opacity-35"
+        >
+          <span
+            class="absolute inset-0 rounded-2xl"
+            style="background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+                   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                   -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+          ></span>
+        </span>
+
+        <p class="text-[var(--muted-foreground,#6b7280)] leading-relaxed">{feature}</p>
+      </article>
     ))}
-  </ul>
+  </div>
 </section>
 
+<style>
+.group:hover svg [stroke] {
+  stroke: var(--accent);
+  transition: stroke 0.3s ease;
+}
+</style>

@@ -1,26 +1,18 @@
 ---
+// Layout for tools pages
 import Seo from '@components/Seo.astro';
 import Header from '@components/sections/Header.astro';
 import Footer from '@components/sections/Footer.astro';
-import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
-// Minimal share widget reuse (optional): you can import ShareButtons if desired
-// import ShareButtons from '@components/ui/share/ShareButtons.astro';
-
 export interface Props {
-  // SEO / header
   title: string;
   description?: string;
-  path?: string;            // canonical path starting with '/'
-  image?: ImageMetadata;    // optional hero image
+  path?: string;
+  image?: ImageMetadata;
   imageAlt?: string;
-
-  // UI
   showHeader?: boolean;
   noindex?: boolean;
-
-  // Optional meta for tools
   category?: string;
   popularity?: number;
   isPremium?: boolean;
@@ -38,10 +30,9 @@ const {
   popularity,
   isPremium,
 } = Astro.props as Props;
-
-const canonicalUrl = new URL(path, Astro.url).toString();
 ---
-<html lang="en" data-theme="dark" class="dark">
+
+<html lang="en">
   <head>
     <Seo
       title={title}
@@ -52,91 +43,59 @@ const canonicalUrl = new URL(path, Astro.url).toString();
       noindex={noindex}
     />
   </head>
-  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-300">
+  <body class="bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] antialiased">
     <Header />
-    <main>
-      <article>
-        {showHeader && (
-          <div class="hero-image">
-            {image && <Image width={1020} height={510} src={image} alt={imageAlt ?? title} />}
-          </div>
-        )}
 
-        <div class="prose">
-          {showHeader && (
-            <header class="title">
-              <h1>{title}</h1>
-              {description && <p class="subtitle">{description}</p>}
-              {(category || popularity !== undefined || isPremium !== undefined) && (
-                <div class="tool-meta">
-                  {category && <span class="badge">Category: {category}</span>}
-                  {popularity !== undefined && <span class="badge">Popularity: {popularity}</span>}
-                  {isPremium !== undefined && <span class="badge">{isPremium ? 'Premium' : 'Free'}</span>}
-                </div>
-              )}
-              <hr />
-            </header>
+    <main class="max-w-6xl mx-auto px-4 py-10 space-y-10">
+      {showHeader && (
+        <header class="text-center space-y-4">
+          {image && (
+            <img
+              src={image.src}
+              width={1020}
+              height={510}
+              alt={imageAlt ?? title}
+              class="rounded-2xl shadow-lg mx-auto"
+              loading="lazy"
+            />
           )}
 
-          {/* Optional share buttons
-          <ShareButtons title={title} url={canonicalUrl} />
-          */}
+          <!-- Gradient title -->
+          <h1 class="text-4xl md:text-5xl font-bold gradient-text">{title}</h1>
 
-          <slot />
-        </div>
+          {description && (
+            <p class="text-lg text-[var(--color-text-muted)] max-w-2xl mx-auto">
+              {description}
+            </p>
+          )}
+
+          {(category || popularity !== undefined || isPremium !== undefined) && (
+            <div class="flex justify-center flex-wrap gap-2 mt-4">
+              {category && (
+                <span class="px-3 py-1 text-sm rounded-full border bg-[var(--color-bg-secondary)] text-[var(--color-text-muted)]">
+                  Category: {category}
+                </span>
+              )}
+              {popularity !== undefined && (
+                <span class="px-3 py-1 text-sm rounded-full border bg-[var(--color-bg-secondary)] text-[var(--color-text-muted)]">
+                  Popularity: {popularity}
+                </span>
+              )}
+              {isPremium !== undefined && (
+                <span class="px-3 py-1 text-sm rounded-full border bg-[var(--color-bg-secondary)] text-[var(--color-text-muted)]">
+                  {isPremium ? 'Premium' : 'Free'}
+                </span>
+              )}
+            </div>
+          )}
+        </header>
+      )}
+
+      <article class="bg-[var(--color-bg-secondary)] rounded-2xl shadow p-6 space-y-6">
+        <slot />
       </article>
     </main>
+
     <Footer />
   </body>
 </html>
-
-<style>
-  main {
-    width: 1280px;
-    max-width: calc(100% - 2em);
-    margin: auto;
-    background: var(--color-bg-primary);
-  }
-  .hero-image { width: 100%; }
-  .hero-image img {
-    display: block;
-    margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: var(--box-shadow);
-  }
-  .prose {
-    width: 100%;
-    max-width: 870px;
-    margin: auto;
-    padding: 0.05em;
-    color: var(--color-text-secondary);
-  }
-  .title {
-    margin-bottom: 1em;
-    padding: 1em 0;
-    text-align: center;
-    line-height: 1.2;
-  }
-  .title h1 {
-    margin: 0 0 0.25em 0;
-    color: var(--color-text-primary);
-  }
-  .subtitle {
-    margin: 0.25em 0 0.75em;
-    color: var(--color-text-muted);
-  }
-  .tool-meta {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    margin-bottom: 0.5rem;
-  }
-  .badge {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    padding: 0.15rem 0.6rem;
-  }
-</style>

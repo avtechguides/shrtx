@@ -2,53 +2,85 @@
 interface Props {
   title?: string;
   subtitle?: string;
-  center?: boolean; // optional: center-align subtitle and title on small layouts
+  center?: boolean;
+  showQuick?: boolean;    // defaults to false now
+  shortenHref?: string;
+  qrHref?: string;
 }
 
 const {
   title = 'SHRTX Utility Tools',
   subtitle = 'Your daily companion for productivity. Explore our online tools including URL shortener, QR code generator, JSON formatter, and more.',
-  center = false
+  center = false,
+  showQuick = false,      // changed default
+  shortenHref = '/shorten',
+  qrHref = '/qr',
 } = Astro.props as Props;
 ---
 
 <section
-  class="w-full pt-[calc(var(--header-offset,64px)+0.5rem)] pb-6 sm:pb-8 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300"
+  class="w-full pt-[calc(var(--header-offset,64px)+0.5rem)] pb-10 bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300"
   aria-labelledby="toolhero-title"
 >
-  <div class="mx-auto max-w-5xl px-3">
-    <div
-      class={[
-        'grid items-center gap-3 sm:gap-4',
-        'md:grid-cols-2',
-        center ? 'text-center md:text-left' : ''
-      ].join(' ')}
+  <!-- Match home: max-w-5xl, px-4, text-center block with bottom margin -->
+  <div class="max-w-5xl mx-auto px-4 text-center mb-8">
+    <h1
+      id="toolhero-title"
+      class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4"
     >
-      <h1
-        id="toolhero-title"
-        class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight"
-      >
-        <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
-          {title}
-        </span>
-      </h1>
-      {subtitle && (
-        <p
-          class={[
-            'text-sm sm:text-base md:text-lg leading-relaxed',
-            'text-[var(--muted-foreground,#6b7280)]',
-            center ? 'md:text-left' : 'md:text-right'
-          ].join(' ')}
+      <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+        {title}
+      </span>
+    </h1>
+
+    {subtitle && (
+      <p class="mt-2 text-lg md:text-xl text-[var(--muted-foreground,#6b7280)] max-w-2xl mx-auto transition-colors duration-300">
+        {subtitle}
+      </p>
+    )}
+
+    {showQuick && (
+      <div class={['mt-4 flex gap-3', center ? 'justify-center' : 'justify-center'].join(' ')}>
+        <a
+          href={shortenHref}
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow hover:shadow-md transition hover:-translate-y-0.5 relative group"
+          aria-label="Open URL Shortener"
         >
-          {subtitle}
-        </p>
-      )}
-    </div>
+          <span aria-hidden="true">🔗</span>
+          <span class="font-semibold">Shorten URL</span>
+          <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-xl p-[2px] opacity-10 group-hover:opacity-30 transition-opacity">
+            <span
+              class="absolute inset-0 rounded-xl"
+              style="background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+                    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                    -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+            ></span>
+          </span>
+        </a>
+
+        <a
+          href={qrHref}
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--card)] text-[var(--card-foreground)] ring-1 ring-inset ring-[var(--border)] shadow hover:shadow-md transition hover:-translate-y-0.5 relative group"
+          aria-label="Open QR Code Generator"
+        >
+          <span aria-hidden="true">📱</span>
+          <span class="font-semibold">Generate QR</span>
+          <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-xl p-[2px] opacity-10 group-hover:opacity-30 transition-opacity">
+            <span
+              class="absolute inset-0 rounded-xl"
+              style="background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+                    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+                    -webkit-mask-composite: xor; mask-composite: exclude; padding: 2px;"
+            ></span>
+          </span>
+        </a>
+      </div>
+    )}
   </div>
 </section>
 
 <style>
-/* 
-  If the header is sticky, ensure --header-offset is set in Header (64px mobile, ~80px desktop).
-*/
+/* Uses same tokens as home; ensure var(--background), --card, --border, --accent are identical on tools page */
 </style>

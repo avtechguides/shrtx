@@ -1,0 +1,8 @@
+---
+// src/components/google/GoogleSearchConsole.astro
+const verificationCode = 'your-verification-code';
+---
+
+{verificationCode && (
+  <meta name="google-site-verification" content={verificationCode} />
+)}

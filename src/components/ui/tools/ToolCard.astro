@@ -1,6 +1,5 @@
 ---
 // ToolCard.astro
-import Button from '../button/Button.astro';
 import type { Tool } from '../../../data/tools/tools';
 import { slugifyTag } from '../../../lib/slug';
 
@@ -11,61 +10,136 @@ const {
   category,
   isPremium = false,
   popularity,
-  authorSlug,
-  createdAt,
-  href
+  href,
+  slug
 } = Astro.props as Tool;
 
-const categorySlug = category ? slugifyTag(category) : '';
-const displayDate = createdAt ? new Date(createdAt).toLocaleDateString() : '';
+// Default href to internal tool page if not provided
+const link = href ?? (slug ? `/tools/${slug}` : undefined);
 ---
+{link ? (
+  <a class="card" href={link}>
+    <!-- Decorative frame -->
+    <span aria-hidden="true" class="frame">
+      <span class="frame-inner"></span>
+    </span>
 
-<article class="bg-[var(--card)] rounded-2xl shadow-md hover:shadow-xl transition-shadow p-6 flex flex-col justify-between">
-  <header class="flex items-center gap-4 mb-4">
-    <div class="w-12 h-12 flex items-center justify-center text-2xl">
-      <span set:html={icon}></span>
-    </div>
-    <div class="flex-1">
-      <h3 class="text-lg font-semibold">{title}</h3>
-      <div class="flex flex-wrap gap-2 mt-1">
-        {category && (
-          <Button 
-            href={`/tools/categories/${categorySlug}`} 
-            variant="outline" 
-            size="sm" 
-            class="pointer-events-auto"
-          >
-            {category}
-          </Button>
-        )}
-        {isPremium && (
-          <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">
-            Premium
-          </span>
-        )}
-        {popularity !== undefined && (
-          <span class="text-xs text-[var(--muted-foreground)]">
-            ⭐ {popularity}
-          </span>
-        )}
+    <header class="flex items-center gap-4 mb-4">
+      <div class="w-12 h-12 flex items-center justify-center text-2xl">
+        <span set:html={icon}></span>
       </div>
-    </div>
-  </header>
+      <div class="flex-1">
+        <h3 class="font-extrabold text-lg mb-1">
+          <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+            {title}
+          </span>
+        </h3>
+        <div class="flex flex-wrap gap-2 mt-1">
+          {category && (
+            <span class="text-xs bg-[var(--color-bg-secondary)] px-2 py-0.5 rounded-full">{category}</span>
+          )}
+          {isPremium && (
+            <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">
+              Premium
+            </span>
+          )}
+          {popularity !== undefined && (
+            <span class="text-xs text-[var(--muted-foreground)]">⭐ {popularity}</span>
+          )}
+        </div>
+      </div>
+    </header>
 
-  <p class="text-sm text-[var(--muted-foreground)] mb-4">{description}</p>
+    <p class="text-sm text-[var(--muted-foreground)] mb-4 leading-relaxed">{description}</p>
+  </a>
+) : (
+  <div class="card">
+    <!-- Decorative frame -->
+    <span aria-hidden="true" class="frame">
+      <span class="frame-inner"></span>
+    </span>
 
-  <footer class="flex items-center justify-between mt-4 text-xs text-[var(--muted-foreground)]">
-    <div class="flex gap-2">
-      {authorSlug && <span>By {authorSlug}</span>}
-      {displayDate && <span>{displayDate}</span>}
-    </div>
-    <Button 
-      href={href ?? '#'} 
-      variant="primary" 
-      size="sm" 
-      disabled={!href}
-    >
-      {href ? 'Open Tool' : 'Coming Soon'}
-    </Button>
-  </footer>
-</article>
+    <header class="flex items-center gap-4 mb-4">
+      <div class="w-12 h-12 flex items-center justify-center text-2xl">
+        <span set:html={icon}></span>
+      </div>
+      <div class="flex-1">
+        <h3 class="font-extrabold text-lg mb-1">
+          <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
+            {title}
+          </span>
+        </h3>
+        <div class="flex flex-wrap gap-2 mt-1">
+          {category && (
+            <span class="text-xs bg-[var(--color-bg-secondary)] px-2 py-0.5 rounded-full">{category}</span>
+          )}
+          {isPremium && (
+            <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">
+              Premium
+            </span>
+          )}
+          {popularity !== undefined && (
+            <span class="text-xs text-[var(--muted-foreground)]">⭐ {popularity}</span>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <p class="text-sm text-[var(--muted-foreground)] mb-4 leading-relaxed">{description}</p>
+  </div>
+)}
+
+<style>
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+  cursor: pointer;
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.3); /* blue shadow */
+  border-color: var(--accent); /* blue border */
+  outline: none;
+}
+
+.frame {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 2px;
+  opacity: .1;
+  transition: opacity .3s ease;
+}
+.group:hover .frame { opacity: .25; }
+
+.frame-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Remove underlines for all text inside cards */
+a,
+a * {
+  text-decoration: none !important;
+  cursor: pointer;
+}
+</style>

@@ -23,7 +23,7 @@ export default defineConfig({
 
   vite: {
     server: {
-      allowedHosts: ['shrtx.in'],
+      allowedHosts: ['shrtx.in', 'dev.avtechguides.com'],
     },
   },
 });
