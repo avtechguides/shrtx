@@ -2,47 +2,67 @@
 import ToolsLayout from '@layouts/ToolsLayout.astro';
 import ToolCard from '@components/ui/tools/ToolCard.astro';
 import ToolFeatures from '@components/ui/tools/ToolFeatures.astro';
-import { tools } from '@data/tools/tools';
-import { slugifyTag } from '@lib/slug';
-import type { Tool } from '@data/tools/tools';
 
 export const prerender = true;
 
-export function getStaticPaths() {
-  return tools
-    .filter((t) => !!t.slug)
-    .map((t) => ({ params: { slug: t.slug as string } }));
+interface ToolFrontmatter {
+  slug: string;
+  title: string;
+  description?: string;
+  category?: string;
+  features?: string[];
+  popularity?: number;
+}
+
+interface ToolModule {
+  frontmatter: ToolFrontmatter;
+  default: any; // MDX component
+}
+
+const slugifyTag = (str: string): string => str.toLowerCase().replace(/\s+/g, '-');
+const formatCategory = (s: string): string => s.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+
+// Use import.meta.glob with eager: true to import all MDX modules eagerly
+const modules = import.meta.glob<ToolModule>('../../content/tools/**/*.mdx', { eager: true });
+const toolModules: ToolModule[] = Object.values(modules);
+
+const paths = toolModules.map((mod) => ({
+  params: { slug: mod.frontmatter.slug }
+}));
+
+export function getStaticPaths(): { params: { slug: string } }[] {
+  return paths;
 }
 
 const { slug } = Astro.params;
-const tool = tools.find((t) => t.slug === slug);
-if (!tool) return Astro.redirect('/404');
+const toolModule = toolModules.find((mod) => mod.frontmatter.slug === slug);
+
+if (!toolModule) {
+  return Astro.redirect('/404');
+}
+
+const tool = toolModule.frontmatter;
 
 const pageTitle = `${tool.title} - SHRTX Tools`;
 const pageDescription = tool.description ?? '';
 const path = `/tools/${tool.slug}`;
 
-const sorted = [...tools].filter((t) => !!t.slug).sort((a, b) => a.title.localeCompare(b.title));
-const idx = sorted.findIndex((t) => t.slug === tool.slug);
-const prevTool = idx > 0 ? sorted[idx - 1] : null;
-const nextTool = idx >= 0 && idx < sorted.length - 1 ? sorted[idx + 1] : null;
+const sortedFrontmatters = toolModules
+  .map((mod) => mod.frontmatter)
+  .filter((t) => !!t.slug)
+  .sort((a, b) => a.title.localeCompare(b.title));
+
+const idx = sortedFrontmatters.findIndex((t) => t.slug === slug);
+const prevTool = idx > 0 ? sortedFrontmatters[idx - 1] : null;
+const nextTool = idx < sortedFrontmatters.length - 1 ? sortedFrontmatters[idx + 1] : null;
 
 const categoryName = tool.category ?? '';
 const categorySlug = categoryName ? slugifyTag(categoryName) : '';
 const categoryHref = categorySlug ? `/tools/categories/${categorySlug}` : '';
-
-const formatCategory = (s: string) => s.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 ---
 
-<ToolsLayout
-  title={pageTitle}
-  description={pageDescription}
-  path={path}
-  category={categoryName}
-  showHeader={true}
->
+<ToolsLayout title={pageTitle} description={pageDescription} path={path} category={categoryName} showHeader={true}>
 
-  <!-- Breadcrumb -->
   {categoryHref && (
     <p class="text-sm text-[var(--color-text-muted)] mb-4">
       <a href="/tools" class="hover:underline">Tools</a>
@@ -50,11 +70,9 @@ const formatCategory = (s: string) => s.replace(/-/g, ' ').replace(/\b\w/g, (c) 
     </p>
   )}
 
-  <!-- Tool Card -->
   <ToolCard {...tool} />
 
-  <!-- Tool Features -->
-  {tool.features && tool.features.length > 0 && (
-    <ToolFeatures features={tool.features} />
-  )}
+  {tool.features && tool.features.length > 0 && <ToolFeatures features={tool.features} />}
+
+  <toolModule.default />
 </ToolsLayout>

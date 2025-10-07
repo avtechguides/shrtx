@@ -2,56 +2,71 @@
 import ToolsLayout from '@layouts/ToolsLayout.astro';
 import ToolCard from '@components/ui/tools/ToolCard.astro';
 import ToolsPagination from '@components/ui/nav/ToolsPagination.astro';
-import CategoryGallery from '@components/sections/CategoryGallery.astro';
-import ToolSearch from '@components/ui/tools/ToolSearch.astro';
-import { tools } from '@data/tools/tools';
-import { slugifyTag } from '@lib/slug';
+import { normalizeTools } from '@lib/normalizeTools';
 
 export const prerender = true;
 
+interface ToolFrontmatter {
+  slug: string;
+  title: string;
+  description?: string;
+  category?: string;
+  popularity?: number;
+}
+
 const PAGE_SIZE = 12;
 
-// Sort tools by popularity then title
+// Eager import of MDX modules
+const modules = import.meta.glob<{ frontmatter: ToolFrontmatter }>('../../content/tools/**/*.mdx', { eager: true });
+const toolModules = Object.values(modules);
+
+// Extract and normalize
+const rawTools = toolModules.map(mod => mod.frontmatter);
+const tools = normalizeTools(rawTools);
+
+// Sort tools by popularity then title for pagination
 const sortedTools = [...tools].sort(
   (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0) || a.title.localeCompare(b.title)
 );
 
-const pageTitle = 'SHRTX Utility Tools';
-const pageDescription =
-  'All the web tools you need for your daily hustle — speedy, dependable, and designed with you in mind.';
-
-// Pagination
+// Pagination logic: slice paginated tools for "Latest Tools"
 const currentPage = Number(Astro.params.page ?? 1);
 const totalPages = Math.ceil(sortedTools.length / PAGE_SIZE);
 const paginatedTools = sortedTools.slice(
   (currentPage - 1) * PAGE_SIZE,
   currentPage * PAGE_SIZE
 );
+
+// Group tools by category to get top 5 per category
+const categoryMap = new Map<string, (typeof tools[0])[]>();
+for (const tool of tools) {
+  if (!tool.category) continue;
+  const array = categoryMap.get(tool.category) || [];
+  array.push(tool);
+  categoryMap.set(tool.category, array);
+}
+
+// Sort each category's tools by popularity and pick top 5
+const topToolsByCategory = Array.from(categoryMap.entries())
+  .map(([category, tools]) => ({
+    category,
+    tools: tools
+      .sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0))
+      .slice(0, 5),
+  }))
+  .filter(catGroup => catGroup.tools.length > 0) // Skip empty categories
+  .sort((a, b) => a.category.localeCompare(b.category));
+
+const pageTitle = 'SHRTX Utility Tools';
+const pageDescription = 'All the web tools you need for your daily hustle — speedy, dependable, and designed with you in mind.';
 ---
 
-<ToolsLayout title={pageTitle} description={pageDescription} showHeader={true}>
-
-  <!-- Search panel -->
-  <ToolSearch tools={tools} />
-
-  <!-- Categories Section -->
-  <section class="space-y-6">
-    <div>
-      <h2 class="text-2xl font-bold mb-2">
-        <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
-          Explore by Category
-        </span>
-      </h2>
-      <p class="text-[var(--color-text-muted)]">Jump into a group of tools tailored to specific tasks.</p>
-    </div>
-
-    <CategoryGallery
-      tools={tools}
-      title=""
-      subtitle=""
-    />
-  </section>
-
+<ToolsLayout
+  title={pageTitle}
+  description={pageDescription}
+  showHeader={true}
+  tools={tools}
+>
   <!-- Latest Tools Section -->
   <section class="mt-10 space-y-6">
     <h2 class="text-2xl font-bold mb-2">
@@ -70,4 +85,16 @@ const paginatedTools = sortedTools.slice(
       <ToolsPagination currentPage={currentPage} totalPages={totalPages} />
     )}
   </section>
+
+  <!-- Categorized Top Tools Sections -->
+  {topToolsByCategory.map(({ category, tools: catTools }) => (
+    <section class="mt-14">
+      <h3 class="text-xl font-semibold mb-4 text-[var(--accent)]">{category}</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {catTools.map((tool) => (
+          <ToolCard {...tool} />
+        ))}
+      </div>
+    </section>
+  ))}
 </ToolsLayout>

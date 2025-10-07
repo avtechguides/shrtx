@@ -4,29 +4,48 @@ import Header from '@components/sections/Header.astro';
 import Footer from '@components/sections/Footer.astro';
 import ToolsAll from '@components/sections/ToolsAll.astro';
 import ToolsPagination from '@components/ui/nav/ToolsPagination.astro';
-import { tools, type Tool } from '@data/tools/tools';
+import { normalizeTools } from '@lib/normalizeTools';
 
 export const prerender = true;
 
-const PAGE_SIZE = 8;
-
-export function getStaticPaths() {
-  const rest = [...tools].slice(1);
-  const totalPages = Math.max(1, Math.ceil(rest.length / PAGE_SIZE));
-  return Array.from({ length: totalPages - 1 }, (_, i) => ({ params: { page: String(i + 2) } }));
+interface ToolFrontmatter {
+  slug: string;
+  title: string;
+  description?: string;
+  category?: string;
+  popularity?: number;
 }
 
+const PAGE_SIZE = 8;
+
+// Eager load all tools from MDX modules
+const modules = import.meta.glob<{ frontmatter: ToolFrontmatter }>('../../content/tools/**/*.mdx', { eager: true });
+const toolModules = Object.values(modules);
+
+// Normalize all tools data
+const rawTools = toolModules.map(mod => mod.frontmatter);
+const tools = normalizeTools(rawTools);
+
+// Sort all tools by popularity descending then alphabetically by title
+const sorted = [...tools].sort(
+  (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0) || a.title.localeCompare(b.title)
+);
+
+// total pages for paginated subset (exclude first if showing separate page1)
+const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+
+// get page param (default to 2 as this is the [page] route; page 1 is handled outside)
 const { page } = Astro.params;
-const pageNum = Math.max(2, parseInt(page || '2', 10));
+const pageNum = Math.max(2, parseInt(page ?? '2', 10));
 
-const sorted = [...tools].sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0) || a.title.localeCompare(b.title));
-const [, ...rest] = sorted;
-const totalPages = Math.max(1, Math.ceil(rest.length / PAGE_SIZE));
+if (pageNum > totalPages) {
+  // Redirect invalid high page number to the main tools page (page 1)
+  return Astro.redirect('/tools/');
+}
 
-if (pageNum > totalPages) return Astro.redirect('/tools/');
-
-const start = (pageNum - 2) * PAGE_SIZE;
-const pageItems: Tool[] = rest.slice(start, start + PAGE_SIZE);
+// Calculate tool indices for current page slice
+const start = (pageNum - 1) * PAGE_SIZE;
+const pageItems = sorted.slice(start, start + PAGE_SIZE);
 
 const pageTitle = `Tools - Page ${pageNum}`;
 const pageDescription = `Browse SHRTX tools (page ${pageNum}).`;

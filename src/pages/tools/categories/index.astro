@@ -1,16 +1,46 @@
 ---
 import ToolsLayout from '@layouts/ToolsLayout.astro';
 import CategoryGallery from '@components/sections/CategoryGallery.astro';
-import { tools } from '@data/tools/tools';
+import { normalizeTools } from '@lib/normalizeTools';
+
+export const prerender = true;
+
+interface ToolFrontmatter {
+  slug: string;
+  title: string;
+  description?: string;
+  category?: string;
+  features?: string[];
+  popularity?: number;
+}
+
+// Correct path: from src/pages/tools/categories/index.astro to src/content/tools
+const modules = import.meta.glob<{ frontmatter: ToolFrontmatter }>(
+  '../../../content/tools/**/*.mdx',
+  { eager: true }
+);
+const toolModules = Object.values(modules);
+const rawTools = toolModules.map((mod) => mod.frontmatter);
+
+const normalized = normalizeTools(rawTools);
+
+// Ensure a category string exists for CategoryGallery aggregation
+const tools = normalized.map((t: any) => ({
+  ...t,
+  category:
+    t.category ??
+    t.categoryName ??
+    (Array.isArray(t.categories) ? t.categories[0] : undefined),
+}));
 
 const pageTitle = 'All Tool Categories';
 const pageDescription = 'Browse every SHRTX tool category.';
 ---
 
-<ToolsLayout title={pageTitle} description={pageDescription} showHeader={true}>
-  <CategoryGallery
-    tools={tools}
-    title={pageTitle}
-    subtitle="Jump into a group of tools tailored to specific tasks."
-  />
+<ToolsLayout title={pageTitle} description={pageDescription} tools={tools}>
+  {tools.length === 0 ? (
+    <p class="text-[var(--color-text-muted)]">No categories found.</p>
+  ) : (
+    <CategoryGallery tools={tools} variant="page" />
+  )}
 </ToolsLayout>

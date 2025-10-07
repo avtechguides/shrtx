@@ -1,5 +1,4 @@
 ---
-// src/components/ui/ShortenerForm.astro
 interface Props {
   onShorten?: (url: string) => void; // optional callback for shortening
   onGenerateQr?: (url: string) => void; // optional callback for QR generation
@@ -16,16 +15,23 @@ let inputUrl: string = '';
   </p>
   <form
     class="flex flex-col sm:flex-row gap-3"
-    on:submit={(e) => {
-      e.preventDefault();
-      if (onShorten) onShorten(inputUrl);
-    }}
+    onsubmit="handleSubmit(event)"
   >
+  <script type="module" is:inline>
+    function handleSubmit(e) {
+      e.preventDefault();
+      if (typeof onShorten === 'function') onShorten(inputUrl);
+    }
+  </script>
     <input
       type="url"
       placeholder="https://example.com/your-long-url"
       class="flex-1 px-4 py-3 rounded-xl border border-[color:var(--border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)] dark:bg-[color:var(--input)] dark:text-foreground"
-      bind:value={inputUrl}
+      value={inputUrl}
+      :onInput={(e: Event) => {
+        const target = e.target as HTMLInputElement;
+        inputUrl = target.value;
+      }}
       required
     />
     <button
@@ -35,11 +41,16 @@ let inputUrl: string = '';
       Shorten Link →
     </button>
     <button
+      id="generate-qr-btn"
       type="button"
       class="px-6 py-3 bg-[var(--secondary)] text-foreground font-semibold rounded-xl hover:bg-[var(--secondary-foreground)] transition"
-      onClick={() => onGenerateQr && onGenerateQr(inputUrl)}
     >
       Generate QR →
     </button>
+    <script type="module" is:inline>
+      document.getElementById('generate-qr-btn')?.addEventListener('click', () => {
+        if (typeof onGenerateQr === 'function') onGenerateQr(inputUrl);
+      });
+    </script>
   </form>
 </section>

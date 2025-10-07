@@ -1,0 +1,148 @@
+---
+export interface Props {
+  name: string;
+  slug: string;
+  count: number;
+  icon?: string; // emoji or HTML string for SVG
+  href?: string; // override default link
+  class?: string;
+}
+
+const {
+  name,
+  slug,
+  count,
+  icon,
+  href,
+  class: className = '',
+} = Astro.props as Props;
+
+const link = href ?? `/tools/categories/${slug}`;
+const countLabel = `${count} ${count === 1 ? 'tool' : 'tools'}`;
+
+function iconForCategory(label: string): string {
+  const s = label.toLowerCase();
+  if (s.includes('code') || s.includes('dev')) return '🎨';      // dev/design/code
+  if (s.includes('seo') || s.includes('marketing')) return '📈';  // SEO/marketing
+  if (s.includes('image') || s.includes('photo')) return '🖼️';   // images/media
+  if (s.includes('pdf') || s.includes('document')) return '📄';   // docs/PDF
+  if (s.includes('privacy') || s.includes('security')) return '🔒'; // security
+  if (s.includes('social')) return '💬';                           // social
+  if (s.includes('text') || s.includes('content')) return '📝';   // text/content
+  if (s.includes('url') || s.includes('link')) return '🔗';       // links/url
+  if (s.includes('convert') || s.includes('conversion')) return '🔁'; // converters
+  if (s.includes('fun') || s.includes('meme') || s.includes('viral')) return '🎉'; // fun
+  return '🧩'; // fallback
+}
+
+const displayIcon = icon ?? iconForCategory(name);
+---
+
+<a class={`category-card ${className}`} href={link} aria-label={`${name} category with ${countLabel}`}>
+  <span aria-hidden="true" class="frame">
+    <span class="frame-inner"></span>
+  </span>
+
+  <div class="row">
+    <div class="icon">
+      <span set:html={displayIcon}></span>
+    </div>
+    <div class="content">
+      <h3 class="title">
+        <span class="title-gradient">{name}</span>
+      </h3>
+      <p class="meta">{countLabel}</p>
+    </div>
+  </div>
+</a>
+
+<style>
+.category-card {
+  position: relative;
+  display: block;
+  padding: 1rem 1.125rem;
+  border-radius: 0.75rem;
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+  text-decoration: none;
+  height: 100%; /* consistent tile height in grids */
+}
+
+.category-card:hover,
+.category-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.3);
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* decorative frame */
+.frame {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  opacity: .08;
+  transition: opacity .3s ease;
+}
+.category-card:hover .frame,
+.category-card:focus-visible .frame { opacity: .2; }
+.frame-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* layout */
+.row {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.content { min-width: 0; }
+.title {
+  margin: 0 0 2px 0;
+  font-weight: 800;
+  font-size: 1rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.title-gradient {
+  background-image: linear-gradient(90deg, var(--accent), var(--accent-dark));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.meta {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  line-height: 1.1;
+}
+
+/* remove underlines */
+a.category-card, a.category-card * { text-decoration: none !important; }
+</style>

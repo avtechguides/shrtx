@@ -1,15 +1,19 @@
 ---
-// ToolSearchResults.astro
-import type { tools as toolsData } from '@data/tools/tools';
-type Tool = typeof toolsData[number];
-
 export interface Props {
-  results: Tool[];
+  results: {
+    title: string;
+    description?: string;
+    icon?: string;
+    category?: string;
+    isPremium?: boolean;
+    popularity?: number;
+    slug?: string;
+  }[];
 }
 const { results = [] } = Astro.props as Props;
 ---
 
-<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
   {results.map((tool) => {
     const {
       title,
@@ -22,9 +26,10 @@ const { results = [] } = Astro.props as Props;
     } = tool;
 
     const link = slug ? `/tools/${slug}` : '#';
+
     return (
-      <a class="card" href={link}>
-        <!-- Decorative frame -->
+      <a class="card" href={link} aria-label={title}>
+        {/* Decorative frame */}
         <span aria-hidden="true" class="frame">
           <span class="frame-inner"></span>
         </span>
@@ -35,18 +40,14 @@ const { results = [] } = Astro.props as Props;
           </div>
           <div class="flex-1">
             <h3 class="font-extrabold text-lg mb-1">
-              <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">
-                {title}
-              </span>
+              <span class="bg-gradient-to-r from-[var(--accent)] to-[var(--accent-dark)] bg-clip-text text-transparent">{title}</span>
             </h3>
             <div class="flex flex-wrap gap-2 mt-1">
               {category && (
                 <span class="text-xs bg-[var(--color-bg-secondary)] px-2 py-0.5 rounded-full">{category}</span>
               )}
               {isPremium && (
-                <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">
-                  Premium
-                </span>
+                <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">Premium</span>
               )}
               {popularity !== undefined && (
                 <span class="text-xs text-[var(--muted-foreground)]">⭐ {popularity}</span>
@@ -71,7 +72,7 @@ const { results = [] } = Astro.props as Props;
   border-radius: 1rem;
   background: var(--card);
   color: var(--foreground);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   text-decoration: none;
   border: 1px solid var(--border);
   transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
@@ -92,10 +93,13 @@ const { results = [] } = Astro.props as Props;
   inset: 0;
   border-radius: 16px;
   padding: 2px;
-  opacity: .1;
-  transition: opacity .3s ease;
+  opacity: 0.1;
+  transition: opacity 0.3s ease;
 }
-.card:hover .frame { opacity: .25; }
+
+.card:hover .frame {
+  opacity: 0.25;
+}
 
 .frame-inner {
   position: absolute;
@@ -113,5 +117,9 @@ a,
 a * {
   text-decoration: none !important;
   cursor: pointer;
+}
+
+@media(max-width: 640px) {
+  /* stack cards for very small screens if needed */
 }
 </style>

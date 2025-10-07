@@ -1,5 +1,11 @@
 .
 ├── astro.config.mjs
+├── create-google-components.sh
+├── .gitattributes
+├── .github
+│   └── workflows
+│       └── deploy.yml
+├── .gitignore
 ├── LICENSE
 ├── package.json
 ├── package-lock.json
@@ -27,21 +33,123 @@
 ├── src
 │   ├── assets
 │   │   ├── icons
+│   │   │   ├── about-icon.svg
+│   │   │   ├── blog-scroll-icon.svg
+│   │   │   ├── company-icon.svg
+│   │   │   ├── contact-icon.svg
+│   │   │   ├── icons8-y-combinator.svg
+│   │   │   ├── job-title-icon.svg
+│   │   │   ├── linkedin-blog-post-shareicon.svg
+│   │   │   ├── location-icon.svg
+│   │   │   ├── magnifying-glass-icon.svg
+│   │   │   ├── pin-icon.svg
+│   │   │   ├── portfolio-icon.svg
+│   │   │   ├── reddit-blog-post-share-icon.svg
+│   │   │   ├── resume-icon.svg
+│   │   │   ├── x-blog-post-share-icon.svg
+│   │   │   └── yc-blog-post-share-icon copy.svg
 │   │   ├── images
+│   │   │   ├── blog-placeholder-1.jpg
+│   │   │   ├── blog-placeholder-about.jpg
+│   │   │   ├── example-blog-hero1.jpg
+│   │   │   ├── example-blog-hero2.jpg
+│   │   │   ├── example-blog-hero3.jpg
+│   │   │   ├── example-blog-hero4.jpg
+│   │   │   ├── example-blog-hero5.jpg
+│   │   │   ├── example-blog-hero6.jpg
+│   │   │   ├── example-blog-hero7.jpg
+│   │   │   ├── example-blog-hero8.jpg
+│   │   │   ├── sample-avatar.jpg
+│   │   │   └── vishu-akanksha-shrtx-developer.jpg
 │   │   └── logos
+│   │       ├── discord.svg
+│   │       ├── facebook.svg
+│   │       ├── github.svg
+│   │       ├── google.svg
+│   │       ├── linkedin.svg
+│   │       ├── paypal.svg
+│   │       ├── slack.svg
+│   │       ├── teams.svg
+│   │       ├── telegram.svg
+│   │       ├── whatsapp.svg
+│   │       ├── X.svg
+│   │       └── youtube.svg
 │   ├── components
 │   │   ├── BaseHead.astro
 │   │   ├── CookieBanner.astro
 │   │   ├── FormattedDate.astro
+│   │   ├── google
+│   │   │   ├── AdSense.astro
+│   │   │   ├── GoogleAnalytics.astro
+│   │   │   ├── GoogleFonts.astro
+│   │   │   ├── GoogleSearchConsole.astro
+│   │   │   └── GoogleTagManager.astro
 │   │   ├── sections
+│   │   │   ├── AuthorCard.astro
+│   │   │   ├── BlogAllArticles.astro
+│   │   │   ├── BlogHero.astro
+│   │   │   ├── CategoryGallery.astro
+│   │   │   ├── DonationCTA.astro
+│   │   │   ├── FeaturesSection.astro
+│   │   │   ├── Footer.astro
+│   │   │   ├── Header.astro
+│   │   │   ├── HeaderLink.astro
+│   │   │   ├── HeroSection.astro
+│   │   │   ├── ToolHero.astro
+│   │   │   ├── ToolHighlightsSection.astro
+│   │   │   └── ToolsAll.astro
 │   │   ├── Seo.astro
 │   │   └── ui
+│   │       ├── badge
+│   │       │   └── Badge.astro
+│   │       ├── button
+│   │       │   ├── Button.astro
+│   │       │   └── ThemeToggle.astro
+│   │       ├── card
+│   │       │   ├── Card.astro
+│   │       │   ├── FeaturedPost.astro
+│   │       │   └── PostCard.astro
+│   │       ├── carousel
+│   │       │   └── Carousel.astro
+│   │       ├── CookiePreferencesModal.astro
+│   │       ├── CookieToast.astro
+│   │       ├── DonationCTA.astro
+│   │       ├── meta
+│   │       │   └── PostMeta.astro
+│   │       ├── nav
+│   │       │   ├── BlogPagination.astro
+│   │       │   ├── PostNav.astro
+│   │       │   ├── ToolNav.astro
+│   │       │   └── ToolsPagination.astro
+│   │       ├── separator
+│   │       │   ├── ArrowSeparator.astro
+│   │       │   └── GlowLineSeparator.astro
+│   │       ├── share
+│   │       │   └── ShareButtons.astro
+│   │       ├── ShortenerForm.astro
+│   │       ├── timeline
+│   │       │   └── Timeline.astro
+│   │       └── tools
+│   │           ├── ToolCard.astro
+│   │           ├── ToolFeatures.astro
+│   │           ├── ToolSearch.astro
+│   │           ├── ToolSearchLive.astro
+│   │           └── ToolSearchResults.astro
 │   ├── config
 │   │   ├── consts.ts
 │   │   ├── index.ts
 │   │   └── seo.config.ts
 │   ├── content
 │   │   ├── blog
+│   │   │   ├── example-post-1.md
+│   │   │   ├── example-post-2.md
+│   │   │   ├── example-post-3.md
+│   │   │   ├── example-post-4.md
+│   │   │   ├── example-post-5.md
+│   │   │   ├── example-post-6.md
+│   │   │   ├── example-post-7.md
+│   │   │   ├── example-post-8.md
+│   │   │   └── markdown-style-guide.md
 │   │   └── config.ts
 │   ├── content.config.ts
 │   ├── data
@@ -52,9 +160,22 @@
 │   │   ├── tags.ts
 │   │   ├── toolHighlights.ts
 │   │   └── tools
+│   │       ├── categories
+│   │       │   ├── conversion-tools.ts
+│   │       │   ├── developer-tools.ts
+│   │       │   ├── fun-tools.ts
+│   │       │   ├── image-tools.ts
+│   │       │   ├── pdf-tools.ts
+│   │       │   ├── security-tools.ts
+│   │       │   ├── seo-tools.ts
+│   │       │   ├── social-tools.ts
+│   │       │   ├── text-tools.ts
+│   │       │   └── url-tools.ts
+│   │       └── tools.ts
 │   ├── layouts
 │   │   ├── BlogLayout.astro
-│   │   └── BlogPost.astro
+│   │   ├── BlogPost.astro
+│   │   └── ToolsLayout.astro
 │   ├── lib
 │   │   ├── reading.ts
 │   │   ├── slug.ts
@@ -63,6 +184,17 @@
 │   │   ├── 404.astro
 │   │   ├── about.astro
 │   │   ├── blog
+│   │   │   ├── author
+│   │   │   │   ├── index.astro
+│   │   │   │   └── [slug].astro
+│   │   │   ├── category
+│   │   │   │   └── [category].astro
+│   │   │   ├── index.astro
+│   │   │   ├── page
+│   │   │   │   └── [page].astro
+│   │   │   ├── [...slug].astro
+│   │   │   └── tag
+│   │   │       └── [tag].astro
 │   │   ├── contact.astro
 │   │   ├── cookie.astro
 │   │   ├── disclaimer.astro
@@ -70,32 +202,162 @@
 │   │   ├── index.astro
 │   │   ├── privacy.astro
 │   │   ├── projects
+│   │   │   └── shrtx.astro
 │   │   ├── rss
+│   │   │   ├── category
+│   │   │   │   └── [category].xml.js
+│   │   │   └── tag
+│   │   │       └── [tag].xml.js
 │   │   ├── rss.xml.js
 │   │   ├── search-index.json.ts
 │   │   ├── terms.astro
 │   │   └── tools
+│   │       ├── categories
+│   │       │   ├── [category].astro
+│   │       │   └── index.astro
+│   │       ├── code
+│   │       │   ├── css-minifier.astro
+│   │       │   ├── html-encoder.astro
+│   │       │   ├── js-minifier.astro
+│   │       │   ├── json-formatter.astro
+│   │       │   └── regex-tester.astro
+│   │       ├── conversion
+│   │       │   ├── currency-converter.astro
+│   │       │   ├── decimal-binary.astro
+│   │       │   ├── number-to-words.astro
+│   │       │   ├── timezone-converter.astro
+│   │       │   └── unit-converter.astro
+│   │       ├── fun
+│   │       │   ├── ascii-art.astro
+│   │       │   ├── emoji-translator.astro
+│   │       │   ├── meme-caption.astro
+│   │       │   ├── random-joke.astro
+│   │       │   └── username-generator.astro
+│   │       ├── image
+│   │       │   ├── base64-image.astro
+│   │       │   ├── image-compressor.astro
+│   │       │   ├── image-metadata.astro
+│   │       │   ├── image-resizer.astro
+│   │       │   └── meme-generator.astro
+│   │       ├── index.astro
+│   │       ├── page
+│   │       │   └── [page].astro
+│   │       ├── pdf
+│   │       │   ├── pdf-compressor.astro
+│   │       │   ├── pdf-split-merge.astro
+│   │       │   ├── pdf-to-text.astro
+│   │       │   ├── pdf-to-word.astro
+│   │       │   └── word-to-pdf.astro
+│   │       ├── security
+│   │       │   ├── base64-encode.astro
+│   │       │   ├── hash-generator.astro
+│   │       │   ├── ip-lookup.astro
+│   │       │   ├── password-generator.astro
+│   │       │   └── ssl-checker.astro
+│   │       ├── seo
+│   │       │   ├── backlink-checker.astro
+│   │       │   ├── keyword-density.astro
+│   │       │   ├── meta-generator.astro
+│   │       │   ├── robots-txt.astro
+│   │       │   └── serp-preview.astro
+│   │       ├── [slug].astro
+│   │       ├── social
+│   │       │   ├── insta-username.astro
+│   │       │   ├── online-timer.astro
+│   │       │   ├── post-scheduler.astro
+│   │       │   ├── tweet-hashtag.astro
+│   │       │   └── youtube-thumbnail.astro
+│   │       ├── text
+│   │       │   ├── case-converter.astro
+│   │       │   ├── char-counter.astro
+│   │       │   ├── lorem-ipsum.astro
+│   │       │   ├── text-cleaner.astro
+│   │       │   └── word-counter.astro
+│   │       └── url
+│   │           ├── broken-link.astro
+│   │           ├── expand.astro
+│   │           ├── qr-generator.astro
+│   │           ├── shorten.astro
+│   │           └── utm-builder.astro
 │   ├── scripts
 │   │   ├── code
+│   │   │   ├── css-minifier.js
+│   │   │   ├── html-encoder.js
+│   │   │   ├── js-minifier.js
+│   │   │   ├── json-formatter.js
+│   │   │   └── regex-tester.js
 │   │   ├── conversion
+│   │   │   ├── currency-converter.js
+│   │   │   ├── decimal-binary.js
+│   │   │   ├── number-to-words.js
+│   │   │   ├── timezone-converter.js
+│   │   │   └── unit-converter.js
 │   │   ├── fun
+│   │   │   ├── ascii-art.js
+│   │   │   ├── emoji-translator.js
+│   │   │   ├── meme-caption.js
+│   │   │   ├── random-joke.js
+│   │   │   └── username-generator.js
 │   │   ├── header.js
 │   │   ├── image
+│   │   │   ├── base64-image.js
+│   │   │   ├── image-compressor.js
+│   │   │   ├── image-metadata.js
+│   │   │   ├── image-resizer.js
+│   │   │   └── meme-generator.js
 │   │   ├── pdf
+│   │   │   ├── pdf-compressor.js
+│   │   │   ├── pdf-split-merge.js
+│   │   │   ├── pdf-to-text.js
+│   │   │   ├── pdf-to-word.js
+│   │   │   └── word-to-pdf.js
 │   │   ├── security
+│   │   │   ├── base64-encode.js
+│   │   │   ├── hash-generator.js
+│   │   │   ├── ip-lookup.js
+│   │   │   ├── password-generator.js
+│   │   │   └── ssl-checker.js
 │   │   ├── seo
+│   │   │   ├── backlink-checker.js
+│   │   │   ├── keyword-density.js
+│   │   │   ├── meta-generator.js
+│   │   │   ├── robots-txt.js
+│   │   │   └── serp-preview.js
 │   │   ├── social
+│   │   │   ├── insta-username.js
+│   │   │   ├── online-timer.js
+│   │   │   ├── post-scheduler.js
+│   │   │   ├── tweet-hashtag.js
+│   │   │   └── youtube-thumbnail.js
 │   │   ├── text
+│   │   │   ├── case-converter.js
+│   │   │   ├── char-counter.js
+│   │   │   ├── lorem-ipsum.js
+│   │   │   ├── text-cleaner.js
+│   │   │   └── word-counter.js
 │   │   └── url
+│   │       ├── broken-link.js
+│   │       ├── expand.js
+│   │       ├── qr-generator.js
+│   │       ├── shorten.js
+│   │       └── utm-builder.js
 │   └── styles
 │       ├── global.css
 │       ├── starwind.css
 │       ├── themes
+│       │   ├── dark.css
+│       │   └── light.css
 │       ├── tokens.css
 │       └── utilities.css
 ├── starwind.config.json
 ├── structure.txt
 ├── tailwind.config.mjs
-└── tsconfig.json
+├── tsconfig.json
+└── .wrangler
+    └── state
+        └── v3
+            ├── cache
+            │   └── miniflare-CacheObject
+            └── workflows
 
-37 directories, 62 files
+75 directories, 286 files

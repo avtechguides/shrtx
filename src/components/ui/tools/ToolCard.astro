@@ -1,7 +1,14 @@
 ---
-// ToolCard.astro
-import type { Tool } from '../../../data/tools/tools';
-import { slugifyTag } from '../../../lib/slug';
+export interface ToolProps {
+  slug?: string;
+  title: string;
+  description?: string;
+  icon?: string;       // emoji/SVG HTML string
+  category?: string;
+  isPremium?: boolean;
+  popularity?: number;
+  href?: string;       // optional external/internal override
+}
 
 const {
   title,
@@ -12,17 +19,15 @@ const {
   popularity,
   href,
   slug
-} = Astro.props as Tool;
+} = Astro.props as ToolProps;
 
 // Default href to internal tool page if not provided
 const link = href ?? (slug ? `/tools/${slug}` : undefined);
 ---
+
 {link ? (
   <a class="card" href={link}>
-    <!-- Decorative frame -->
-    <span aria-hidden="true" class="frame">
-      <span class="frame-inner"></span>
-    </span>
+    <span aria-hidden="true" class="frame"><span class="frame-inner"></span></span>
 
     <header class="flex items-center gap-4 mb-4">
       <div class="w-12 h-12 flex items-center justify-center text-2xl">
@@ -39,9 +44,7 @@ const link = href ?? (slug ? `/tools/${slug}` : undefined);
             <span class="text-xs bg-[var(--color-bg-secondary)] px-2 py-0.5 rounded-full">{category}</span>
           )}
           {isPremium && (
-            <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">
-              Premium
-            </span>
+            <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">Premium</span>
           )}
           {popularity !== undefined && (
             <span class="text-xs text-[var(--muted-foreground)]">⭐ {popularity}</span>
@@ -50,14 +53,13 @@ const link = href ?? (slug ? `/tools/${slug}` : undefined);
       </div>
     </header>
 
-    <p class="text-sm text-[var(--muted-foreground)] mb-4 leading-relaxed">{description}</p>
+    {description && (
+      <p class="text-sm text-[var(--muted-foreground)] mb-4 leading-relaxed">{description}</p>
+    )}
   </a>
 ) : (
   <div class="card">
-    <!-- Decorative frame -->
-    <span aria-hidden="true" class="frame">
-      <span class="frame-inner"></span>
-    </span>
+    <span aria-hidden="true" class="frame"><span class="frame-inner"></span></span>
 
     <header class="flex items-center gap-4 mb-4">
       <div class="w-12 h-12 flex items-center justify-center text-2xl">
@@ -74,9 +76,7 @@ const link = href ?? (slug ? `/tools/${slug}` : undefined);
             <span class="text-xs bg-[var(--color-bg-secondary)] px-2 py-0.5 rounded-full">{category}</span>
           )}
           {isPremium && (
-            <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">
-              Premium
-            </span>
+            <span class="text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-medium">Premium</span>
           )}
           {popularity !== undefined && (
             <span class="text-xs text-[var(--muted-foreground)]">⭐ {popularity}</span>
@@ -85,7 +85,9 @@ const link = href ?? (slug ? `/tools/${slug}` : undefined);
       </div>
     </header>
 
-    <p class="text-sm text-[var(--muted-foreground)] mb-4 leading-relaxed">{description}</p>
+    {description && (
+      <p class="text-sm text-[var(--muted-foreground)] mb-4 leading-relaxed">{description}</p>
+    )}
   </div>
 )}
 
@@ -105,15 +107,13 @@ const link = href ?? (slug ? `/tools/${slug}` : undefined);
   transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
   cursor: pointer;
 }
-
 .card:hover,
 .card:focus-within {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.3); /* blue shadow */
-  border-color: var(--accent); /* blue border */
+  box-shadow: 0 6px 24px rgba(59, 130, 246, 0.3);
+  border-color: var(--accent);
   outline: none;
 }
-
 .frame {
   pointer-events: none;
   position: absolute;
@@ -124,7 +124,6 @@ const link = href ?? (slug ? `/tools/${slug}` : undefined);
   transition: opacity .3s ease;
 }
 .group:hover .frame { opacity: .25; }
-
 .frame-inner {
   position: absolute;
   inset: 0;
@@ -135,11 +134,6 @@ const link = href ?? (slug ? `/tools/${slug}` : undefined);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
-
 /* Remove underlines for all text inside cards */
-a,
-a * {
-  text-decoration: none !important;
-  cursor: pointer;
-}
+a, a * { text-decoration: none !important; cursor: pointer; }
 </style>

@@ -2,72 +2,78 @@
 import ToolsLayout from '@layouts/ToolsLayout.astro';
 import ToolCard from '@components/ui/tools/ToolCard.astro';
 import ToolsPagination from '@components/ui/nav/ToolsPagination.astro';
-import { tools } from '@data/tools/tools';
-import { slugifyTag } from '@lib/slug';
+import { slugifyTag as slugify } from '@lib/slug'; // import at top
 
 export const prerender = true;
 
-// Generate static paths for all categories
-export function getStaticPaths() {
-  const categories = Array.from(
-    new Set(tools.filter(t => t.category).map(t => t.category))
-  );
-  return categories.map((category) => ({
-    params: { category: category ? slugifyTag(category) : '' },
-  }));
+interface ToolFrontmatter {
+  slug: string;
+  title: string;
+  description?: string;
+  category?: string;
+  popularity?: number;
 }
 
-// Get current category slug from URL
+export async function getStaticPaths() {
+  const modules = import.meta.glob<{ frontmatter: ToolFrontmatter }>(
+    '../../../content/tools/**/*.mdx',
+    { eager: true }
+  );
+  const toolModules = Object.values(modules);
+  const unique = new Set<string>();
+  for (const mod of toolModules) {
+    const fm = mod.frontmatter;
+    if (!fm?.category) continue;
+    unique.add(slugify(fm.category)); // now defined
+  }
+  return Array.from(unique).map((category) => ({ params: { category } }));
+}
+
 const { category: catSlug } = Astro.params;
 
-// Filter tools by category
+const modules = import.meta.glob<{ frontmatter: ToolFrontmatter }>(
+  '../../../content/tools/**/*.mdx',
+  { eager: true }
+);
+const toolModules = Object.values(modules);
+const tools = toolModules.map((mod) => {
+  const fm = mod.frontmatter;
+  return {
+    slug: fm.slug,
+    title: fm.title,
+    description: fm.description,
+    category: fm.category,
+    popularity: fm.popularity ?? 0,
+    url: `/tools/${fm.slug}`,
+  };
+});
+
 const categoryTools = tools.filter(
-  (t) => t.category && slugifyTag(t.category) === catSlug
+  (t) => t.category && slugify(t.category) === catSlug
 );
 
-if (!categoryTools.length) return Astro.redirect('/404');
+if (categoryTools.length === 0) return Astro.redirect('/404');
 
-// Get category name from first tool
-const categoryName = categoryTools[0].category ?? '';
-const cleanCategory = categoryName.trim();
-
-// Avoid duplicate "Tools" in title
-const pageTitle = cleanCategory.endsWith('Tools')
-  ? `${cleanCategory} - SHRTX`
-  : `${cleanCategory} Tools - SHRTX`;
-
+const cleanCategory = categoryTools[0]?.category?.trim() ?? catSlug.replace(/-/g, ' ');
+const pageTitle = cleanCategory.endsWith('Tools') ? `${cleanCategory} - SHRTX` : `${cleanCategory} Tools - SHRTX`;
 const pageDescription = `Explore all tools under the ${cleanCategory} category.`;
 
-// Pagination (optional)
 const currentPage = 1;
 const perPage = 12;
 const totalPages = Math.ceil(categoryTools.length / perPage);
-const paginatedTools = categoryTools.slice(
-  (currentPage - 1) * perPage,
-  currentPage * perPage
-);
+const paginatedTools = categoryTools.slice((currentPage - 1) * perPage, currentPage * perPage);
 ---
 
-<ToolsLayout
-  title={pageTitle}
-  description={pageDescription}
-  category={cleanCategory}
-  showHeader={true}
->
+<ToolsLayout title={pageTitle} description={pageDescription} category={cleanCategory} showHeader={true} tools={tools}>
+  {paginatedTools.length > 0 ? (
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {paginatedTools.map((tool) => <ToolCard {...tool} />)}
+    </div>
+  ) : (
+    <div class="py-8 text-center text-lg text-[var(--color-text-muted)]">No tools found in this category yet.</div>
+  )}
 
-  <!-- Tools grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {paginatedTools.map((tool) => (
-      <ToolCard {...tool} />
-    ))}
-  </div>
-
-  <!-- Pagination -->
   {totalPages > 1 && (
-    <ToolsPagination
-      currentPage={currentPage}
-      totalPages={totalPages}
-      basePath={`/tools/categories/${catSlug}`}
-    />
+    <ToolsPagination currentPage={currentPage} totalPages={totalPages} basePath={`/tools/categories/${catSlug}`} />
   )}
 </ToolsLayout>
