@@ -1,12 +1,63 @@
 ---
-slug: "ip-lookup"
-title: "IP Lookup / Geolocation"
-description: "Find location, ISP, and other details of any IP address instantly."
-category: "Privacy & Security Tools"
-categorySlug: "security-tools"
-icon: "🌐"
-features:
-  - Lookup IP address location
-  - Identify ISP and region
-  - Quick and accurate results
+slug: ip-lookup
+title: IP Lookup / Geolocation
+description: Find geolocation information of an IP address including city, region, and ISP for analysis or tracking.
+category: Privacy & Security Tools
+icon: "🌐📍"
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/ip-lookup
+keywords:
+  - ip lookup
+  - geolocation
+  - ip address tracker
+faq:
+  - q: Can I find any IP’s location?
+    a: Yes, the tool provides approximate geolocation data for public IP addresses.
+  - q: Is it accurate for VPN users?
+    a: Accuracy may vary if VPN or proxies are used.
+schema:
+  type: Tool
+  featureList:
+    - Locate IP address on map
+    - Retrieve city, region, ISP info
+    - Works offline/lightweight
+  audience:
+    - IT admins
+    - Security analysts
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import IpLookup from '@components/ui/tools/security-tools/ip-lookup.jsx';
+
+# IP Lookup / Geolocation
+
+Discover the location and ISP information of any public IP address quickly.
+
+<IpLookup client:only="react"/>
+
+## How it works
+
+- Step 1: Enter an IP address.
+- Step 2: Tool retrieves city, region, and ISP info.
+- Step 3: Use results for analysis or tracking.
+
+## Features
+
+- Quick geolocation lookup.
+- Provides ISP and region details.
+- Works offline/lightweight mode for speed.
+
+## Use cases
+
+- Monitor suspicious activity.
+- Track IPs for security analysis.
+- Verify location of users or clients.
+
+## Tips
+
+- IP location is approximate; not exact.
+- Use in conjunction with network monitoring tools.
+- Avoid storing personal data unnecessarily.

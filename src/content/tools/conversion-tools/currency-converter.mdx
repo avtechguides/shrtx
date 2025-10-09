@@ -1,16 +1,35 @@
 ---
-slug: "currency-converter"
-title: "Currency Converter"
-description: "Convert currencies using live exchange rates for accurate results."
-category: "Conversion Tools"
+slug: currency-converter
+title: Currency Converter
+description: Convert currencies with live exchange rates.
+category: Conversion Tools
 icon: "💱"
-features:
-  - Convert between popular currencies
-  - Live exchange rate updates
-  - Simple copy and use
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/currency-converter
+keywords:
+  - currency converter
+  - exchange rate
+  - convert money
+faq:
+  - q: How do I convert currencies?
+    a: Paste your amount and select currencies. The tool shows the converted value instantly.
+schema:
+  type: Tool
+  featureList:
+    - Live exchange rate
+    - Browser-based
+    - Copy/export results
+  audience:
+    - Developers
+    - Marketers
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
 
-import CurrencyConverter from '../../../components/ui/tools/conversion-tools/CurrencyConverter.jsx';
 
-<CurrencyConverter client:load />
+import CurrencyConverter, { CurrencyConverterValue } from '@components/ui/tools/conversion-tools/CurrencyConverter.jsx';
+
+<CurrencyConverter client:only="react" />
 

@@ -13,56 +13,63 @@ interface ToolFrontmatter {
   features?: string[];
   popularity?: number;
 }
-
 interface ToolModule {
   frontmatter: ToolFrontmatter;
   default: any; // MDX component
 }
 
-const slugifyTag = (str: string): string => str.toLowerCase().replace(/\s+/g, '-');
+const slugifyTag = (s: string): string => s.toLowerCase().replace(/\s+/g, '-');
 const formatCategory = (s: string): string => s.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
 
-// Use import.meta.glob with eager: true to import all MDX modules eagerly
-const modules = import.meta.glob<ToolModule>('../../content/tools/**/*.mdx', { eager: true });
-const toolModules: ToolModule[] = Object.values(modules);
-
-const paths = toolModules.map((mod) => ({
-  params: { slug: mod.frontmatter.slug }
-}));
-
-export function getStaticPaths(): { params: { slug: string } }[] {
-  return paths;
+// Static paths
+export function getStaticPaths() {
+  const modules = import.meta.glob<ToolModule>('../../content/tools/**/*.mdx', { eager: true });
+  const toolModules: ToolModule[] = Object.values(modules);
+  return toolModules
+    .filter((m) => !!m?.frontmatter?.slug)
+    .map((m) => ({ params: { slug: m.frontmatter.slug }, props: { tool: m.frontmatter } }));
 }
 
 const { slug } = Astro.params;
-const toolModule = toolModules.find((mod) => mod.frontmatter.slug === slug);
+const { tool: toolFromProps } = Astro.props as { tool?: ToolFrontmatter };
+
+// Resolve content
+const modules = import.meta.glob<ToolModule>('../../content/tools/**/*.mdx', { eager: true });
+const toolModules: ToolModule[] = Object.values(modules);
+const toolModule = toolFromProps
+  ? toolModules.find((m) => m.frontmatter.slug === toolFromProps.slug)
+  : toolModules.find((m) => m.frontmatter.slug === slug);
 
 if (!toolModule) {
   return Astro.redirect('/404');
 }
-
 const tool = toolModule.frontmatter;
 
+// Data for sidebar and related
+const allFront = toolModules.map((m) => m.frontmatter).filter((t) => !!t.slug);
 const pageTitle = `${tool.title} - SHRTX Tools`;
 const pageDescription = tool.description ?? '';
 const path = `/tools/${tool.slug}`;
 
-const sortedFrontmatters = toolModules
-  .map((mod) => mod.frontmatter)
-  .filter((t) => !!t.slug)
-  .sort((a, b) => a.title.localeCompare(b.title));
-
-const idx = sortedFrontmatters.findIndex((t) => t.slug === slug);
-const prevTool = idx > 0 ? sortedFrontmatters[idx - 1] : null;
-const nextTool = idx < sortedFrontmatters.length - 1 ? sortedFrontmatters[idx + 1] : null;
-
 const categoryName = tool.category ?? '';
-const categorySlug = categoryName ? slugifyTag(categoryName) : '';
-const categoryHref = categorySlug ? `/tools/categories/${categorySlug}` : '';
+const categoryHref = categoryName ? `/tools/categories/${slugifyTag(categoryName)}` : '';
+
+const related = categoryName
+  ? allFront
+      .filter((t) => (t.category || '').toLowerCase() === categoryName.toLowerCase() && t.slug !== tool.slug)
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .slice(0, 8)
+  : [];
 ---
 
-<ToolsLayout title={pageTitle} description={pageDescription} path={path} category={categoryName} showHeader={true}>
-
+<ToolsLayout
+  title={pageTitle}
+  description={pageDescription}
+  path={path}
+  category={categoryName}
+  showHeader={true}
+  tools={allFront}
+>
   {categoryHref && (
     <p class="text-sm text-[var(--color-text-muted)] mb-4">
       <a href="/tools" class="hover:underline">Tools</a>
@@ -71,8 +78,22 @@ const categoryHref = categorySlug ? `/tools/categories/${categorySlug}` : '';
   )}
 
   <ToolCard {...tool} />
-
-  {tool.features && tool.features.length > 0 && <ToolFeatures features={tool.features} />}
-
+  {Array.isArray(tool.features) && tool.features.length > 0 && <ToolFeatures features={tool.features} />}
   <toolModule.default />
+
+  {related.length > 0 && (
+    <section class="mt-10" slot="after-content">
+      <h2 class="text-lg font-semibold mb-3">Related tools</h2>
+      <ul class="grid gap-3 md:grid-cols-2">
+        {related.map((t) => (
+          <li class="rounded-md border border-[var(--color-border)] p-3 hover:bg-[var(--color-surface-2)] transition">
+            <a href={`/tools/${t.slug}`} class="hover:underline">
+              <div class="font-medium">{t.title}</div>
+              {t.description && <div class="text-sm text-[var(--color-text-muted)] mt-1">{t.description}</div>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 </ToolsLayout>

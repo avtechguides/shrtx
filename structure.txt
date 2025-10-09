@@ -1,6 +1,5 @@
 .
 ├── astro.config.mjs
-├── create-google-components.sh
 ├── .gitattributes
 ├── .github
 │   └── workflows
@@ -111,6 +110,8 @@
 │   │       │   └── PostCard.astro
 │   │       ├── carousel
 │   │       │   └── Carousel.astro
+│   │       ├── categories
+│   │       │   └── CategoryCard.astro
 │   │       ├── CookiePreferencesModal.astro
 │   │       ├── CookieToast.astro
 │   │       ├── DonationCTA.astro
@@ -130,11 +131,74 @@
 │   │       ├── timeline
 │   │       │   └── Timeline.astro
 │   │       └── tools
+│   │           ├── conversion-tools
+│   │           │   ├── currency-converter.astro
+│   │           │   ├── CurrencyConverter.jsx
+│   │           │   ├── decimal-binary.jsx
+│   │           │   ├── number-to-words.jsx
+│   │           │   ├── timezone-converter.jsx
+│   │           │   └── unit-converter.jsx
+│   │           ├── developer-tools
+│   │           │   ├── css-minifier.jsx
+│   │           │   ├── html-encoder.jsx
+│   │           │   ├── js-minifier.jsx
+│   │           │   ├── json-formatter.jsx
+│   │           │   └── regex-tester.jsx
+│   │           ├── fun-tools
+│   │           │   ├── ascii-art.jsx
+│   │           │   ├── emoji-translator.jsx
+│   │           │   ├── meme-caption.jsx
+│   │           │   ├── random-joke.jsx
+│   │           │   └── username-generator.jsx
+│   │           ├── image-tools
+│   │           │   ├── base64-image.jsx
+│   │           │   ├── image-compressor.jsx
+│   │           │   ├── image-metadata.jsx
+│   │           │   ├── image-resizer.jsx
+│   │           │   └── meme-generator.jsx
+│   │           ├── pdf-tools
+│   │           │   ├── pdf-compressor.jsx
+│   │           │   ├── pdf-split-merge.jsx
+│   │           │   ├── pdf-to-text.jsx
+│   │           │   ├── pdf-to-word.jsx
+│   │           │   └── word-to-pdf.jsx
+│   │           ├── security-tools
+│   │           │   ├── base64-encode.jsx
+│   │           │   ├── hash-generator.jsx
+│   │           │   ├── ip-lookup.jsx
+│   │           │   ├── password-generator.jsx
+│   │           │   └── ssl-checker.jsx
+│   │           ├── seo-tools
+│   │           │   ├── backlink-checker.jsx
+│   │           │   ├── keyword-density.jsx
+│   │           │   ├── meta-generator.jsx
+│   │           │   ├── robots-txt.jsx
+│   │           │   └── serp-preview.jsx
+│   │           ├── Sidebar.astro
+│   │           ├── social-tools
+│   │           │   ├── insta-username.jsx
+│   │           │   ├── online-timer.jsx
+│   │           │   ├── post-scheduler.jsx
+│   │           │   ├── tweet-hashtag.jsx
+│   │           │   └── youtube-thumbnail.jsx
+│   │           ├── text-tools
+│   │           │   ├── case-converter.jsx
+│   │           │   ├── char-counter.jsx
+│   │           │   ├── lorem-ipsum.jsx
+│   │           │   ├── text-cleaner.jsx
+│   │           │   └── word-counterjsx
+│   │           ├── Tool.astro
 │   │           ├── ToolCard.astro
 │   │           ├── ToolFeatures.astro
 │   │           ├── ToolSearch.astro
 │   │           ├── ToolSearchLive.astro
-│   │           └── ToolSearchResults.astro
+│   │           ├── ToolSearchResults.astro
+│   │           └── url-tools
+│   │               ├── broken-link.jsx
+│   │               ├── expand.jsx
+│   │               ├── qr-generator.jsx
+│   │               ├── shorten.jsx
+│   │               └── utm-builder.jsx
 │   ├── config
 │   │   ├── consts.ts
 │   │   ├── index.ts
@@ -150,7 +214,68 @@
 │   │   │   ├── example-post-7.md
 │   │   │   ├── example-post-8.md
 │   │   │   └── markdown-style-guide.md
-│   │   └── config.ts
+│   │   ├── config.ts
+│   │   └── tools
+│   │       ├── conversion-tools
+│   │       │   ├── currency-converter.mdx
+│   │       │   ├── decimal-binary.mdx
+│   │       │   ├── number-to-words.mdx
+│   │       │   ├── timezone-converter.mdx
+│   │       │   └── unit-converter.mdx
+│   │       ├── developer-tools
+│   │       │   ├── css-minifier.mdx
+│   │       │   ├── html-encoder.mdx
+│   │       │   ├── js-minifier.mdx
+│   │       │   ├── json-formatter.mdx
+│   │       │   └── regex-tester.mdx
+│   │       ├── fun-tools
+│   │       │   ├── ascii-art.mdx
+│   │       │   ├── emoji-translator.mdx
+│   │       │   ├── meme-caption.mdx
+│   │       │   ├── random-joke.mdx
+│   │       │   └── username-generator.mdx
+│   │       ├── image-tools
+│   │       │   ├── base64-image.mdx
+│   │       │   ├── image-compressor.mdx
+│   │       │   ├── image-metadata.mdx
+│   │       │   ├── image-resizer.mdx
+│   │       │   └── meme-generator.mdx
+│   │       ├── pdf-tools
+│   │       │   ├── pdf-compressor.mdx
+│   │       │   ├── pdf-split-merge.mdx
+│   │       │   ├── pdf-to-text.mdx
+│   │       │   ├── pdf-to-word.mdx
+│   │       │   └── word-to-pdf.mdx
+│   │       ├── security-tools
+│   │       │   ├── base64-encode.mdx
+│   │       │   ├── hash-generator.mdx
+│   │       │   ├── ip-lookup.mdx
+│   │       │   ├── password-generator.mdx
+│   │       │   └── ssl-checker.mdx
+│   │       ├── seo-tools
+│   │       │   ├── backlink-checker.mdx
+│   │       │   ├── keyword-density.mdx
+│   │       │   ├── meta-generator.mdx
+│   │       │   ├── robots-txt.mdx
+│   │       │   └── serp-preview.mdx
+│   │       ├── social-tools
+│   │       │   ├── insta-username.mdx
+│   │       │   ├── online-timer.mdx
+│   │       │   ├── post-scheduler.mdx
+│   │       │   ├── tweet-hashtag.mdx
+│   │       │   └── youtube-thumbnail.mdx
+│   │       ├── text-tools
+│   │       │   ├── case-converter.mdx
+│   │       │   ├── char-counter.mdx
+│   │       │   ├── lorem-ipsum.mdx
+│   │       │   ├── text-cleaner.mdx
+│   │       │   └── word-counter.mdx
+│   │       └── url-tools
+│   │           ├── broken-link.mdx
+│   │           ├── expand.mdx
+│   │           ├── qr-generator.mdx
+│   │           ├── shorten.mdx
+│   │           └── utm-builder.mdx
 │   ├── content.config.ts
 │   ├── data
 │   │   ├── author.ts
@@ -158,25 +283,13 @@
 │   │   ├── features.ts
 │   │   ├── logos.ts
 │   │   ├── tags.ts
-│   │   ├── toolHighlights.ts
-│   │   └── tools
-│   │       ├── categories
-│   │       │   ├── conversion-tools.ts
-│   │       │   ├── developer-tools.ts
-│   │       │   ├── fun-tools.ts
-│   │       │   ├── image-tools.ts
-│   │       │   ├── pdf-tools.ts
-│   │       │   ├── security-tools.ts
-│   │       │   ├── seo-tools.ts
-│   │       │   ├── social-tools.ts
-│   │       │   ├── text-tools.ts
-│   │       │   └── url-tools.ts
-│   │       └── tools.ts
+│   │   └── toolHighlights.ts
 │   ├── layouts
 │   │   ├── BlogLayout.astro
 │   │   ├── BlogPost.astro
 │   │   └── ToolsLayout.astro
 │   ├── lib
+│   │   ├── normalizeTools.ts
 │   │   ├── reading.ts
 │   │   ├── slug.ts
 │   │   └── svg.ts
@@ -215,132 +328,12 @@
 │   │       ├── categories
 │   │       │   ├── [category].astro
 │   │       │   └── index.astro
-│   │       ├── code
-│   │       │   ├── css-minifier.astro
-│   │       │   ├── html-encoder.astro
-│   │       │   ├── js-minifier.astro
-│   │       │   ├── json-formatter.astro
-│   │       │   └── regex-tester.astro
-│   │       ├── conversion
-│   │       │   ├── currency-converter.astro
-│   │       │   ├── decimal-binary.astro
-│   │       │   ├── number-to-words.astro
-│   │       │   ├── timezone-converter.astro
-│   │       │   └── unit-converter.astro
-│   │       ├── fun
-│   │       │   ├── ascii-art.astro
-│   │       │   ├── emoji-translator.astro
-│   │       │   ├── meme-caption.astro
-│   │       │   ├── random-joke.astro
-│   │       │   └── username-generator.astro
-│   │       ├── image
-│   │       │   ├── base64-image.astro
-│   │       │   ├── image-compressor.astro
-│   │       │   ├── image-metadata.astro
-│   │       │   ├── image-resizer.astro
-│   │       │   └── meme-generator.astro
 │   │       ├── index.astro
 │   │       ├── page
 │   │       │   └── [page].astro
-│   │       ├── pdf
-│   │       │   ├── pdf-compressor.astro
-│   │       │   ├── pdf-split-merge.astro
-│   │       │   ├── pdf-to-text.astro
-│   │       │   ├── pdf-to-word.astro
-│   │       │   └── word-to-pdf.astro
-│   │       ├── security
-│   │       │   ├── base64-encode.astro
-│   │       │   ├── hash-generator.astro
-│   │       │   ├── ip-lookup.astro
-│   │       │   ├── password-generator.astro
-│   │       │   └── ssl-checker.astro
-│   │       ├── seo
-│   │       │   ├── backlink-checker.astro
-│   │       │   ├── keyword-density.astro
-│   │       │   ├── meta-generator.astro
-│   │       │   ├── robots-txt.astro
-│   │       │   └── serp-preview.astro
-│   │       ├── [slug].astro
-│   │       ├── social
-│   │       │   ├── insta-username.astro
-│   │       │   ├── online-timer.astro
-│   │       │   ├── post-scheduler.astro
-│   │       │   ├── tweet-hashtag.astro
-│   │       │   └── youtube-thumbnail.astro
-│   │       ├── text
-│   │       │   ├── case-converter.astro
-│   │       │   ├── char-counter.astro
-│   │       │   ├── lorem-ipsum.astro
-│   │       │   ├── text-cleaner.astro
-│   │       │   └── word-counter.astro
-│   │       └── url
-│   │           ├── broken-link.astro
-│   │           ├── expand.astro
-│   │           ├── qr-generator.astro
-│   │           ├── shorten.astro
-│   │           └── utm-builder.astro
+│   │       └── [slug].astro
 │   ├── scripts
-│   │   ├── code
-│   │   │   ├── css-minifier.js
-│   │   │   ├── html-encoder.js
-│   │   │   ├── js-minifier.js
-│   │   │   ├── json-formatter.js
-│   │   │   └── regex-tester.js
-│   │   ├── conversion
-│   │   │   ├── currency-converter.js
-│   │   │   ├── decimal-binary.js
-│   │   │   ├── number-to-words.js
-│   │   │   ├── timezone-converter.js
-│   │   │   └── unit-converter.js
-│   │   ├── fun
-│   │   │   ├── ascii-art.js
-│   │   │   ├── emoji-translator.js
-│   │   │   ├── meme-caption.js
-│   │   │   ├── random-joke.js
-│   │   │   └── username-generator.js
-│   │   ├── header.js
-│   │   ├── image
-│   │   │   ├── base64-image.js
-│   │   │   ├── image-compressor.js
-│   │   │   ├── image-metadata.js
-│   │   │   ├── image-resizer.js
-│   │   │   └── meme-generator.js
-│   │   ├── pdf
-│   │   │   ├── pdf-compressor.js
-│   │   │   ├── pdf-split-merge.js
-│   │   │   ├── pdf-to-text.js
-│   │   │   ├── pdf-to-word.js
-│   │   │   └── word-to-pdf.js
-│   │   ├── security
-│   │   │   ├── base64-encode.js
-│   │   │   ├── hash-generator.js
-│   │   │   ├── ip-lookup.js
-│   │   │   ├── password-generator.js
-│   │   │   └── ssl-checker.js
-│   │   ├── seo
-│   │   │   ├── backlink-checker.js
-│   │   │   ├── keyword-density.js
-│   │   │   ├── meta-generator.js
-│   │   │   ├── robots-txt.js
-│   │   │   └── serp-preview.js
-│   │   ├── social
-│   │   │   ├── insta-username.js
-│   │   │   ├── online-timer.js
-│   │   │   ├── post-scheduler.js
-│   │   │   ├── tweet-hashtag.js
-│   │   │   └── youtube-thumbnail.js
-│   │   ├── text
-│   │   │   ├── case-converter.js
-│   │   │   ├── char-counter.js
-│   │   │   ├── lorem-ipsum.js
-│   │   │   ├── text-cleaner.js
-│   │   │   └── word-counter.js
-│   │   └── url
-│   │       ├── broken-link.js
-│   │       ├── expand.js
-│   │       ├── qr-generator.js
-│   │       ├── shorten.js
-│   │       └── utm-builder.js
+│   │   └── header.js
 │   └── styles
 │       ├── global.css
 │       ├── starwind.css
@@ -360,4 +353,4 @@
             │   └── miniflare-CacheObject
             └── workflows
 
-75 directories, 286 files
+75 directories, 279 files

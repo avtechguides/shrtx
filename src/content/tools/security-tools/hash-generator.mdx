@@ -1,12 +1,63 @@
 ---
-slug: "hash-generator"
-title: "Hash Generator (MD5, SHA1, SHA256)"
-description: "Generate hashes for text using MD5, SHA1, or SHA256 for verification or security."
-category: "Privacy & Security Tools"
-categorySlug: "security-tools"
-icon: "🧮"
-features:
-  - Generate MD5, SHA1, SHA256 hashes
-  - Verify data integrity
-  - Copy results easily
+slug: base64-encode
+title: Base64 Encode / Decode
+description: Convert text or files to Base64 and decode them for web or programming purposes.
+category: Privacy & Security Tools
+icon: "🔡🔁"
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/base64-encode
+keywords:
+  - base64 encode
+  - base64 decode
+  - text converter
+faq:
+  - q: Can I encode text and decode back to original?
+    a: Yes, full round-trip encoding and decoding is supported.
+  - q: Is it safe for sensitive data?
+    a: Base64 is not encryption, only encoding; do not use for sensitive info.
+schema:
+  type: Tool
+  featureList:
+    - Encode text to Base64
+    - Decode Base64 to text
+    - Works offline in browser
+  audience:
+    - Developers
+    - Webmasters
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import Base64Tool from '@components/ui/tools/security-tools/base64-encode.jsx';
+
+# Base64 Encode / Decode
+
+Quickly encode text to Base64 or decode Base64 to its original form for programming or web use.
+
+<Base64Tool client:only="react"/>
+
+## How it works
+
+- Step 1: Paste text to encode or decode.
+- Step 2: Select Encode or Decode mode.
+- Step 3: Copy output for use.
+
+## Features
+
+- Encode/decode instantly in-browser.
+- Works offline after first load.
+- Simple interface for fast conversions.
+
+## Use cases
+
+- Convert text for web applications.
+- Encode data for email or programming purposes.
+- Decode Base64 content from other sources.
+
+## Tips
+
+- Remember Base64 is not encryption.
+- Useful for embedding images or text in code.
+- Use with caution for sensitive info.

@@ -1,12 +1,63 @@
 ---
-slug: "html-encoder"
-title: "HTML Encoder / Decoder"
-description: "Encode or decode HTML entities safely for web development."
-category: "Code & Developer Tools"
-categorySlug: "developer-tools"
-icon: "💻"
-features:
-  - Encode HTML entities for safe output
-  - Decode HTML back to plain text
-  - Supports batch input
+slug: html-encoder
+title: HTML Encoder / Decoder
+description: Encode or decode HTML content to safely display code snippets or process text.
+category: Code & Developer Tools
+icon: "💻↔️📄"
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/html-encoder
+keywords:
+  - html encoder
+  - html decoder
+  - escape html
+faq:
+  - q: Can it encode special HTML characters?
+    a: Yes, all special characters are safely encoded.
+  - q: Can I decode encoded HTML?
+    a: Yes, the tool restores original content instantly.
+schema:
+  type: Tool
+  featureList:
+    - Encode HTML for safe display
+    - Decode HTML to original text
+    - Works offline in browser
+  audience:
+    - Web developers
+    - Content creators
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import HtmlEncoder from '@components/ui/tools/developer-tools/html-encoder.jsx';
+
+# HTML Encoder / Decoder
+
+Encode or decode HTML content safely in the browser for display or processing.
+
+<HtmlEncoder client:only="react" />
+
+## How it works
+
+- Step 1: Paste HTML code or text.
+- Step 2: Choose encode or decode mode.
+- Step 3: Copy or download processed content.
+
+## Features
+
+- Fast and safe encoding/decoding.
+- Preserves all characters and tags.
+- Works offline after first load.
+
+## Use cases
+
+- Display HTML code snippets safely.
+- Process content for editors or CMS.
+- Convert special characters for web use.
+
+## Tips
+
+- Use encoding before embedding in HTML pages.
+- Decode before editing content.
+- Combine with JSON and JS tools for workflow.

@@ -1,12 +1,63 @@
 ---
-slug: "url-shortener"
-title: "URL Shortener"
-description: "Create short, shareable links instantly to track clicks and simplify URLs."
-category: "URL & Link Tools"
-categorySlug: "url-tools"
+slug: shorten
+title: URL Shortener
+description: Quickly shorten long URLs for easy sharing and tracking.
+category: URL & Link Tools
 icon: "🔗"
-features:
-  - Shorten long URLs for easy sharing
-  - Generate QR codes for links
-  - Track clicks and link performance
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/shorten
+keywords:
+  - url shortener
+  - link shortener
+  - shorten urls
+faq:
+  - q: How do I shorten a URL?
+    a: Paste the long URL and click "Shorten" to get a short, shareable link.
+  - q: Can I track clicks on shortened URLs?
+    a: Yes, our tool provides basic click tracking for each shortened URL.
+schema:
+  type: Tool
+  featureList:
+    - One-click URL shortening
+    - Copy to clipboard instantly
+    - Works offline after first load
+  audience:
+    - Marketers
+    - Social Media Managers
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import URLShortener from '@components/ui/tools/url-tools/shorten.jsx';
+
+# URL Shortener
+
+Quickly shorten long URLs for easy sharing across social media, email, or messages.
+
+<URLShortener client:only="react" />
+
+## How it works
+
+- Step 1: Paste the long URL in the input field.
+- Step 2: Click "Shorten" to generate a short URL.
+- Step 3: Copy the output and share instantly.
+
+## Features
+
+- Instant processing in the browser (no server upload).
+- Works offline after first load (PWA-ready).
+- Keyboard shortcuts and accessible labels included.
+
+## Use cases
+
+- Share long URLs easily on social media.
+- Simplify links in emails or documents.
+- Track clicks on short URLs for analytics.
+
+## Tips
+
+- Use descriptive aliases for better recognition.
+- Test the short URL before sharing widely.
+- Bookmark frequently used URLs for quick shortening.

@@ -1,12 +1,63 @@
 ---
-slug: "pdf-split-merge"
-title: "PDF Split / Merge"
-description: "Split large PDFs or merge multiple PDFs into a single document easily."
-category: "PDF & Document Tools"
-categorySlug: "pdf-tools"
-icon: "📑"
-features:
-  - Split PDF pages into separate files
-  - Merge multiple PDFs into one
-  - Drag-and-drop interface for simplicity
+slug: pdf-split-merge
+title: PDF Split / Merge
+description: Split large PDFs into smaller files or merge multiple PDFs into one quickly in the browser.
+category: PDF & Document Tools
+icon: "📚↔️📄"
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/pdf-split-merge
+keywords:
+  - pdf split
+  - merge pdf
+  - combine pdf
+faq:
+  - q: Can I merge multiple PDFs into one?
+    a: Yes, upload multiple files and merge them in desired order.
+  - q: Can I split specific pages?
+    a: Yes, select page ranges to split PDFs into smaller files.
+schema:
+  type: Tool
+  featureList:
+    - Merge multiple PDFs into one
+    - Split PDFs by page ranges
+    - Works offline in browser
+  audience:
+    - Office professionals
+    - Students
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import PdfSplitMerge from '@components/ui/tools/pdf-tools/pdf-split-merge.jsx';
+
+# PDF Split / Merge
+
+Split or merge PDF files instantly in the browser without uploading to a server.
+
+<PdfSplitMerge client:only="react"/>
+
+## How it works
+
+- Step 1: Upload PDF(s).
+- Step 2: Choose split ranges or merge order.
+- Step 3: Download processed PDF files.
+
+## Features
+
+- Split large PDFs into smaller files.
+- Merge multiple PDFs in desired order.
+- Works offline after first load.
+
+## Use cases
+
+- Extract specific pages for sharing.
+- Combine multiple reports into a single file.
+- Reduce file size by splitting large PDFs.
+
+## Tips
+
+- Preview selected pages before splitting.
+- Ensure correct merge order.
+- Use along with PDF Compressor for optimal size.

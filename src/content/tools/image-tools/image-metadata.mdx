@@ -1,12 +1,63 @@
 ---
-slug: "image-metadata-viewer"
-title: "Image Metadata Viewer"
-description: "View detailed metadata of your images including EXIF, camera info, and GPS."
-category: "Image Tools"
-categorySlug: "image-tools"
-icon: "📷"
-features:
-  - Inspect image EXIF data
-  - Check camera, date, and location info
-  - Supports multiple image formats
+slug: image-metadata
+title: Image Metadata Viewer
+description: View detailed metadata of images including EXIF, dimensions, and camera info.
+category: Image Tools
+icon: "📊"
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/image-metadata
+keywords:
+  - image metadata
+  - view EXIF
+  - image info tool
+faq:
+  - q: What information can I see?
+    a: View EXIF data, image dimensions, file size, camera model, and more instantly.
+  - q: Does it work offline?
+    a: Yes, metadata is read directly in the browser without uploading.
+schema:
+  type: Tool
+  featureList:
+    - Display image metadata and EXIF
+    - Works offline in browser
+    - Instant processing
+  audience:
+    - Photographers
+    - Developers
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import ImageMetadata from '@components/ui/tools/image-tools/image-metadata.jsx';
+
+# Image Metadata Viewer
+
+Inspect your images for detailed metadata including EXIF, dimensions, and camera info.
+
+<ImageMetadata client:only="react"/>
+
+## How it works
+
+- Step 1: Upload an image.
+- Step 2: Tool displays metadata instantly.
+- Step 3: Copy or review data for analysis.
+
+## Features
+
+- View EXIF, dimensions, file size, and camera model.
+- Works offline after first load.
+- Instant browser processing.
+
+## Use cases
+
+- Check camera settings for photography.
+- Validate image information for projects.
+- Analyze uploaded images for technical details.
+
+## Tips
+
+- Use with large images for full EXIF details.
+- Copy metadata for cataloging.
+- Check privacy-sensitive info before sharing images.

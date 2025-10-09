@@ -1,12 +1,63 @@
 ---
-slug: "qr-code-generator"
-title: "QR Code Generator"
-description: "Generate custom QR codes for URLs, text, or contact info in seconds."
-category: "URL & Link Tools"
-categorySlug: "url-tools"
+slug: qr-generator
+title: QR Code Generator
+description: Generate QR codes instantly for URLs, text, or other data.
+category: URL & Link Tools
 icon: "📱"
-features:
-  - Create QR codes for URLs or text
-  - Customize size and colors
-  - Download in PNG or SVG formats
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/qr-generator
+keywords:
+  - qr code generator
+  - create qr code
+  - qr codes online
+faq:
+  - q: How do I generate a QR code?
+    a: Enter the URL or text, select options, and click "Generate QR" to get your code.
+  - q: Can I download the QR code?
+    a: Yes, download it as PNG or SVG for use in print or online.
+schema:
+  type: Tool
+  featureList:
+    - Instant QR code generation
+    - Download as PNG or SVG
+    - Customize size and colors
+  audience:
+    - Marketers
+    - Developers
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import QRCodeGenerator from '@components/ui/tools/url-tools/qr-generator.jsx';
+
+# QR Code Generator
+
+Generate QR codes instantly for URLs, text, or contact info for quick sharing.
+
+<QRCodeGenerator client:only="react" />
+
+## How it works
+
+- Step 1: Enter the data you want to encode.
+- Step 2: Adjust size, colors, or format if needed.
+- Step 3: Click "Generate QR" and copy or download the code.
+
+## Features
+
+- Instant browser processing.
+- Download as PNG or SVG.
+- Works offline after first load.
+
+## Use cases
+
+- Add QR codes to marketing materials.
+- Share links in print media.
+- Encode contact info for events or business cards.
+
+## Tips
+
+- Test scanning before sharing widely.
+- Keep contrast high for better scanning.
+- Use high-resolution for printing.

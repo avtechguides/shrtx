@@ -1,12 +1,63 @@
 ---
-slug: "word-counter"
-title: "Word Counter"
-description: "Count words, characters, and paragraphs in your text quickly and accurately."
-category: "Text & Content Tools"
-categorySlug: "text-tools"
-icon: "✏️"
-features:
-  - Count words, characters, and lines
-  - Analyze readability metrics
-  - Live text input and instant results
+slug: word-counter
+title: Word Counter
+description: Count words and track text length instantly for writing or editing.
+category: Text & Content Tools
+icon: "📝"
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/word-counter
+keywords:
+  - word counter
+  - text analysis
+  - writing tool
+faq:
+  - q: How do I count words in text?
+    a: Paste your text into the input field and the tool will show the total word count instantly.
+  - q: Can it count multiple documents at once?
+    a: Currently, it counts words per single text input.
+schema:
+  type: Tool
+  featureList:
+    - Instant word count
+    - Works offline after first load
+    - Shows character and line count
+  audience:
+    - Writers
+    - Editors
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import WordCounter from '@components/ui/tools/text-tools/word-counter.jsx';
+
+# Word Counter
+
+Quickly count words in your text to track length and readability for writing or editing.
+
+<WordCounter client:only="react" />
+
+## How it works
+
+- Step 1: Paste or type your text.
+- Step 2: Tool automatically calculates word count.
+- Step 3: Review counts and copy results if needed.
+
+## Features
+
+- Real-time word counting.
+- Character and line count included.
+- Works offline after first load.
+
+## Use cases
+
+- Check article length for SEO.
+- Monitor essay or report word limits.
+- Edit content with precise word control.
+
+## Tips
+
+- Use keyboard shortcuts for faster input.
+- Remove unnecessary whitespace for accurate counts.
+- Paste large texts in chunks if browser slows.

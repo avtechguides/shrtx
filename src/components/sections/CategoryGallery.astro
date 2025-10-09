@@ -2,21 +2,8 @@
 import { slugifyTag } from '@lib/slug';
 import CategoryCard from '@components/ui/categories/CategoryCard.astro';
 
-export interface Tool {
-  slug: string;
-  title: string;
-  description?: string;
-  category?: string;
-  popularity?: number;
-}
-
-export interface CategoryItem {
-  name: string;
-  slug: string;
-  count: number;
-  icon?: string;
-}
-
+export interface Tool { slug: string; title: string; description?: string; category?: string; popularity?: number; }
+export interface CategoryItem { name: string; slug: string; count: number; icon?: string; }
 export interface Props {
   tools?: Tool[];
   categories?: CategoryItem[];
@@ -48,11 +35,7 @@ function buildCategories(fromTools: Tool[]): CategoryItem[] {
     categoryMap.set(key, entry);
   }
   return Array.from(categoryMap.values())
-    .map(c => ({
-      name: c.name,
-      slug: slugifyTag(c.name),
-      count: c.count,
-    }))
+    .map(c => ({ name: c.name, slug: slugifyTag(c.name), count: c.count }))
     .sort((a, b) => a.name.localeCompare(b.name));
 }
 
@@ -71,20 +54,13 @@ function iconForCategory(label: string): string {
   return '🧩';
 }
 
-const allCategoriesRaw: CategoryItem[] =
+const allCategoriesRaw =
   Array.isArray(incomingCategories) && incomingCategories.length
     ? incomingCategories.slice().sort((a, b) => a.name.localeCompare(b.name))
     : buildCategories(tools);
 
-// Add icons where missing
-const allCategories = allCategoriesRaw.map(c => ({
-  ...c,
-  icon: c.icon ?? iconForCategory(c.name),
-}));
-
-const categories =
-  typeof maxItems === 'number' ? allCategories.slice(0, maxItems) : allCategories;
-
+const allCategories = allCategoriesRaw.map(c => ({ ...c, icon: c.icon ?? iconForCategory(c.name) }));
+const categories = typeof maxItems === 'number' ? allCategories.slice(0, maxItems) : allCategories;
 const isSidebar = variant === 'sidebar';
 ---
 
@@ -105,7 +81,7 @@ const isSidebar = variant === 'sidebar';
 
   {isSidebar && (
     <div class="flex items-center justify-between">
-      <span class="text-sm font-semibold text-[var(--color-text-primary)]">Categories</span>
+      <span class="text-sm font-semibold text-[var(--color-text-primary)]">All categories</span>
       <a href="/tools/categories" class="text-[var(--accent)] hover:underline text-xs">See all</a>
     </div>
   )}
@@ -114,19 +90,21 @@ const isSidebar = variant === 'sidebar';
     <p class="text-[var(--color-text-muted)]">No categories found.</p>
   ) : (
     isSidebar ? (
-      <div class="flex flex-col gap-3">
+      <div class="flex flex-col gap-2">
         {categories.map(({ name, slug, count, icon }) => (
           <a
             href={`/tools/categories/${slug}`}
-            class="flex items-center gap-3 p-2 rounded-md border border-gray-700 bg-[var(--color-bg-secondary)] hover:bg-[var(--color-bg-elevated)] transition text-[var(--color-text-primary)] text-sm font-medium"
+            class="flex items-center gap-3 px-2 py-2 rounded-md
+                   border border-[var(--color-border)]
+                   bg-[var(--color-bg-secondary)]
+                   hover:bg-[var(--color-surface-2)] transition
+                   text-[var(--color-text-primary)] text-sm font-medium"
             aria-label={`${name} category with ${count} ${count === 1 ? 'tool' : 'tools'}`}
           >
             <div class="text-lg">{icon}</div>
-            <div class="flex flex-col leading-none">
-              <span class="truncate max-w-[150px]">{name.replace(/-/g, ' ')}</span>
-              <span class="text-xs text-[var(--color-text-muted)]">
-                {count} {count === 1 ? 'tool' : 'tools'}
-              </span>
+            <div class="flex-1 min-w-0">
+              <div class="truncate">{name.replace(/-/g, ' ')}</div>
+              <div class="text-xs text-[var(--color-text-muted)]">{count} {count === 1 ? 'tool' : 'tools'}</div>
             </div>
           </a>
         ))}
@@ -140,7 +118,3 @@ const isSidebar = variant === 'sidebar';
     )
   )}
 </section>
-
-<style>
-/* Layout-specific tweaks are controlled via variant; cards inherit site variables */
-</style>

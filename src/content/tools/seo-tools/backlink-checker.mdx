@@ -1,12 +1,63 @@
 ---
-slug: "backlink-checker"
-title: "Backlink Checker (Light Version)"
-description: "Check backlinks pointing to your website to improve SEO strategy."
-category: "SEO & Marketing Tools"
-categorySlug: "seo-tools"
-icon: "🔗"
-features:
-  - Check incoming backlinks
-  - Analyze domain and page authority
-  - Export backlink data
+slug: ssl-checker
+title: SSL Checker
+description: Check SSL/TLS certificate status of any website to ensure secure HTTPS connections.
+category: Privacy & Security Tools
+icon: "🔐🌐"
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/ssl-checker
+keywords:
+  - ssl checker
+  - https certificate
+  - website security
+faq:
+  - q: Can I check any website’s SSL certificate?
+    a: Yes, the tool shows certificate details, expiration date, and issuer.
+  - q: Does it alert for expired certificates?
+    a: Yes, expired or invalid certificates are highlighted.
+schema:
+  type: Tool
+  featureList:
+    - Check SSL/TLS certificates
+    - Verify expiration and issuer
+    - Works offline/lightweight
+  audience:
+    - Webmasters
+    - Security analysts
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import SslChecker from '@components/ui/tools/security-tools/ssl-checker.jsx';
+
+# SSL Checker
+
+Quickly verify SSL/TLS certificates for any website to ensure secure HTTPS connections.
+
+<SslChecker client:only="react"/>
+
+## How it works
+
+- Step 1: Enter website URL.
+- Step 2: Tool retrieves SSL certificate info.
+- Step 3: Check expiration, issuer, and validity.
+
+## Features
+
+- Fast certificate verification.
+- Highlights expired or invalid certificates.
+- Works offline/lightweight.
+
+## Use cases
+
+- Monitor website security.
+- Prevent HTTPS issues before they affect users.
+- Ensure trustworthiness of sites you manage.
+
+## Tips
+
+- Recheck SSL periodically.
+- Renew certificates before expiration.
+- Combine with SEO tools for overall site health.

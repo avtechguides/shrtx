@@ -1,12 +1,63 @@
 ---
-slug: "regex-tester"
-title: "Regex Tester / Generator"
-description: "Test and generate regular expressions easily with instant feedback."
-category: "Code & Developer Tools"
-categorySlug: "developer-tools"
-icon: "🔍"
-features:
-  - Test regex patterns live
-  - Highlight matches in text
-  - Generate common regex patterns
+slug: regex-tester
+title: Regex Tester / Generator
+description: Test and generate regular expressions in-browser with real-time results and explanations.
+category: Code & Developer Tools
+icon: "🔍📝"
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/regex-tester
+keywords:
+  - regex tester
+  - regular expression generator
+  - test regex
+faq:
+  - q: Can I test multiple patterns?
+    a: Yes, test multiple regex patterns in the same interface.
+  - q: Can I see match groups and explanations?
+    a: Yes, matches and capture groups are highlighted in real-time.
+schema:
+  type: Tool
+  featureList:
+    - Test regular expressions instantly
+    - Generate regex patterns easily
+    - Works offline in browser
+  audience:
+    - Developers
+    - QA engineers
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import RegexTester from '@components/ui/tools/developer-tools/regex-tester.jsx';
+
+# Regex Tester / Generator
+
+Test, debug, or generate regular expressions in the browser with live feedback.
+
+<RegexTester client:only="react"/>
+
+## How it works
+
+- Step 1: Enter regex pattern and test string.
+- Step 2: Tool highlights matches and groups.
+- Step 3: Copy or refine pattern as needed.
+
+## Features
+
+- Real-time regex testing.
+- Generates regex for common patterns.
+- Works offline after first load.
+
+## Use cases
+
+- Validate user input patterns.
+- Extract data using regex.
+- Learn and debug complex regex.
+
+## Tips
+
+- Test patterns with multiple sample strings.
+- Use explainers to understand matches.
+- Combine with code validators for workflow.

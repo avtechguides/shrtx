@@ -6,12 +6,14 @@ import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import tailwind from '@astrojs/tailwind';
 import preact from '@astrojs/preact';
+import react from '@astrojs/react'; // <-- import react
 import path from 'node:path';
 
 export default defineConfig({
   site: 'https://shrtx.in',
   adapter: cloudflare(),
   integrations: [
+    react(),  // <-- now valid
     preact(),
     mdx(),
     sitemap(),

@@ -1,68 +1,151 @@
-import { useSignal } from '@preact/signals';
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
-const rates = {
-  USD: 1,
-  EUR: 0.92,
-  GBP: 0.81,
-  INR: 82.74,
+export const CurrencyConverterValue = {
+  slug: "currency-converter",
+  title: "Currency Converter",
+  description: "Convert currencies easily with live exchange rates.",
+  category: "Conversion Tools",
+  icon: "💱",
 };
 
-export default function CurrencyConverter() {
-  const amount = useSignal(1);
-  const fromCurrency = useSignal('USD');
-  const toCurrency = useSignal('EUR');
-  const result = useSignal((amount.value * rates[toCurrency.value]) / rates[fromCurrency.value]);
+const DAILY_RATES_URL = (base) =>
+  `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${base.toLowerCase()}.json`;
 
-  function convertCurrency() {
-    result.value = (amount.value * rates[toCurrency.value]) / rates[fromCurrency.value];
+const COMMON = ["USD","EUR","INR","GBP","JPY","AUD","CAD","CHF","CNY","HKD","NZD","SGD","SEK","NOK","DKK","ZAR","BRL","MXN","AED","SAR"];
+
+function useDebounced(value, delay = 250) {
+  const [v, setV] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setV(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return v;
+}
+
+export default function CurrencyConverter() {
+  const [amount, setAmount] = useState("1");
+  const [from, setFrom] = useState("USD");
+  const [to, setTo] = useState("EUR");
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [error, setError] = useState("");
+  const cache = useRef(new Map());
+  const debouncedAmount = useDebounced(amount);
+
+  const numericAmount = useMemo(() => {
+    const n = Number(debouncedAmount);
+    return Number.isFinite(n) ? n : 0;
+  }, [debouncedAmount]);
+
+  async function fetchRates(base) {
+    if (cache.current.has(base)) return cache.current.get(base);
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(DAILY_RATES_URL(base));
+      if (!res.ok) throw new Error("Rate fetch failed");
+      const data = await res.json();
+      const key = Object.keys(data)[0];
+      const rates = data[key] || {};
+      const payload = { base, rates, date: data.date || null };
+      cache.current.set(base, payload);
+      setLastUpdated(payload.date);
+      return payload;
+    } catch {
+      setError("Could not load exchange rates.");
+      return { base, rates: {}, date: null };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function convert() {
+    if (!numericAmount || numericAmount < 0) {
+      setResult("");
+      return;
+    }
+    const { rates } = await fetchRates(from);
+    const rate = rates?.[to.toLowerCase()];
+    if (!rate) {
+      setError(`No rate for ${from} → ${to}.`);
+      setResult("");
+      return;
+    }
+    const out = numericAmount * rate;
+    setResult(out.toLocaleString(undefined, { maximumFractionDigits: 6 }));
+  }
+
+  useEffect(() => {
+    convert();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedAmount, from, to]);
+
+  function swap() {
+    setFrom(to);
+    setTo(from);
+  }
+
+  function onAmount(e) {
+    const v = e.target.value;
+    if (v === "" || /^[0-9]*[.]?[0-9]*$/.test(v)) setAmount(v);
   }
 
   return (
-    <div className="currency-converter p-4 border rounded shadow-md max-w-sm">
-      <h2 className="text-xl font-semibold mb-4">Currency Converter</h2>
-      <div className="mb-4">
-        <label>
-          Amount:
+    <div className="card max-w-xl mx-auto p-4 sm:p-6 rounded-lg border border-gray-200 bg-white dark:bg-gray-900 dark:border-gray-800">
+      <h2 className="text-xl font-semibold mb-1">{CurrencyConverterValue.title}</h2>
+      <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{CurrencyConverterValue.description}</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <label className="flex flex-col">
+          <span className="text-xs text-gray-500 mb-1">Amount</span>
           <input
-            type="number"
-            value={amount.value}
-            min="0"
-            className="border rounded p-1 w-full"
-            onInput={e => (amount.value = Number(e.currentTarget.value) || 0)}
+            type="text"
+            inputMode="decimal"
+            value={amount}
+            onChange={onAmount}
+            className="h-10 px-3 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+            aria-label="Amount"
           />
         </label>
-      </div>
-      <div className="mb-4 flex space-x-2">
-        <label className="flex-1">
-          From:
+
+        <label className="flex flex-col">
+          <span className="text-xs text-gray-500 mb-1">From</span>
           <select
-            value={fromCurrency.value}
-            className="border rounded p-1 w-full"
-            onChange={e => (fromCurrency.value = e.currentTarget.value)}
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+            className="h-10 px-3 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+            aria-label="From currency"
           >
-            {Object.keys(rates).map(currency => (
-              <option key={currency} value={currency}>{currency}</option>
-            ))}
+            {COMMON.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </label>
-        <label className="flex-1">
-          To:
+
+        <label className="flex flex-col">
+          <span className="text-xs text-gray-500 mb-1">To</span>
           <select
-            value={toCurrency.value}
-            className="border rounded p-1 w-full"
-            onChange={e => (toCurrency.value = e.currentTarget.value)}
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+            className="h-10 px-3 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+            aria-label="To currency"
           >
-            {Object.keys(rates).map(currency => (
-              <option key={currency} value={currency}>{currency}</option>
-            ))}
+            {COMMON.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
         </label>
       </div>
-      <button className="bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700" onClick={convertCurrency}>
-        Convert
-      </button>
-      <div className="mt-4 font-semibold">
-        Result: {result.value.toFixed(2)} {toCurrency.value}
+
+      <div className="flex items-center gap-3 mt-3">
+        <button onClick={swap} type="button" className="h-9 px-3 rounded bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700">
+          ⇄ Swap
+        </button>
+        <button onClick={convert} type="button" disabled={loading} className="h-9 px-4 rounded bg-black text-white dark:bg-white dark:text-black disabled:opacity-60">
+          {loading ? "Converting..." : "Convert"}
+        </button>
+        {lastUpdated && <span className="text-xs text-gray-500">Updated: {new Date(lastUpdated).toLocaleDateString()}</span>}
+      </div>
+
+      <div className="mt-4 min-h-6" aria-live="polite" role="status">
+        {error ? <p className="text-sm text-red-600">{error}</p> : result ? <p className="text-base">{Number(numericAmount).toLocaleString()} {from} = {result} {to}</p> : null}
       </div>
     </div>
   );

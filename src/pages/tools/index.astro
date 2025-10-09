@@ -3,6 +3,7 @@ import ToolsLayout from '@layouts/ToolsLayout.astro';
 import ToolCard from '@components/ui/tools/ToolCard.astro';
 import ToolsPagination from '@components/ui/nav/ToolsPagination.astro';
 import { normalizeTools } from '@lib/normalizeTools';
+import DonationCTA from '@/components/ui/DonationCTA.astro';
 
 export const prerender = true;
 
@@ -29,32 +30,46 @@ const sortedTools = [...tools].sort(
   (a, b) => (b.popularity ?? 0) - (a.popularity ?? 0) || a.title.localeCompare(b.title)
 );
 
-// Pagination logic: slice paginated tools for "Latest Tools"
+// Pagination
 const currentPage = Number(Astro.params.page ?? 1);
 const totalPages = Math.ceil(sortedTools.length / PAGE_SIZE);
-const paginatedTools = sortedTools.slice(
-  (currentPage - 1) * PAGE_SIZE,
-  currentPage * PAGE_SIZE
-);
+const paginatedTools = sortedTools.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
-// Group tools by category to get top 5 per category
-const categoryMap = new Map<string, (typeof tools[0])[]>();
+// Categories for sidebar and navigation
+const slugifyTag = (str: string): string => str.toLowerCase().replace(/\s+/g, '-');
+const formatCategory = (s: string): string => s.replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase());
+
+const categoryCounts = tools.reduce<Record<string, number>>((acc, t) => {
+  const key = (t.category || 'uncategorized').toLowerCase();
+  acc[key] = (acc[key] || 0) + 1;
+  return acc;
+}, {});
+const categories = Object.keys(categoryCounts)
+  .sort((a, b) => a.localeCompare(b))
+  .map((c) => ({
+    name: formatCategory(c),
+    slug: slugifyTag(c),
+    count: categoryCounts[c],
+    href: `/tools/categories/${slugifyTag(c)}`
+  }));
+
+// Top tools by category
+const categoryMap = new Map<string, typeof tools>();
 for (const tool of tools) {
   if (!tool.category) continue;
-  const array = categoryMap.get(tool.category) || [];
-  array.push(tool);
-  categoryMap.set(tool.category, array);
+  const arr = categoryMap.get(tool.category) || [];
+  arr.push(tool);
+  categoryMap.set(tool.category, arr);
 }
 
-// Sort each category's tools by popularity and pick top 5
 const topToolsByCategory = Array.from(categoryMap.entries())
   .map(([category, tools]) => ({
     category,
     tools: tools
-      .sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0))
+      .sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0) || a.title.localeCompare(b.title))
       .slice(0, 5),
   }))
-  .filter(catGroup => catGroup.tools.length > 0) // Skip empty categories
+  .filter((group) => group.tools.length > 0)
   .sort((a, b) => a.category.localeCompare(b.category));
 
 const pageTitle = 'SHRTX Utility Tools';
@@ -67,6 +82,33 @@ const pageDescription = 'All the web tools you need for your daily hustle — sp
   showHeader={true}
   tools={tools}
 >
+  <Fragment slot="sidebar">
+    <aside class="space-y-4">
+      <div>
+        <label class="sr-only" for="tool-search">Search tools</label>
+        <input id="tool-search" type="search" placeholder="URL shortener, QR, …" class="w-full rounded-md bg-[var(--color-surface-2)] px-3 py-2 text-sm" />
+      </div>
+
+      <div>
+        <h3 class="text-sm font-medium mb-2">Categories</h3>
+        {categories.length === 0 ? (
+          <p class="text-sm text-[var(--color-text-muted)]">No categories found.</p>
+        ) : (
+          <ul class="space-y-1">
+            {categories.map((c) => (
+              <li>
+                <a href={c.href} class="hover:underline flex items-center justify-between">
+                  <span>{c.name}</span>
+                  <span class="text-[var(--color-text-muted)] text-xs">{c.count}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </aside>
+  </Fragment>
+
   <!-- Latest Tools Section -->
   <section class="mt-10 space-y-6">
     <h2 class="text-2xl font-bold mb-2">
@@ -97,4 +139,24 @@ const pageDescription = 'All the web tools you need for your daily hustle — sp
       </div>
     </section>
   ))}
+
+  <!-- Footer slot -->
+  <Fragment slot="footer">
+    <footer class="mt-12 pt-6 border-t border-[var(--color-border)] text-sm text-[var(--color-text-muted)]">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <span>© {new Date().getFullYear()} SHRTX Tools</span>
+        <nav class="flex items-center gap-3">
+          <a class="hover:underline" href="/about">About</a>
+          <a class="hover:underline" href="/blog">Blog</a>
+          <a class="hover:underline" href="/contact">Contact</a>
+        </nav>
+      </div>
+    </footer>
+  </Fragment>
+
+  <!-- Donation CTA Component -->
+  <DonationCTA
+    description="Support SHRTX and help keep it free of ads — your contribution makes a difference!"
+    buttonText="Contribute Now"
+  />
 </ToolsLayout>

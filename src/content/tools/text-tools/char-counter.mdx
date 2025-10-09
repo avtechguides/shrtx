@@ -1,12 +1,63 @@
 ---
-slug: "character-counter"
-title: "Character Counter"
-description: "Instantly count characters in your text, including spaces and without spaces."
-category: "Text & Content Tools"
-categorySlug: "text-tools"
+slug: char-counter
+title: Character Counter
+description: Count characters in your text instantly to meet length requirements.
+category: Text & Content Tools
 icon: "🔤"
-features:
-  - Count all characters including spaces
-  - Count characters excluding spaces
-  - Supports copy-paste and typing input
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/char-counter
+keywords:
+  - character counter
+  - text length
+  - content analysis
+faq:
+  - q: How do I count characters?
+    a: Paste your text into the input field and the tool will instantly display character count.
+  - q: Can it exclude spaces?
+    a: Yes, enable the "exclude spaces" option to count only visible characters.
+schema:
+  type: Tool
+  featureList:
+    - Count characters instantly
+    - Option to exclude spaces
+    - Works offline after first load
+  audience:
+    - Writers
+    - Editors
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import CharCounter from '@components/ui/tools/text-tools/char-counter.jsx';
+
+# Character Counter
+
+Instantly count characters in your text to meet content length requirements.
+
+<CharCounter client:only="react"/>
+
+## How it works
+
+- Step 1: Paste or type your text.
+- Step 2: Tool calculates total characters (with optional space exclusion).
+- Step 3: Copy results or adjust text as needed.
+
+## Features
+
+- Instant character counting.
+- Option to exclude spaces.
+- Works offline after first load.
+
+## Use cases
+
+- Check social media post length.
+- Monitor essay or article character limits.
+- Validate input fields for forms or applications.
+
+## Tips
+
+- Paste text into clean input to avoid hidden characters.
+- Use for social media captions or SEO meta descriptions.
+- Combine with word counter for detailed analysis.

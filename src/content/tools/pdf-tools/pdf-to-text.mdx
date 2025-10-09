@@ -1,12 +1,63 @@
 ---
-slug: "pdf-to-text"
-title: "PDF to Text / OCR"
-description: "Extract text from PDF files or scanned documents using OCR."
-category: "PDF & Document Tools"
-categorySlug: "pdf-tools"
-icon: "🔎"
-features:
-  - Extract text from PDFs
-  - OCR support for scanned documents
-  - Copy or download extracted content
+slug: pdf-to-text
+title: PDF to Text / OCR
+description: Extract text from PDFs instantly, including scanned documents using OCR.
+category: PDF & Document Tools
+icon: "📄➡️✏️"
+popularity: 90
+updatedAt: 2025-10-08
+canonical: https://shrtx.in/tools/pdf-to-text
+keywords:
+  - pdf to text
+  - extract text from pdf
+  - OCR pdf
+faq:
+  - q: Can it extract text from scanned PDFs?
+    a: Yes, OCR is applied in the browser for scanned PDFs.
+  - q: Can I copy the extracted text?
+    a: Yes, copy directly or download as a text file.
+schema:
+  type: Tool
+  featureList:
+    - Extract text from PDFs
+    - OCR for scanned documents
+    - Works offline in browser
+  audience:
+    - Students
+    - Professionals
+  sameAs:
+    - https://twitter.com/avtechguides
+    - https://github.com/avtechguides
 ---
+
+import PdfToText from '@components/ui/tools/pdf-tools/pdf-to-text.jsx';
+
+# PDF to Text / OCR
+
+Convert PDFs into editable text quickly, even scanned documents, directly in the browser.
+
+<PdfToText client:only="react"/>
+
+## How it works
+
+- Step 1: Upload PDF file.
+- Step 2: Tool extracts text or applies OCR.
+- Step 3: Copy or download extracted text.
+
+## Features
+
+- Extracts text from normal and scanned PDFs.
+- Works offline after first load.
+- Instant processing in browser.
+
+## Use cases
+
+- Extract content from reports, forms, and eBooks.
+- Copy text for notes or research.
+- Process scanned documents efficiently.
+
+## Tips
+
+- Check extracted text for formatting issues.
+- Use for searchable PDFs.
+- Combine with PDF Compressor if file size is large.
